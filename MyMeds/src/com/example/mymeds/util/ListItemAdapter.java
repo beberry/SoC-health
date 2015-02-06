@@ -44,10 +44,10 @@ public class ListItemAdapter extends BaseAdapter {
 
 			// get the TextView and then set the text (item name) and tag (item ID) values
 			TextView textViewItemID = (TextView) list.findViewById(R.id.textID);
-			textViewItemID.setText(String.valueOf(objectItem.getItemId()));
+			textViewItemID.setText(String.valueOf(objectItem.getMedId()));
 			
 			TextView textViewItemName = (TextView) list.findViewById(R.id.textName);
-			textViewItemName.setText(objectItem.getItemName());
+			textViewItemName.setText(objectItem.getMedName());
 		}
 		else{
 			list = (View) convertView;
@@ -69,7 +69,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return data.get(position).getItemId();
+		return data.get(position).getMedId();
 	}
 
 }

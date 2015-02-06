@@ -41,6 +41,7 @@ public class FirstFragment extends Fragment {
 		ListView listViewItems = (ListView) rootView.findViewById(R.id.listview);
 
 		if(meds.size()==0){
+			System.out.println("Loading values");
 			loadValues();
 		}
 
@@ -54,7 +55,7 @@ public class FirstFragment extends Fragment {
 		listViewItems.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Medication item = adapter.getItem(position);
-				Toast.makeText(mContext, String.valueOf(item.getItemName()),Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -82,13 +83,20 @@ public class FirstFragment extends Fragment {
 				int itemID = tempCheck.getInt("index");
 				String itemName = tempCheck.getString("name");
 				String description = tempCheck.getString("description");
+				long startTime = tempCheck.getLong("start");
+				long endTime  = tempCheck.getLong("end");
 
-				med.setItemDescription(description);
-				med.setItemId(itemID);
-				med.setItemName(itemName);
-				meds.add(med);
-				
-				med = null;
+				if(meds.contains((Integer)med.getMedId())==false){
+					System.out.println("adding "+ itemID + " to the list");
+					med.setMedId(itemID);
+					med.setMedName(itemName);
+					med.setDescription(description);
+					med.setStartTime(startTime);
+					med.setEndTime(endTime);
+					meds.add(med);
+				}else{
+					med = null;
+				}
 			}
 		} catch (IOException e) {
 			Log.e("IOException","Error loading file");
@@ -99,6 +107,7 @@ public class FirstFragment extends Fragment {
 			e.printStackTrace();			
 			return false;
 		}
+		System.out.println(meds.toString());
 		return true;
 	}
 }

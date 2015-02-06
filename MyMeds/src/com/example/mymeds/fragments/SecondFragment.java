@@ -22,6 +22,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.mymeds.R;
+import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.ListItemAdapter;
 import com.example.mymeds.util.Medication;
 
@@ -54,7 +55,7 @@ public class SecondFragment extends Fragment {
 		listViewItems.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				Medication item = adapter.getItem(position);
-				Toast.makeText(mContext, String.valueOf(item.getItemName()),Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
 			}
 		});
 
@@ -62,6 +63,8 @@ public class SecondFragment extends Fragment {
 	}
 
 	public boolean loadValues(){
+		ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
+
 		try {
 			// read file from assets
 			AssetManager assetManager = mContext.getAssets();
@@ -81,13 +84,41 @@ public class SecondFragment extends Fragment {
 				JSONObject tempCheck = medIndex.getJSONObject(k);
 				int itemID = tempCheck.getInt("index");
 				String itemName = tempCheck.getString("name");
+				String displayName = tempCheck.getString("displayName");
 				String description = tempCheck.getString("description");
+				String type = tempCheck.getString("type");
+				long startTime = tempCheck.getLong("startTime");
+				long endTime = tempCheck.getLong("endTime");
+				int remaining = tempCheck.getInt("remaining");
+				int repeatPeriod = tempCheck.getInt("repeatPeriod");
+				JSONArray frequency = tempCheck.getJSONArray("frequency");
+				for(int i=0;i<frequency.length();i++){
+					JSONObject frequencyObject = frequency.getJSONObject(i);
+					int time = frequencyObject.getInt("time");
+					String dosage = frequencyObject.getString("dosage");
+					int units = frequencyObject.getInt("units");
+					Frequency frequency2 = new Frequency();
+					frequency2.setDosage(dosage);
+					frequency2.setUnits(units);
+					frequency2.setTime(time);
+					frequencyList.add(frequency2);
+				}
 
-				med.setItemDescription(description);
-				med.setItemId(itemID);
-				med.setItemName(itemName);
-				allmeds.add(med);
-			}
+				if(allmeds.contains((Integer)med.getMedId())==false){
+					med.setMedId(itemID);
+					med.setMedName(itemName);
+					med.setDisplayName(displayName);
+					med.setDescription(description);
+					med.setType(type);
+					med.setStartTime(startTime);
+					med.setEndTime(endTime);
+					med.setRemaining(remaining);
+					med.setRepeatPeriod(repeatPeriod);
+					med.setFrequency(frequencyList);
+					allmeds.add(med);
+				}else{
+					med = null;
+				}			}
 		} catch (IOException e) {
 			Log.e("IOException","Error loading file");
 			e.printStackTrace();
