@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -102,19 +103,13 @@ ActionBar.TabListener {
 	public boolean onOptionsItemSelected(MenuItem item)
 	{		
 		int id = viewPager.getId();
-		if(id == R.id.action_settings){
+		Log.d("Problem Determination", "id: " + id);
+		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
+		//Log.d("Problem Determination", "action_exit id: " + R.id.action_exit);
+		
+		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
 			this.startActivity(new Intent(this, SettingsActivity.class));
 			return true;
-		}
-		else if(id == R.id.action_exit){
-			Intent intent = new Intent(Intent.ACTION_MAIN); 
-			intent.addCategory(Intent.CATEGORY_HOME);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-			startActivity(intent);
-			return true;
-		}
-		else{
-			return super.onOptionsItemSelected(item);
-		}
+
 	}
 }
