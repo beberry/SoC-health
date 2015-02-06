@@ -14,34 +14,35 @@ public class SettingsStore {
 	public void setSounds(Boolean sounds) {
 		this.sounds = sounds;
 	}
-	public String getSoundSelection() {
+	public int getSoundSelection() {
 		return soundSelection;
 	}
-	public void setSoundSelection(String soundSelection) {
+	public void setSoundSelection(int soundSelection) {
 		this.soundSelection = soundSelection;
 	}
-	public String getSnoozeTime() {
+	public int getSnoozeTime() {
 		return snoozeTime;
 	}
-	public void setSnoozeTime(String snoozeTime) {
+	public void setSnoozeTime(int snoozeTime) {
 		this.snoozeTime = snoozeTime;
 	}
-	public String getHowLongBefore() {
+	public int getHowLongBefore() {
 		return howLongBefore;
 	}
-	public void setHowLongBefore(String howLongBefore) {
+	public void setHowLongBefore(int howLongBefore) {
 		this.howLongBefore = howLongBefore;
 	}
-	public String getTextSize() {
+	public int getTextSize() {
 		return textSize;
 	}
-	public void setTextSize(String textSize) {
+	public void setTextSize(int textSize) {
 		this.textSize = textSize;
 	}
 	private Boolean banners;
 	private Boolean sounds;
-	private String soundSelection;
-	private String snoozeTime;
-	private String howLongBefore;
-	private String textSize;
+	private int soundSelection;
+	private int snoozeTime;
+	private int howLongBefore;
+	private int textSize;
+
 }

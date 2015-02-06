@@ -17,6 +17,7 @@ import com.example.mymeds.stores.SettingsStore;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity implements OnClickListener{
+public class SettingsActivity extends Activity{
 
 	Button buttonSave;
 	Button buttonCancel;
@@ -42,7 +43,17 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		buttonSave = (Button) findViewById(R.id.buttonSave);
 		buttonCancel = (Button) findViewById(R.id.buttonCancel);
 		
+		Switch switchBanners = (Switch) findViewById(R.id.switchBanners);
+		Switch switchSounds = (Switch) findViewById(R.id.switchSounds);
+		
+		Spinner spinnerSoundsSelection = (Spinner) findViewById(R.id.spinnerSoundsSelection);
+		Spinner spinnerSnoozeTime = (Spinner) findViewById(R.id.spinnerSnoozeTime);
+		Spinner spinnerHowLongBefore = (Spinner) findViewById(R.id.spinnerHowLongBefore);
+		Spinner spinnerTextSize = (Spinner) findViewById(R.id.spinnerTextSize);
+		
+		
 		SettingsStore store = null;
+		
 		try {
 			store = (SettingsStore)PojoMapper.fromJson(readFromSettings(), SettingsStore.class);
 		} catch (IOException e) {
@@ -51,23 +62,23 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		}
 		try {
 			Log.w("Hello", PojoMapper.toJson(store, true));
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JsonGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		if(store != null)
+		{
+			switchBanners.setChecked(store.getBanners());
+			switchSounds.setChecked(store.getSounds());
+			
+			spinnerSoundsSelection.setSelection(store.getSoundSelection());
+			spinnerSnoozeTime.setSelection(store.getSnoozeTime());
+			spinnerHowLongBefore.setSelection(store.getHowLongBefore());
+			spinnerTextSize.setSelection(store.getTextSize());
+		}
 	}
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/**
 	 * Called when Save button is selected. Extracts data from UI widgets and exports into JSON.
@@ -87,10 +98,10 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		//Extract data from UI widgets.
 		boolean banner = switchBanners.isChecked();
 		boolean sounds = switchSounds.isChecked();
-		String soundsSelection = (String) spinnerSoundsSelection.getSelectedItem();
-		String snoozeTime = (String) spinnerSnoozeTime.getSelectedItem();
-		String howLongBefore = (String) spinnerHowLongBefore.getSelectedItem();
-		String textSize = (String) spinnerTextSize.getSelectedItem();
+		int soundsSelection = (int)spinnerSoundsSelection.getSelectedItemPosition();
+		int snoozeTime = (int)spinnerSnoozeTime.getSelectedItemPosition();
+		int howLongBefore = (int) spinnerHowLongBefore.getSelectedItemPosition();
+		int textSize = (int) spinnerTextSize.getSelectedItemPosition();
 		
 		Log.d("Problem Determination", "banner: " + banner +
 									   "\nsounds: " + sounds + 
@@ -99,6 +110,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 									   "\nhowLongBefore: " + howLongBefore +
 									   "\ntextSize: " + textSize);
 		
+		//Export to JSON
 		SettingsStore store = new SettingsStore();
 		store.setBanners(banner);
 		store.setSounds(sounds);
@@ -106,6 +118,17 @@ public class SettingsActivity extends Activity implements OnClickListener{
 		store.setSnoozeTime(snoozeTime);
 		store.setHowLongBefore(howLongBefore);	
 		store.setTextSize(textSize);
+		
+		SharedPreferences prefs = this.getSharedPreferences(
+			      "com.example.mymeds", Context.MODE_PRIVATE);
+		  SharedPreferences.Editor editor = prefs.edit();
+		  editor.putBoolean("banner",banner);
+		  editor.putBoolean("sounds", sounds);
+		  editor.putInt("soundsSelection", soundsSelection);
+		  editor.putInt("snoozeTime", snoozeTime);
+		  editor.putInt("howLongBefore", howLongBefore);
+		  editor.putInt("textSize", textSize);
+		  editor.apply();
 		
 		try {
 			Log.w("osfn", PojoMapper.toJson(store, true));
@@ -167,41 +190,7 @@ public class SettingsActivity extends Activity implements OnClickListener{
 	 * @param view
 	 */
 	public void cancelChanges(View view){
-		
+		finish();
 	}
 	
-	/**
-	 * Deprecated Code		
-	 */
-	void Useless()
-	{
-	/*
-	 * switchBanners.setChecked(true);
-		switchSounds.setChecked(true);
-		
-		//Set switchBanners onClickListener listeners
-		switchBanners.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				//Output isChecked to preferences file		
-				if(isChecked)
-				{
-					Toast.makeText(getApplicationContext(), "Mike Coutts - Teradata", Toast.LENGTH_LONG).show();
-				}
-			}			
-		});
-		
-		//Set switchSounds onClickListener listeners
-		switchSounds.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				//Output isChecked to preferences file			
-			}			
-		});
-	 */
-	}
 }   
