@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fillViewport="true" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textNotifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_marginLeft="50dp"
+            		android:layout_marginTop="50dp"
+            		android:text="Notifications"
+            android:textSize="45sp" />
+
+        <!-- Banners -->
+        <TextView
+            android:id="@+id/textBanners"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textNotifications"
+            		android:layout_marginLeft="100dp"
+            		android:layout_marginTop="20dp"
+            android:text="Banners"
+            android:textSize="30sp" />
+        
+        <Switch
+            android:id="@+id/switchBanners"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_alignBaseline="@+id/textBanners"
+            		android:layout_alignBottom="@+id/textBanners"
+            android:layout_marginLeft="600dp"
+            android:layout_below="@+id/textNotifications" />
+        
+        <!-- Sounds -->
+        <TextView
+            android:id="@+id/textSounds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textBanners"
+            		android:layout_marginLeft="100dp"
+            		android:layout_marginTop="20dp"
+            android:text="Sounds"
+            android:textSize="30sp" />
+        
+        <Switch
+            android:id="@+id/switchSounds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_alignBaseline="@+id/textSounds"
+            		android:layout_alignBottom="@+id/textSounds"
+            android:layout_marginLeft="600dp"
+            android:layout_below="@+id/textBanners" />
+        
+        <!-- Sounds Selection -->
+        <TextView
+            android:id="@+id/textSoundsSelection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textSounds"
+            		android:layout_marginLeft="100dp"
+            		android:layout_marginTop="20dp"
+            android:text="Sounds Selection"
+            android:textSize="30sp" />
+        
+        <Spinner 
+        	android:id="@+id/spinnerSoundsSelection"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        			android:layout_below="@id/textSounds"
+            		android:layout_marginLeft="600dp"
+            		android:layout_marginTop="20dp"
+        	android:drawSelectorOnTop="true"
+        	android:entries="@array/SoundsSelectionArray"/>
+        
+        <!-- Snooze Time -->
+        <TextView
+            android:id="@+id/textSnoozeTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textSoundsSelection"
+            		android:layout_marginLeft="100dp"
+            		android:layout_marginTop="20dp"
+            android:text="Snooze Time"
+            android:textSize="30sp" />
+        
+        <Spinner 
+        	android:id="@+id/spinnerSnoozeTime"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        			android:layout_below="@id/textSoundsSelection"
+            		android:layout_marginLeft="600dp"
+            		android:layout_marginTop="20dp"
+        	android:drawSelectorOnTop="true"
+        	android:entries="@array/SnoozeTimeArray"/>
+        
+        <!-- How Long -->
+        <TextView
+            android:id="@+id/textHowLongBefore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textSnoozeTime"
+            		android:layout_marginLeft="100dp"
+            		android:layout_marginTop="20dp"
+            android:text="How long before notification"
+            android:textSize="30sp" />
+        
+        <Spinner 
+        	android:id="@+id/spinnerHowLongBefore"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        			android:layout_below="@id/textSnoozeTime"
+            		android:layout_marginLeft="600dp"
+            		android:layout_marginTop="20dp"
+        	android:drawSelectorOnTop="true"
+        	android:entries="@array/HowLongArray"/>
+        
+        <TextView
+            android:id="@+id/textText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textHowLongBefore"
+            		android:layout_marginLeft="50dp"
+            		android:layout_marginTop="50dp"
+            android:text="Text"
+            android:textSize="45sp" />
+        
+        <!-- Text Size -->
+        <TextView
+            android:id="@+id/textTextSize"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            		android:layout_below="@id/textText"
+            		android:layout_marginLeft="100dp"
+            		android:layout_marginTop="20dp"
+            android:text="Text Size"
+            android:textSize="30sp" />
+
+        <Spinner 
+        	android:id="@+id/spinnerTextSize"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        			android:layout_below="@id/textText"
+            		android:layout_marginLeft="600dp"
+            		android:layout_marginTop="20dp"
+        	android:drawSelectorOnTop="true"
+        	android:entries="@array/TextSizeArray"/>
+        
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        			android:layout_below="@id/textTextSize" 
+        			android:layout_marginTop="50dp"
+					android:layout_marginLeft="500dp"
+					android:layout_marginBottom="100dp"
+        	android:text="Save"
+            android:textSize="25sp"
+            />
+        
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        			android:layout_below="@id/textTextSize" 
+        			android:layout_marginTop="50dp"
+        			android:layout_marginLeft="600dp"
+        			android:layout_marginBottom="100dp"
+        	android:text="Cancel"
+            android:textSize="25sp"
+            />
+        
+    </RelativeLayout>
+
+</ScrollView>

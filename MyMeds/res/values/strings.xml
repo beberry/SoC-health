@@ -16,4 +16,43 @@
     
     <!-- Fragments -->
     
+    <!-- Settings Activity -->
+    <string-array name="SoundsSelectionArray">
+		<item>Beep1</item>
+		<item>Beep2</item>
+		<item>Beep3</item>
+		<item>Ring1</item>
+		<item>Ring2</item>
+		<item>Ring3</item>
+		<item>Vibrate</item>
+	</string-array>
+	
+    <string-array name="SnoozeTimeArray">
+		<item>5 mins</item>
+		<item>10 mins</item>
+		<item>15 mins</item>
+		<item>20 mins</item>
+		<item>25 mins</item>
+		<item>30 mins</item>
+		<item>45 mins</item>
+	</string-array>
+    
+    <string-array name="HowLongArray">
+        <item>0 mins</item>
+		<item>5 mins</item>
+		<item>10 mins</item>
+		<item>15 mins</item>
+		<item>30 mins</item>
+		<item>45 mins</item>
+		<item>1 hour</item>
+		<item>2 hours</item>
+	</string-array>
+	
+    <string-array name="TextSizeArray">
+        <item>Small</item>
+		<item>Medium</item>
+		<item>Large</item>
+		<item>Extra Large</item>
+	</string-array>
+    
 </resources>
