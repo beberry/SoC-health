@@ -8,4 +8,12 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Action Bar -->
+    <string name="action_exit">Exit</string>
+    
+    <!-- Activities -->
+    <string name="activity_settings">Settings</string>
+    
+    <!-- Fragments -->
+    
 </resources>
