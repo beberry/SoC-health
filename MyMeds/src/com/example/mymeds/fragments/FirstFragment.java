@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -16,10 +17,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.ListItemAdapter;
@@ -38,26 +38,31 @@ public class FirstFragment extends Fragment {
 
 		mContext = getActivity().getApplicationContext();
 
-		ListView listViewItems = (ListView) rootView.findViewById(R.id.listview);
-
 		if(meds.size()==0){
 			System.out.println("Loading values");
 			loadValues();
 		}
+		
+		TableLayout listViewItems = (TableLayout) rootView.findViewById(R.id.listview);
 
 		// our adapter instance
-		adapter = new ListItemAdapter(mContext,meds);
-
-		// create a new ListView, set the adapter and item click listener
-		listViewItems.setAdapter(adapter);
-
-		// Set up the user interaction to manually show or hide the system UI.
-		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Medication item = adapter.getItem(position);
-				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-			}
-		});
+		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
+	
+		for(int i=0;i<meds.size();i++){
+			System.out.println(meds.get(i).getMedName());
+			adapter.setView(i, rootView, listViewItems);
+		}
+		//		
+//		// create a new ListView, set the adapter and item click listener
+//		listViewItems.setAdapter(adapter);
+//
+//		// Set up the user interaction to manually show or hide the system UI.
+//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
+//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//				Medication item = adapter.getItem(position);
+//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
+//			}
+//		});
 
 		return rootView;
 	}

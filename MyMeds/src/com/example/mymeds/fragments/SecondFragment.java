@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -39,25 +40,37 @@ public class SecondFragment extends Fragment {
 
 		mContext = getActivity().getApplicationContext();
 
-		ListView listViewItems = (ListView) rootView.findViewById(R.id.listview);
-
 		if(allmeds.size()==0){
 			loadValues();
 		}
 
+		TableLayout listViewItems = (TableLayout) rootView.findViewById(R.id.listview);
+
 		// our adapter instance
-		adapter = new ListItemAdapter(mContext,allmeds);
+		adapter = new ListItemAdapter(mContext, R.id.listview, allmeds);
 
-		// create a new ListView, set the adapter and item click listener
-		listViewItems.setAdapter(adapter);
+		for(int i=0;i<allmeds.size();i++){
+			System.out.println(allmeds.get(i).getMedName());
+			adapter.setView(i, rootView, listViewItems);
+		}
 
-		// Set up the user interaction to manually show or hide the system UI.
-		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				Medication item = adapter.getItem(position);
-				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-			}
-		});
+
+		//		ListView listViewItems = (ListView) rootView.findViewById(R.id.listview);
+		//
+		//
+		//		// our adapter instance
+		//		adapter = new ListItemAdapter(mContext, R.id.listview, allmeds);
+		//
+		//		// create a new ListView, set the adapter and item click listener
+		//		listViewItems.setAdapter(adapter);
+		//
+		//		// Set up the user interaction to manually show or hide the system UI.
+		//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
+		//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+		//				Medication item = adapter.getItem(position);
+		//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
+		//			}
+		//		});
 
 		return rootView;
 	}
@@ -127,6 +140,9 @@ public class SecondFragment extends Fragment {
 			Log.e("JSONException","JSON exception");
 			e.printStackTrace();			
 			return false;
+		}
+		for(int i=0;i<allmeds.size();i++){
+			System.out.println(allmeds.get(i).toString());
 		}
 		return true;
 	}
