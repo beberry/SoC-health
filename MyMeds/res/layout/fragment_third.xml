@@ -8,20 +8,46 @@
     android:paddingRight="5dp"
     android:paddingTop="30dp" >
 
-    <TextView
-        android:id="@+id/thirdText"
+    <Button
+        android:id="@+id/end"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="top|center"
-        android:text="Third Page"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/start"
+        android:layout_alignBottom="@+id/start"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="28dp"
+        android:onClick="showDatePickerDialog"
+        android:text="End Date" />
 
     <Button
-        android:id="@+id/accept"
-        android:layout_width="fill_parent"
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accept" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:onClick="showDatePickerDialog"
+        android:text="Start Date" />
+
+    <EditText
+        android:id="@+id/endDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/end"
+        android:layout_alignRight="@+id/end"
+        android:layout_below="@+id/end"
+        android:ems="10"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/startDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/start"
+        android:layout_alignRight="@+id/start"
+        android:layout_below="@+id/start"
+        android:ems="10"
+        android:inputType="date" />
 
 </RelativeLayout>
