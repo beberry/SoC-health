@@ -46,22 +46,9 @@ public class FirstFragment extends Fragment {
 		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
 
 		for(int i=0;i<meds.size();i++){
-			System.out.println(meds.get(i).getMedName());
 			adapter.setFirstView(i, rootView, listViewItems);
 		}
 		listViewItems.requestLayout();
-
-		//		
-		//		// create a new ListView, set the adapter and item click listener
-		//		listViewItems.setAdapter(adapter);
-		//
-		//		// Set up the user interaction to manually show or hide the system UI.
-		//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-		//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		//				Medication item = adapter.getItem(position);
-		//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-		//			}
-		//		});
 
 		return rootView;
 	}

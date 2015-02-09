@@ -16,11 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TableLayout;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.Frequency;
@@ -36,7 +32,7 @@ public class SecondFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_first, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_second, container, false);
 
 		mContext = getActivity().getApplicationContext();
 
@@ -50,27 +46,9 @@ public class SecondFragment extends Fragment {
 		adapter = new ListItemAdapter(mContext, R.id.listview, allmeds);
 
 		for(int i=0;i<allmeds.size();i++){
-			System.out.println(allmeds.get(i).getMedName());
-			adapter.setView(i, rootView, listViewItems);
+			adapter.setSecondView(i, rootView, listViewItems);
 		}
-
-
-		//		ListView listViewItems = (ListView) rootView.findViewById(R.id.listview);
-		//
-		//
-		//		// our adapter instance
-		//		adapter = new ListItemAdapter(mContext, R.id.listview, allmeds);
-		//
-		//		// create a new ListView, set the adapter and item click listener
-		//		listViewItems.setAdapter(adapter);
-		//
-		//		// Set up the user interaction to manually show or hide the system UI.
-		//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-		//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		//				Medication item = adapter.getItem(position);
-		//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-		//			}
-		//		});
+		listViewItems.requestLayout();
 
 		return rootView;
 	}
@@ -140,9 +118,6 @@ public class SecondFragment extends Fragment {
 			Log.e("JSONException","JSON exception");
 			e.printStackTrace();			
 			return false;
-		}
-		for(int i=0;i<allmeds.size();i++){
-			System.out.println(allmeds.get(i).toString());
 		}
 		return true;
 	}

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/cell_shape"
+    android:padding="20dp" >
+    <!-- Remove cell_shape drawable background to remove white background from the table -->
 
     <TextView
         android:id="@+id/name"
@@ -9,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:gravity="start|center"
+        android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -18,17 +22,18 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center|center"
+        android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="normal" />
-    
+
     <ToggleButton
         android:id="@+id/pillTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:gravity="end|center"
-        android:textOn="Pill Taken"
+        android:padding="10dp"
         android:textOff="Not Taken"
-        />
+        android:textOn="Pill Taken" />
 
 </TableRow>
