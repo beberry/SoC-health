@@ -42,12 +42,11 @@ public class ListItemAdapter extends BaseAdapter {
 			// object item based on the position
 			Medication objectItem = data.get(position);
 
-			// get the TextView and then set the text (item name) and tag (item ID) values
-			TextView textViewItemID = (TextView) list.findViewById(R.id.textID);
-			textViewItemID.setText(String.valueOf(objectItem.getMedId()));
-			
-			TextView textViewItemName = (TextView) list.findViewById(R.id.textName);
+			TextView textViewItemName = (TextView) list.findViewById(R.id.name);
 			textViewItemName.setText(objectItem.getMedName());
+			
+			TextView textViewItemDisplayName = (TextView) list.findViewById(R.id.displayName);
+			textViewItemDisplayName.setText(objectItem.getDisplayName());
 		}
 		else{
 			list = (View) convertView;
