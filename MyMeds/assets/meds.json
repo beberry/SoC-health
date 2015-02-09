@@ -3,82 +3,14 @@
         {
             "index": 0,
             "name": "medication 0",
-            "displayName":  
+            "displayName": "Rubbing Cream",
             "description": "easy",
-            "type": 
-            "time": 
-            "dosage": 
-            "units": 
-        },
-        {
-            "index": 1,
-            "name": "medication 1",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 2,
-            "name": "medication 2",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 3,
-            "name": "medication 3",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 4,
-            "name": "medication 4",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 5,
-            "name": "medication 5",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 6,
-            "name": "medication 6",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 7,
-            "name": "medication 7",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 8,
-            "name": "medication 8",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 9,
-            "name": "medication 9",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
-        },
-        {
-            "index": 10,
-            "name": "medication 10",
-            "description": "easy",
-            "start": 1402055218,
-            "end": 1433591218
+            "type": "cream",
+            "time": "12",
+            "dosage": "1",
+            "units": "mg",
+            "start": 1423479361,
+            "end": 1423480000
         }
     ]
 }
