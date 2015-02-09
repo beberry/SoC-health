@@ -2,6 +2,8 @@ package com.example.mymeds.activites;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.Window;
 
 import com.example.mymeds.R;
+import com.example.mymeds.util.NotificationsService;
 import com.example.mymeds.util.TabsPagerAdapter;
 
 public class MainActivity extends FragmentActivity implements
@@ -65,7 +68,23 @@ ActionBar.TabListener {
 			public void onPageScrollStateChanged(int arg0) {
 			}
 		});
+		
+		if (!isMyServiceRunning()){
+			Log.v("NotificationsService", "Running");
+		    Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
+		    getApplicationContext().startService(serviceIntent);
+		}
 	}
+	
+	private boolean isMyServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (NotificationsService.class.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
