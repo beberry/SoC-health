@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -18,8 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.ListItemAdapter;
@@ -42,27 +39,29 @@ public class FirstFragment extends Fragment {
 			System.out.println("Loading values");
 			loadValues();
 		}
-		
+
 		TableLayout listViewItems = (TableLayout) rootView.findViewById(R.id.listview);
 
 		// our adapter instance
 		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
-	
+
 		for(int i=0;i<meds.size();i++){
 			System.out.println(meds.get(i).getMedName());
-			adapter.setView(i, rootView, listViewItems);
+			adapter.setFirstView(i, rootView, listViewItems);
 		}
+		listViewItems.requestLayout();
+
 		//		
-//		// create a new ListView, set the adapter and item click listener
-//		listViewItems.setAdapter(adapter);
-//
-//		// Set up the user interaction to manually show or hide the system UI.
-//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//				Medication item = adapter.getItem(position);
-//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-//			}
-//		});
+		//		// create a new ListView, set the adapter and item click listener
+		//		listViewItems.setAdapter(adapter);
+		//
+		//		// Set up the user interaction to manually show or hide the system UI.
+		//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
+		//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+		//				Medication item = adapter.getItem(position);
+		//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
+		//			}
+		//		});
 
 		return rootView;
 	}
@@ -87,17 +86,15 @@ public class FirstFragment extends Fragment {
 				JSONObject tempCheck = medIndex.getJSONObject(k);
 				int itemID = tempCheck.getInt("index");
 				String itemName = tempCheck.getString("name");
-				String description = tempCheck.getString("description");
-				long startTime = tempCheck.getLong("start");
-				long endTime  = tempCheck.getLong("end");
+				String displayName = tempCheck.getString("displayName");
+				String time = tempCheck.getString("time");
 
 				if(meds.contains((Integer)med.getMedId())==false){
 					System.out.println("adding "+ itemID + " to the list");
 					med.setMedId(itemID);
 					med.setMedName(itemName);
-					med.setDescription(description);
-					med.setStartTime(startTime);
-					med.setEndTime(endTime);
+					med.setDisplayName(displayName);
+					med.setTime(time);
 					meds.add(med);
 				}else{
 					med = null;

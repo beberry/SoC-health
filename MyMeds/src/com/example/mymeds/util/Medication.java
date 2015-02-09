@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Medication {
 
 	public int medId;
-	public String medName, displayName, description, type;
+	public String medName, displayName, description, type, time;
 	long startTime, endTime;
 	int remaining, repeatPeriod;
 	ArrayList<Frequency> frequency;
@@ -45,6 +45,14 @@ public class Medication {
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String newTime) {
+		this.time = newTime;
 	}
 
 	public String getDescription() {
