@@ -2,18 +2,17 @@ package com.example.mymeds.util;
 
 import java.util.ArrayList;
 
-import com.example.mymeds.R;
-
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.example.mymeds.R;
 
 public class ListItemAdapter extends BaseAdapter {
 
@@ -37,7 +36,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
-
+		
 		TextView t2 = (TextView) row.findViewById(R.id.time);
 		t2.setText(data.get(position).getTime());
 

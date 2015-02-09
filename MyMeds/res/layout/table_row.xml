@@ -7,12 +7,28 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:gravity="start|center"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center|center"
+        android:textSize="15sp"
         android:textStyle="normal" />
+    
+    <ToggleButton
+        android:id="@+id/pillTaken"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:gravity="end|center"
+        android:textOn="Pill Taken"
+        android:textOff="Not Taken"
+        />
 
 </TableRow>
