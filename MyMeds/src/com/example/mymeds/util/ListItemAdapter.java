@@ -2,11 +2,14 @@ package com.example.mymeds.util;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.mymeds.R;
@@ -17,7 +20,7 @@ public class ListItemAdapter extends BaseAdapter {
 	ArrayList<Medication> data = null;
 	int count=0;
 
-	public ListItemAdapter(Context mContext,ArrayList<Medication> medData) {
+	public ListItemAdapter(Context mContext,int layoutID, ArrayList<Medication> medData) {
 
 		super();
 
@@ -28,32 +31,17 @@ public class ListItemAdapter extends BaseAdapter {
 		System.out.println(data.toString());
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	
+	public View setView(int position, View root, TableLayout table){
 
-		View list;
-		LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-		if(convertView==null){
-
-			list = new View(mContext);
-			list = inflater.inflate(R.layout.list_item, null);
-
-			// object item based on the position
-			Medication objectItem = data.get(position);
-
-			TextView textViewItemName = (TextView) list.findViewById(R.id.name);
-			textViewItemName.setText(objectItem.getMedName());
-			
-			TextView textViewItemDisplayName = (TextView) list.findViewById(R.id.displayName);
-			textViewItemDisplayName.setText(objectItem.getDisplayName());
-		}
-		else{
-			list = (View) convertView;
-		}
-
-		return list;
-
+		TableRow row = new TableRow(mContext);
+		TextView t1= new TextView(mContext);
+		t1.setText(data.get(position).getMedName());
+		row.addView(t1);
+		table.addView(row, new TableLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		
+		return root;
 	}
 
 	@Override
@@ -69,6 +57,13 @@ public class ListItemAdapter extends BaseAdapter {
 	@Override
 	public long getItemId(int position) {
 		return data.get(position).getMedId();
+	}
+
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
