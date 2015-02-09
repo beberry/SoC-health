@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.TabsPagerAdapter;
@@ -26,6 +27,7 @@ ActionBar.TabListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		setContentView(R.layout.activity_main);
 
 		// Initilization
