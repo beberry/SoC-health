@@ -2,8 +2,8 @@
     "medication": [
         {
             "index": 0,
-            "name": "medication 0",
-            "displayName": "Rubbing Cream",
+            "name": "Hydrocortisone",
+            "displayName": "Steroid Cream",
             "description": "easy",
             "type": "cream",
             "time": "12",

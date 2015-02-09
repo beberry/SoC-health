@@ -2,8 +2,8 @@
     "medication": [
         {
             "index": 0,
-            "name": "medication 0",
-            "displayName":  "Rubbing cream",
+            "name": "Hydrocortisone",
+            "displayName": "Steroid Cream",
             "description": "easy",
             "type": "pill",
             "startTime": 140003824,
@@ -16,6 +16,24 @@
             		"dosage": "500mg",
             		"units": 2
             	}
+            ]
+        },
+        {
+            "index": 1,
+            "name": "Oxycodone",
+            "displayName": "Opium",
+            "description": "easy",
+            "type": "pill",
+            "startTime": 140003824,
+            "endTime": 143003824,
+            "remaining": 56,
+            "repeatPeriod": 2,
+            "frequency":[
+                {
+                    "time": 12,
+                    "dosage": "500mg",
+                    "units": 2
+                }
             ]
         }
     ]
