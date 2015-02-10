@@ -1,28 +1,28 @@
 package com.example.mymeds.activites;
 
 import android.app.ActionBar;
-import android.app.ActionBar.Tab;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.app.FragmentTransaction;
+import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
+import com.example.mymeds.tabs.AllMeds;
+import com.example.mymeds.tabs.MyProfile;
+import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.NotificationsService;
-import com.example.mymeds.util.TabsPagerAdapter;
 
-public class MainActivity extends FragmentActivity implements
-ActionBar.TabListener {
+public class MainActivity extends TabActivity {
 
 	private ViewPager viewPager;
-	private TabsPagerAdapter mAdapter;
 	private ActionBar actionBar;
 	// Tab titles
 	private String[] tabs = { "Daily Meds", "All Meds", "Profile" };
@@ -30,75 +30,57 @@ ActionBar.TabListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		setContentView(R.layout.activity_main);
 
-		// Initilization
-		viewPager = (ViewPager) findViewById(R.id.pager);
-		actionBar = getActionBar();
-		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+		Resources resources = getResources(); 
+		TabHost tabHost = getTabHost(); 
 
-		viewPager.setAdapter(mAdapter);
-		actionBar.setHomeButtonEnabled(false);
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
+		// Android tab
+		Intent intentAndroid = new Intent().setClass(this, TodaysMeds.class);
+		TabSpec tabSpecAndroid = tabHost
+				.newTabSpec("Today")
+				.setIndicator("Todays Meds", null)
+				.setContent(intentAndroid);
 
-		// Adding Tabs
-		for (String tab_name : tabs) {
-			actionBar.addTab(actionBar.newTab().setText(tab_name)
-					.setTabListener(this));
-		}
+		// Apple tab
+		Intent intentApple = new Intent().setClass(this, AllMeds.class);
+		TabSpec tabSpecApple = tabHost
+				.newTabSpec("All")
+				.setIndicator("All Meds", null)
+				.setContent(intentApple);
 
-		/**
-		 * on swiping the viewpager make respective tab selected
-		 * */
-		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		// Windows tab
+		Intent intentWindows = new Intent().setClass(this, MyProfile.class);
+		TabSpec tabSpecWindows = tabHost
+				.newTabSpec("Profile")
+				.setIndicator("Profile", null)
+				.setContent(intentWindows);
 
-			@Override
-			public void onPageSelected(int position) {
-				// on changing the page
-				// make respected tab selected
-				actionBar.setSelectedNavigationItem(position);
-			}
 
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-			}
+		// add all tabs 
+		tabHost.addTab(tabSpecAndroid);
+		tabHost.addTab(tabSpecApple);
+		tabHost.addTab(tabSpecWindows);
 
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
-			}
-		});
-		
+		//set Windows tab as default (zero based)
+		tabHost.setCurrentTab(1);
+
+
 		if (!isMyServiceRunning()){
 			Log.v("NotificationsService", "Running");
-		    Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
-		    getApplicationContext().startService(serviceIntent);
+			Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
+			getApplicationContext().startService(serviceIntent);
 		}
 	}
-	
+
 	private boolean isMyServiceRunning() {
-        ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
-        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (NotificationsService.class.getName().equals(service.service.getClassName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-	@Override
-	public void onTabReselected(Tab tab, FragmentTransaction ft) {
-	}
-
-	@Override
-	public void onTabSelected(Tab tab, FragmentTransaction ft) {
-		// on tab selected
-		// show respected fragment view
-		viewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (NotificationsService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -127,10 +109,10 @@ ActionBar.TabListener {
 		Log.d("Problem Determination", "id: " + id);
 		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
 		//Log.d("Problem Determination", "action_exit id: " + R.id.action_exit);
-		
+
 		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
-			this.startActivity(new Intent(this, SettingsActivity.class));
-			return true;
+		this.startActivity(new Intent(this, SettingsActivity.class));
+		return true;
 
 	}
 }
