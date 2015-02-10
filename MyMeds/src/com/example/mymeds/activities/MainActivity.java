@@ -1,6 +1,10 @@
 package com.example.mymeds.activities;
  
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.util.Log;
@@ -12,6 +16,7 @@ import com.example.mymeds.R;
 import com.example.mymeds.util.NotificationsService;
 import com.example.mymeds.util.TabsPagerAdapter;
 import com.example.mymeds.fragments.DatePickerFragment;
+import com.example.mymeds.fragments.ThirdFragment;
 import com.example.mymeds.fragments.ThirdFragment.OnDateEntrySelectedListener;
 import com.example.mymeds.util.TabsPagerAdapter;
 
@@ -33,8 +38,9 @@ public class MainActivity extends FragmentActivity implements
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = { "Daily Meds", "All Meds", "Profile" };
+    private String[] tabs = { "Daily Meds", "All Meds", "Future Meds" };
     int year, month, day =0;
+    private int currentPage =1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,7 @@ public class MainActivity extends FragmentActivity implements
 			public void onPageSelected(int position) {
 				// on changing the page
 				// make respected tab selected
+				currentPage = position;
 				actionBar.setSelectedNavigationItem(position);
 			}
  
@@ -105,7 +112,8 @@ public class MainActivity extends FragmentActivity implements
 	public void onTabSelected(Tab tab, FragmentTransaction ft) {
 		// on tab selected
 		// show respected fragment view
-		viewPager.setCurrentItem(tab.getPosition());
+		currentPage = tab.getPosition();
+		viewPager.setCurrentItem(currentPage);
 	}
  
     @Override
@@ -168,6 +176,18 @@ public void onDateSet(DatePicker view, int selectedYear,
 		year = selectedYear;
 		month = selectedMonth;
 		day = selectedDay;
+		SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+		Date d = new Date();
+		try {
+			d = f.parse(day+"-"+month+"-"+year);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		long dateLong = d.getTime();
+		ThirdFragment articleFrag = (ThirdFragment)
+                getSupportFragmentManager().findFragmentById(currentPage);
+		articleFrag.setDate(dateLong);		
 		}
 	};
 	
