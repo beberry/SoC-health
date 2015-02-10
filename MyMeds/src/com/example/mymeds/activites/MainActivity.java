@@ -9,8 +9,11 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -22,13 +25,17 @@ import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.NotificationsService;
 
 public class MainActivity extends TabActivity {
+	private GestureDetector gestureDetector;
+	TabHost tabHost;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		gestureDetector = new GestureDetector(new SwipeGestureDetector());
+
 		Resources ressources = getResources(); 
-		TabHost tabHost = getTabHost(); 
+		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		TabSpec tabSpecToday = tabHost
@@ -54,7 +61,6 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 
 		tabHost.setCurrentTab(0);
-
 
 		if (!isMyServiceRunning()){
 			Log.v("NotificationsService", "Running");
@@ -121,6 +127,62 @@ public class MainActivity extends TabActivity {
 			}
 		} catch (Exception ex) {
 			// Ignore
+		}
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (gestureDetector.onTouchEvent(event)) {
+			return true;
+		}
+		return super.onTouchEvent(event);
+	}
+
+	private void onLeftSwipe() {
+		if(tabHost.getCurrentTab()<3){
+			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
+		}
+	}
+
+	private void onRightSwipe() {
+		if(tabHost.getCurrentTab()>0){
+			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
+		}
+	}
+
+	// Private class for gestures
+	private class SwipeGestureDetector 
+	extends SimpleOnGestureListener {
+		// Swipe properties, you can change it to make the swipe 
+		// longer or shorter and speed
+		private static final int SWIPE_MIN_DISTANCE = 120;
+		private static final int SWIPE_MAX_OFF_PATH = 200;
+		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2,
+				float velocityX, float velocityY) {
+			try {
+				float diffAbs = Math.abs(e1.getY() - e2.getY());
+				float diff = e1.getX() - e2.getX();
+
+				if (diffAbs > SWIPE_MAX_OFF_PATH)
+					return false;
+
+				// Left swipe
+				if (diff > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					MainActivity.this.onLeftSwipe();
+
+					// Right swipe
+				} else if (-diff > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					MainActivity.this.onRightSwipe();
+				}
+			} catch (Exception e) {
+				Log.e("YourActivity", "Error on gestures");
+			}
+			return false;
 		}
 	}
 }
