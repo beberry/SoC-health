@@ -4,8 +4,7 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
@@ -15,24 +14,23 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light" >
-        <service
-            android:name="com.example.mymeds.util.NotificationsService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.example.mymeds.util.NotificationsService" />
-            </intent-filter>
-        </service>
+        
+        <service android:name="com.example.mymeds.util.NotificationsService" android:exported="false">
+    		<intent-filter>
+        		<action android:name="com.example.mymeds.util.NotificationsService" />
+    		</intent-filter>
+		</service>
 
-        <receiver
-            android:name=".BootReceiver"
-            android:enabled="true"
-            android:exported="true"
-            android:label="BootReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
+		<receiver
+    		android:name=".BootReceiver"
+    		android:enabled="true"
+    		android:exported="true"
+    		android:label="BootReceiver">
+    		<intent-filter>
+        		<action android:name="android.intent.action.BOOT_COMPLETED" />
+    		</intent-filter>
+		</receiver>
+        
         <activity
             android:name=".activites.MainActivity"
             android:label="@string/app_name" >
@@ -42,15 +40,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- SettingsActivity -->
+        
+         <!-- SettingsActivity -->
         <activity
             android:name="com.example.mymeds.activites.SettingsActivity"
-            android:label="@string/activity_settings" >
+            android:label="@string/activity_settings" >                      
         </activity>
-        <activity android:name="com.example.mymeds.tabs.AllMeds" />
-        <activity android:name="com.example.mymeds.tabs.MyProfile" />
-        <activity android:name="com.example.mymeds.tabs.TodaysMeds" />
+        
     </application>
 
 </manifest>
