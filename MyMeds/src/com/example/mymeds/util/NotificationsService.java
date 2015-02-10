@@ -8,7 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.example.mymeds.R;
-import com.example.mymeds.activites.MainActivity;
+import com.example.mymeds.activities.MainActivity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
