@@ -119,6 +119,7 @@ public class SettingsActivity extends Activity{
 		store.setHowLongBefore(howLongBefore);	
 		store.setTextSize(textSize);
 		
+		//Save to Shared Preferences
 		SharedPreferences prefs = this.getSharedPreferences(
 			      "com.example.mymeds", Context.MODE_PRIVATE);
 		  SharedPreferences.Editor editor = prefs.edit();
@@ -133,9 +134,11 @@ public class SettingsActivity extends Activity{
 		try {
 			Log.w("osfn", PojoMapper.toJson(store, true));
 			writeToSettings(PojoMapper.toJson(store, true));
+			Toast.makeText(getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Toast.makeText(getApplicationContext(), "Error Saving Settings", Toast.LENGTH_LONG).show();
 		}
 	}
 	
@@ -190,6 +193,7 @@ public class SettingsActivity extends Activity{
 	 * @param view
 	 */
 	public void cancelChanges(View view){
+		Toast.makeText(getApplicationContext(), "Changes Not Saved", Toast.LENGTH_LONG).show();
 		finish();
 	}
 	

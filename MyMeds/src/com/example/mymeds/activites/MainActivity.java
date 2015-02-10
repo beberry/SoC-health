@@ -1,5 +1,7 @@
 package com.example.mymeds.activites;
 
+import java.lang.reflect.Field;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActivityManager;
@@ -12,6 +14,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewConfiguration;
 import android.view.Window;
 
 import com.example.mymeds.R;
@@ -33,6 +36,8 @@ ActionBar.TabListener {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR);
 		setContentView(R.layout.activity_main);
 
+		disableHardwareMenuKey();
+		
 		// Initilization
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		actionBar = getActionBar();
@@ -132,5 +137,25 @@ ActionBar.TabListener {
 			this.startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 
+	}
+	
+	/**
+	 * Disable Hardware Menu Button on phones. Force Menu drop down on Action Bar.
+	 * 
+	 * Referenced from: http://stackoverflow.com/questions/9286822/how-to-force-use-of-overflow-menu-on-devices-with-menu-button
+	 */
+	private void disableHardwareMenuKey()
+	{
+		try
+		{
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			if(menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception ex) {
+			// Ignore
+		}
 	}
 }
