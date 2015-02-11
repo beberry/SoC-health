@@ -49,7 +49,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 	public View setSecondView(int position, View root, TableLayout table){
 
-		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.allmeds_table_row, null);
 
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
