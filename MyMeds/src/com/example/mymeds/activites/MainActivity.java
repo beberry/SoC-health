@@ -1,9 +1,12 @@
 package com.example.mymeds.activites;
 
 import java.lang.reflect.Field;
+import java.util.Calendar;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -22,7 +25,7 @@ import com.example.mymeds.R;
 import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
-import com.example.mymeds.util.NotificationsService;
+import com.example.mymeds.util.AlarmReceiver;
 
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
@@ -61,22 +64,20 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 
 		tabHost.setCurrentTab(0);
+		
+		/*** Testing Notifications ***/
+		Calendar calendar = Calendar.getInstance();
+        int testValues[] = {5000, 20000};
 
-		if (!isMyServiceRunning()){
-			Log.v("NotificationsService", "Running");
-			Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
-			getApplicationContext().startService(serviceIntent);
-		}
-	}
+        for (int id = 0; id < 2; id++) {
+            Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+            myIntent.putExtra("id", id);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, id, myIntent, 0);
 
-	private boolean isMyServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (NotificationsService.class.getName().equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis() + testValues[id], pendingIntent);
+        }
+
 	}
 
 	/**
