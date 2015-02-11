@@ -6,11 +6,13 @@ import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mymeds.R;
 
@@ -33,12 +35,26 @@ public class ListItemAdapter extends BaseAdapter {
 	public View setFirstView(int position, View root, TableLayout table){
 
 		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+		
+		final Medication toAdd = data.get(position);
 
+		for(int i=0;i<toAdd.frequency.size();i++){
+			System.out.println(toAdd.frequency.get(i).getTime());
+		}
+		
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
 		TextView t2 = (TextView) row.findViewById(R.id.time);
 		t2.setText(data.get(position).getTime());
+		
+		row.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(mContext, toAdd.getDisplayName(), Toast.LENGTH_LONG).show();
+			}
+		});
 
 		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(
@@ -54,7 +70,7 @@ public class ListItemAdapter extends BaseAdapter {
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
-		TextView t2 = (TextView) row.findViewById(R.id.time);
+		TextView t2 = (TextView) row.findViewById(R.id.dosage);
 		t2.setText(String.valueOf(data.get(position).getRemaining()));
 
 		row.setPadding(5, 20, 5, 20);

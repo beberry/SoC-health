@@ -6,7 +6,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.ListItemAdapter;
@@ -32,7 +35,7 @@ public class AllMeds extends Activity {
 			adapter.setSecondView(i,this.findViewById(R.layout.tab_second), listViewItems);
 		}
 		listViewItems.requestLayout();
-
+		
 	}
 
 

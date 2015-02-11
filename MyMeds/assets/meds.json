@@ -28,12 +28,12 @@
             "remaining": 56,
             "frequency":[
                 {
-                    "time": 12,
+                    "time": 17,
                     "dosage": "500mg",
                     "units": 2
                 },
                 {
-                    "time": 12,
+                    "time": 9,
                     "dosage": "500mg",
                     "units": 2
                 }
