@@ -70,8 +70,16 @@ public class ListItemAdapter extends BaseAdapter {
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
+<<<<<<< HEAD
 		//TextView t2 = (TextView) row.findViewById(R.id.dosage);
 		//t2.setText(String.valueOf(data.get(position).getRemaining()));
+||||||| merged common ancestors
+		TextView t2 = (TextView) row.findViewById(R.id.time);
+		t2.setText(String.valueOf(data.get(position).getRemaining()));
+=======
+		TextView t2 = (TextView) row.findViewById(R.id.dosage);
+		t2.setText(String.valueOf(data.get(position).getRemaining()));
+>>>>>>> ade06749f7c05a8be03aeeef2748275da627dfbd
 
 		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(
