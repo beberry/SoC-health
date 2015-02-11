@@ -79,6 +79,9 @@ public class NotificationService extends Service {
     public void setAlarms(){
     	
 		String jsonTime = null;
+		String dosage = null;
+		String units = null;
+		String name = null;
 		
     	try {
 			// read file from assets
@@ -97,16 +100,20 @@ public class NotificationService extends Service {
 			for (int k = 0; k < medIndex.length(); k++) {
 				record = medIndex.getJSONObject(k);
 				//work to get into frequency to get time
+				name = record.getString("displayName");
 				JSONArray freqIndex = record.getJSONArray("frequency");
 				JSONObject freq;
 				for(int t = 0; t<freqIndex.length(); t++){
 					freq = freqIndex.getJSONObject(t);
 					jsonTime = freq.getString("time");
+					dosage = freq.getString("dosage");
+					units = freq.getString("units");
 					Log.v("Time", jsonTime);
+					Log.v("Dosage", dosage);
+					Log.v("Units", units);
+					Log.v("Name", name);
+					
 				}
-				//freq = record.get("frequency");
-				//jsonTime = record.getString("time");
-				//Log.v("Time", freq.toString());
 				
 			}
 		} catch (IOException e) {
