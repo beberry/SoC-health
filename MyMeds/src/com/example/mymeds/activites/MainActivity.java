@@ -3,7 +3,10 @@ package com.example.mymeds.activites;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +35,7 @@ import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
 import com.example.mymeds.util.NotificationsService;
 
@@ -59,7 +63,7 @@ public class MainActivity extends TabActivity {
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putParcelableArrayListExtra("meds", allmeds);
+		intentToday.putParcelableArrayListExtra("meds", todaysmeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Meds")
 				.setIndicator("Todays Meds", null)
@@ -210,9 +214,9 @@ public class MainActivity extends TabActivity {
 	}
 
 	public void calculateMeds(){
-		for(int i=0;i<allmeds.size();i++){
-			System.out.println(allmeds.get(i));
-		}
+		MedFetcher medFetcher = new MedFetcher();
+		Calendar c = new GregorianCalendar();
+		todaysmeds = medFetcher.daysMedication(c.getTime().getTime(), allmeds);
 	}
 
 	public boolean loadValues(){
