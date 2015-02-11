@@ -39,6 +39,7 @@ public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
+	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
 	Context mContext;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,14 +59,14 @@ public class MainActivity extends TabActivity {
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putExtra("meds", allmeds.get(0).getDisplayName());
+		intentToday.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Meds")
 				.setIndicator("Todays Meds", null)
 				.setContent(intentToday);
 
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
-		intentAll.putExtra("meds", allmeds.get(0).getDisplayName());
+		intentAll.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecAll = tabHost
 				.newTabSpec("All Meds")
 				.setIndicator("All Meds", null)
@@ -207,7 +208,7 @@ public class MainActivity extends TabActivity {
 			return false;
 		}
 	}
-	
+
 	public void calculateMeds(){
 		for(int i=0;i<allmeds.size();i++){
 			System.out.println(allmeds.get(i));

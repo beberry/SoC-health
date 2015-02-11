@@ -2,8 +2,11 @@ package com.example.mymeds.util;
 
 import java.util.ArrayList;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 //another class to handle item's id and name
-public class Medication {
+public class Medication implements Parcelable{
 
 	public int medId;
 	public String medName, displayName, description, type, time;
@@ -109,6 +112,53 @@ public class Medication {
 
 	public ArrayList<Frequency> getFrequency(){
 		return frequency;
+	}
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	public Medication (Parcel in)
+	{
+		medName = in.readString ();
+		displayName = in.readString ();
+		description = in.readString ();
+		type = in.readString ();
+		time = in.readString ();
+
+		medId = in.readInt();
+		remaining = in.readInt();
+		startTime = in.readLong();
+		endTime = in.readLong();
+	}
+
+	public static final Parcelable.Creator<Medication> CREATOR
+	= new Parcelable.Creator<Medication>() 
+	{
+		public Medication createFromParcel(Parcel in) 
+		{
+			return new Medication(in);
+		}
+
+		public Medication[] newArray (int size) 
+		{
+			return new Medication[size];
+		}
+	};
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(medName);
+		dest.writeString(displayName);
+		dest.writeString(description);
+		dest.writeString(type);
+		dest.writeString(time);
+
+		dest.writeInt(medId);
+		dest.writeInt(remaining);
+		dest.writeLong(startTime);
+		dest.writeLong(endTime);	
 	}
 
 }
