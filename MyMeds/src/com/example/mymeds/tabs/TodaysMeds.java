@@ -31,7 +31,11 @@ public class TodaysMeds extends Activity {
 
 		mContext = this;
 
-		System.out.println("Todays meds : "+getIntent().getStringExtra("meds"));
+		meds = getIntent().getParcelableArrayListExtra("meds");
+		
+		for(int i=0;i<meds.size();i++){
+			System.out.println(meds.get(i).getDisplayName());
+		}
 //		if(meds.size()==0){
 //			System.out.println("Loading values");
 //			loadValues();

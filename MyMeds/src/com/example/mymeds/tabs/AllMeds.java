@@ -22,7 +22,7 @@ public class AllMeds extends Activity {
 		super.onCreate(savedInstanceState);
 		mContext = getApplicationContext();
 		setContentView(R.layout.tab_second);
-		System.out.println("allmeds meds : "+getIntent().getStringExtra("meds"));
+		System.out.println("All meds : "+getIntent().getParcelableArrayListExtra("meds"));
 
 		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
 
