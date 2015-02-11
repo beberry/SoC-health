@@ -53,8 +53,11 @@ public class ListItemAdapter extends BaseAdapter {
 
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
+		
+		//TextView t1 = (TextView) row.findViewById(R.id.dosage);
+		//t1.setText(data.get(position).getD);
 
-		TextView t2 = (TextView) row.findViewById(R.id.time);
+		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
 		t2.setText(String.valueOf(data.get(position).getRemaining()));
 
 		row.setPadding(5, 20, 5, 20);
