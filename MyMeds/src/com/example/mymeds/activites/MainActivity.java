@@ -1,130 +1,188 @@
 package com.example.mymeds.activites;
- 
-import java.util.Calendar;
+
+import java.lang.reflect.Field;
+
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
+import android.app.TabActivity;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.ViewConfiguration;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
-import com.example.mymeds.fragments.DatePickerFragment;
-import com.example.mymeds.fragments.ThirdFragment.OnDateEntrySelectedListener;
-import com.example.mymeds.util.TabsPagerAdapter;
+import com.example.mymeds.tabs.AllMeds;
+import com.example.mymeds.tabs.FutureMeds;
+import com.example.mymeds.tabs.TodaysMeds;
+import com.example.mymeds.util.NotificationsService;
 
-import android.app.ActionBar;
-import android.app.ActionBar.Tab;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.FragmentTransaction;
-import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.widget.DatePicker;
- 
-public class MainActivity extends FragmentActivity implements
-        ActionBar.TabListener, OnDateEntrySelectedListener{
- 
-    private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
-    // Tab titles
-    private String[] tabs = { "Daily Meds", "All Meds", "Profile" };
-    int year, month, day =0;
-    
- 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
- 
-        // Initilization
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
- 
-        viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
- 
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
-        }
- 
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
- 
-            @Override
-            public void onPageSelected(int position) {
-                // on changing the page
-                // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
-            }
- 
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-            }
- 
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-            }
-        });
-    }
-    
-    
- 
-    @Override
-    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-    }
- 
-    @Override
-    public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        // on tab selected
-        // show respected fragment view
-        viewPager.setCurrentItem(tab.getPosition());
-    }
- 
-    @Override
-    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-    }
+public class MainActivity extends TabActivity {
+	private GestureDetector gestureDetector;
+	TabHost tabHost;
 
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
+		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public void onDateEntrySelected(boolean startDate, long defaultDate) {
-		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(defaultDate);
-		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH);
-		day = c.get(Calendar.DAY_OF_MONTH);
-		showDialog(DATE_DIALOG_ID);
-				
-	}
-	
-	static final int DATE_DIALOG_ID = 999;
-	
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		switch (id) {
-		case DATE_DIALOG_ID:
-		   return new DatePickerDialog(this, datePickerListener, 
-                         year, month,day);
+		Resources ressources = getResources(); 
+		tabHost = getTabHost(); 
+
+		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
+		TabSpec tabSpecToday = tabHost
+				.newTabSpec("Todays Meds")
+				.setIndicator("Todays Meds", null)
+				.setContent(intentToday);
+
+		Intent intentAll = new Intent().setClass(this, AllMeds.class);
+		TabSpec tabSpecAll = tabHost
+				.newTabSpec("All Meds")
+				.setIndicator("All Meds", null)
+				.setContent(intentAll);
+
+		Intent intentProfile = new Intent().setClass(this, FutureMeds.class);
+		TabSpec tabSpecProfile = tabHost
+				.newTabSpec("Profile")
+				.setIndicator("Profile", null)
+				.setContent(intentProfile);
+
+		// add all tabs 
+		tabHost.addTab(tabSpecToday);
+		tabHost.addTab(tabSpecAll);
+		tabHost.addTab(tabSpecProfile);
+
+		tabHost.setCurrentTab(0);
+
+		if (!isMyServiceRunning()){
+			Log.v("NotificationsService", "Running");
+			Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
+			getApplicationContext().startService(serviceIntent);
 		}
-		return null;
 	}
-	
-	private DatePickerDialog.OnDateSetListener datePickerListener 
-    = new DatePickerDialog.OnDateSetListener() {
 
-// when dialog box is closed, below method will be called.
-public void onDateSet(DatePicker view, int selectedYear,
-	int selectedMonth, int selectedDay) {
-		year = selectedYear;
-		month = selectedMonth;
-		day = selectedDay;
-		
-		
-}
-};	
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (NotificationsService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Creates the Menu Bar.
+	 * 
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	} 
+
+	/**
+	 * Event Handlers for Menu Bar.
+	 * 
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{		
+		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
+		//Log.d("Problem Determination", "action_exit id: " + R.id.action_exit);
+
+		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
+		this.startActivity(new Intent(this, SettingsActivity.class));
+		return true;
+
+	}
+
+	/**
+	 * Disable Hardware Menu Button on phones. Force Menu drop down on Action Bar.
+	 * 
+	 * Referenced from: http://stackoverflow.com/questions/9286822/how-to-force-use-of-overflow-menu-on-devices-with-menu-button
+	 */
+	private void disableHardwareMenuKey()
+	{
+		try
+		{
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			if(menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception ex) {
+			// Ignore
+		}
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (gestureDetector.onTouchEvent(event)) {
+			return true;
+		}
+		return super.onTouchEvent(event);
+	}
+
+	private void onLeftSwipe() {
+		if(tabHost.getCurrentTab()<3){
+			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
+		}
+	}
+
+	private void onRightSwipe() {
+		if(tabHost.getCurrentTab()>0){
+			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
+		}
+	}
+
+	// Private class for gestures
+	private class SwipeGestureDetector 
+	extends SimpleOnGestureListener {
+		// Swipe properties, you can change it to make the swipe 
+		// longer or shorter and speed
+		private static final int SWIPE_MIN_DISTANCE = 120;
+		private static final int SWIPE_MAX_OFF_PATH = 200;
+		private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2,
+				float velocityX, float velocityY) {
+			try {
+				float diffAbs = Math.abs(e1.getY() - e2.getY());
+				float diff = e1.getX() - e2.getX();
+
+				if (diffAbs > SWIPE_MAX_OFF_PATH)
+					return false;
+
+				// Left swipe
+				if (diff > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					MainActivity.this.onLeftSwipe();
+
+					// Right swipe
+				} else if (-diff > SWIPE_MIN_DISTANCE
+						&& Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+					MainActivity.this.onRightSwipe();
+				}
+			} catch (Exception e) {
+				Log.e("YourActivity", "Error on gestures");
+			}
+			return false;
+		}
+	}
 }

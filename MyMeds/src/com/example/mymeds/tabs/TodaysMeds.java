@@ -1,4 +1,4 @@
-package com.example.mymeds.fragments;
+package com.example.mymeds.tabs;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,62 +8,44 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TableLayout;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.ListItemAdapter;
 import com.example.mymeds.util.Medication;
 
-public class FirstFragment extends Fragment {
+public class TodaysMeds extends Activity {
 	Context mContext;
 	ListItemAdapter adapter;
 	ArrayList<Medication> meds = new ArrayList<Medication>();
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.tab_first);
 
-		View rootView = inflater.inflate(R.layout.fragment_first, container, false);
-
-		mContext = getActivity().getApplicationContext();
+		mContext = this;
 
 		if(meds.size()==0){
 			System.out.println("Loading values");
 			loadValues();
 		}
 
-		TableLayout listViewItems = (TableLayout) rootView.findViewById(R.id.listview);
+
+		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
 
 		// our adapter instance
 		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
 
 		for(int i=0;i<meds.size();i++){
-			System.out.println(meds.get(i).getMedName());
-			adapter.setFirstView(i, rootView, listViewItems);
+			adapter.setFirstView(i, this.findViewById(R.layout.tab_first), listViewItems);
 		}
 		listViewItems.requestLayout();
-
-		//		
-		//		// create a new ListView, set the adapter and item click listener
-		//		listViewItems.setAdapter(adapter);
-		//
-		//		// Set up the user interaction to manually show or hide the system UI.
-		//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-		//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		//				Medication item = adapter.getItem(position);
-		//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-		//			}
-		//		});
-
-		return rootView;
 	}
 
 	public boolean loadValues(){

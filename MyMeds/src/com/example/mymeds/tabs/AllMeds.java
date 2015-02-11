@@ -1,4 +1,4 @@
-package com.example.mymeds.fragments;
+package com.example.mymeds.tabs;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,71 +8,43 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TableLayout;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.ListItemAdapter;
 import com.example.mymeds.util.Medication;
 
-public class SecondFragment extends Fragment {
+public class AllMeds extends Activity {
 	Context mContext;
 	ListItemAdapter adapter;
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-
-		View rootView = inflater.inflate(R.layout.fragment_first, container, false);
-
-		mContext = getActivity().getApplicationContext();
-
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mContext = getApplicationContext();
+		setContentView(R.layout.tab_second);
+		
 		if(allmeds.size()==0){
 			loadValues();
 		}
 
-		TableLayout listViewItems = (TableLayout) rootView.findViewById(R.id.listview);
+		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
 
 		// our adapter instance
 		adapter = new ListItemAdapter(mContext, R.id.listview, allmeds);
 
 		for(int i=0;i<allmeds.size();i++){
-			System.out.println(allmeds.get(i).getMedName());
-			adapter.setView(i, rootView, listViewItems);
+			adapter.setSecondView(i,this.findViewById(R.layout.tab_second), listViewItems);
 		}
+		listViewItems.requestLayout();
 
-
-		//		ListView listViewItems = (ListView) rootView.findViewById(R.id.listview);
-		//
-		//
-		//		// our adapter instance
-		//		adapter = new ListItemAdapter(mContext, R.id.listview, allmeds);
-		//
-		//		// create a new ListView, set the adapter and item click listener
-		//		listViewItems.setAdapter(adapter);
-		//
-		//		// Set up the user interaction to manually show or hide the system UI.
-		//		listViewItems.setOnItemClickListener(new OnItemClickListener() {
-		//			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-		//				Medication item = adapter.getItem(position);
-		//				Toast.makeText(mContext, String.valueOf(item.getMedName()),Toast.LENGTH_LONG).show();
-		//			}
-		//		});
-
-		return rootView;
 	}
 
 	public boolean loadValues(){
@@ -140,9 +112,6 @@ public class SecondFragment extends Fragment {
 			Log.e("JSONException","JSON exception");
 			e.printStackTrace();			
 			return false;
-		}
-		for(int i=0;i<allmeds.size();i++){
-			System.out.println(allmeds.get(i).toString());
 		}
 		return true;
 	}

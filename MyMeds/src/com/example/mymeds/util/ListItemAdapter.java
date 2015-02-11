@@ -2,18 +2,17 @@ package com.example.mymeds.util;
 
 import java.util.ArrayList;
 
-import com.example.mymeds.R;
-
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.example.mymeds.R;
 
 public class ListItemAdapter extends BaseAdapter {
 
@@ -48,12 +47,17 @@ public class ListItemAdapter extends BaseAdapter {
 		return root;
 	}
 
-	public View setView(int position, View root, TableLayout table){
+	public View setSecondView(int position, View root, TableLayout table){
 
-		TableRow row = new TableRow(mContext);
-		TextView t1= new TextView(mContext);
-		t1.setText(data.get(position).getMedName());
-		row.addView(t1);
+		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+
+		TextView t1 = (TextView) row.findViewById(R.id.name);
+		t1.setText(data.get(position).getDisplayName());
+
+		TextView t2 = (TextView) row.findViewById(R.id.time);
+		t2.setText(String.valueOf(data.get(position).getRemaining()));
+
+		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
