@@ -46,7 +46,7 @@ public class Medication {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-	
+
 	public String getTime() {
 		return time;
 	}
@@ -102,13 +102,13 @@ public class Medication {
 	public void setRepeatPeriod(int repeatPeriod) {
 		this.repeatPeriod = repeatPeriod;
 	}
-	
+
 	public void setFrequency(ArrayList<Frequency> freq){
 		this.frequency = freq;
 	}
-	
+
 	public ArrayList<Frequency> getFrequency(){
 		return frequency;
 	}
-	
+
 }

@@ -54,9 +54,9 @@ public class NotificationsService extends Service {
 				JSONObject tempCheck = medIndex.getJSONObject(k);
 				int itemID = tempCheck.getInt("index");
 				String itemName = tempCheck.getString("name");
-				int dosage = tempCheck.getInt("dosage");
+//				int dosage = tempCheck.getInt("dosage");
 				String description = tempCheck.getString("description");
-				int time = tempCheck.getInt("time");
+//				int time = tempCheck.getInt("time");
 				System.out.println(description);
 			}
 		} catch (IOException e) {

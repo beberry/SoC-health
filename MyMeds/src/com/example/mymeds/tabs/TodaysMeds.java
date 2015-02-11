@@ -31,28 +31,29 @@ public class TodaysMeds extends Activity {
 
 		mContext = this;
 
-		if(meds.size()==0){
-			System.out.println("Loading values");
-			loadValues();
-		}
+		System.out.println("Todays meds : "+getIntent().getStringExtra("meds"));
+//		if(meds.size()==0){
+//			System.out.println("Loading values");
+//			loadValues();
+//		}
 
-
-		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
-
-		// our adapter instance
-		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
-
-		for(int i=0;i<meds.size();i++){
-			adapter.setFirstView(i, this.findViewById(R.layout.tab_first), listViewItems);
-		}
-		listViewItems.requestLayout();
+//
+//		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
+//
+//		// our adapter instance
+//		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
+//
+//		for(int i=0;i<meds.size();i++){
+//			adapter.setFirstView(i, this.findViewById(R.layout.tab_first), listViewItems);
+//		}
+//		listViewItems.requestLayout();
 	}
 
 	public boolean loadValues(){
 		try {
 			// read file from assets
 			AssetManager assetManager = mContext.getAssets();
-			InputStream is = assetManager.open("meds.json");
+			InputStream is = assetManager.open("allmeds.json");
 			int size = is.available();
 			byte[] buffer = new byte[size];
 			is.read(buffer);

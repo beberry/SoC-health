@@ -1,11 +1,20 @@
 package com.example.mymeds.activites;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,28 +31,41 @@ import com.example.mymeds.R;
 import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
+import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.Medication;
 import com.example.mymeds.util.NotificationsService;
 
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
+	ArrayList<Medication> allmeds = new ArrayList<Medication>();
+	Context mContext;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		mContext=this;
 
+		if(allmeds.size()==0){
+			loadValues();
+			calculateMeds();
+		}
+
+		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
 		Resources ressources = getResources(); 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
+		intentToday.putExtra("meds", allmeds.get(0).getDisplayName());
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Meds")
 				.setIndicator("Todays Meds", null)
 				.setContent(intentToday);
 
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
+		intentAll.putExtra("meds", allmeds.get(0).getDisplayName());
 		TabSpec tabSpecAll = tabHost
 				.newTabSpec("All Meds")
 				.setIndicator("All Meds", null)
@@ -60,7 +82,7 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 
-		tabHost.setCurrentTab(0);
+		tabHost.setCurrentTab(1);
 
 		if (!isMyServiceRunning()){
 			Log.v("NotificationsService", "Running");
@@ -184,5 +206,80 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
+	}
+	
+	public void calculateMeds(){
+		for(int i=0;i<allmeds.size();i++){
+			System.out.println(allmeds.get(i));
+		}
+	}
+
+	public boolean loadValues(){
+		ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
+
+		try {
+			// read file from assets
+			AssetManager assetManager = mContext.getAssets();
+			InputStream is = assetManager.open("meds.json");
+			int size = is.available();
+			byte[] buffer = new byte[size];
+			is.read(buffer);
+			is.close();
+			String bufferString = new String(buffer);	
+
+			JSONObject jsonObject = new JSONObject(bufferString);
+			JSONArray medIndex = jsonObject.getJSONArray("medication");
+
+			for(int k=0;k<medIndex.length();k++){
+				Medication med = new Medication();
+
+				JSONObject tempCheck = medIndex.getJSONObject(k);
+				int itemID = tempCheck.getInt("index");
+				String itemName = tempCheck.getString("name");
+				String displayName = tempCheck.getString("displayName");
+				String description = tempCheck.getString("description");
+				String type = tempCheck.getString("type");
+				long startTime = tempCheck.getLong("startTime");
+				long endTime = tempCheck.getLong("endTime");
+				int remaining = tempCheck.getInt("remaining");
+				//								int repeatPeriod = tempCheck.getInt("repeatPeriod");
+				JSONArray frequency = tempCheck.getJSONArray("frequency");
+				for(int i=0;i<frequency.length();i++){
+					JSONObject frequencyObject = frequency.getJSONObject(i);
+					int time = frequencyObject.getInt("time");
+					String dosage = frequencyObject.getString("dosage");
+					int units = frequencyObject.getInt("units");
+					Frequency frequency2 = new Frequency();
+					frequency2.setDosage(dosage);
+					frequency2.setUnits(units);
+					frequency2.setTime(time);
+					frequencyList.add(frequency2);
+				}
+
+				if(allmeds.contains((Integer)med.getMedId())==false){
+					med.setMedId(itemID);
+					med.setMedName(itemName);
+					med.setDisplayName(displayName);
+					med.setDescription(description);
+					med.setType(type);
+					med.setStartTime(startTime);
+					med.setEndTime(endTime);
+					med.setRemaining(remaining);
+					//					med.setRepeatPeriod(repeatPeriod);
+					med.setFrequency(frequencyList);
+					allmeds.add(med);
+				}else{
+					med = null;
+				}			}
+		} catch (IOException e) {
+			Log.e("IOException","Error loading file");
+			e.printStackTrace();
+			return false;
+		} catch (JSONException e) {
+			Log.e("JSONException","JSON exception");
+			e.printStackTrace();			
+			return false;
+		}
+		return true;
 	}
 }
