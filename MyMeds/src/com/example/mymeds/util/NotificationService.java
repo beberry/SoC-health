@@ -1,5 +1,12 @@
 package com.example.mymeds.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MainActivity;
 
@@ -8,6 +15,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -39,6 +47,7 @@ public class NotificationService extends Service {
         int value = intent.getIntExtra("id", 0);
         Log.v("INFO", Integer.toString(value));
         showNotification(value);
+        setAlarms();
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -61,6 +70,52 @@ public class NotificationService extends Service {
 
         // Send the notification.
         notificationManager.notify(id, notification);
+    }
+    
+    /**
+     * Go through the mymeds json file and set an alarm for each piece of medication to be
+     * taken during the day
+     */
+    public void setAlarms(){
+    	
+		String jsonTime = null;
+		
+    	try {
+			// read file from assets
+			AssetManager assetManager = this.getAssets();
+			InputStream is = assetManager.open("allmeds.json");
+			int size = is.available();
+			byte[] buffer = new byte[size];
+			is.read(buffer);
+			is.close();
+			String bufferString = new String(buffer);
+
+			JSONObject jsonObject = new JSONObject(bufferString);
+			JSONArray medIndex = jsonObject.getJSONArray("medication");
+			JSONObject record;
+
+			for (int k = 0; k < medIndex.length(); k++) {
+				record = medIndex.getJSONObject(k);
+				//work to get into frequency to get time
+				JSONArray freqIndex = record.getJSONArray("frequency");
+				JSONObject freq;
+				for(int t = 0; t<freqIndex.length(); t++){
+					freq = freqIndex.getJSONObject(t);
+					jsonTime = freq.getString("time");
+					Log.v("Time", jsonTime);
+				}
+				//freq = record.get("frequency");
+				//jsonTime = record.getString("time");
+				//Log.v("Time", freq.toString());
+				
+			}
+		} catch (IOException e) {
+			Log.e("IOException", "Error loading file");
+			e.printStackTrace();
+		} catch (JSONException e) {
+			Log.e("JSONException", "JSON exception");
+			e.printStackTrace();
+		}
     }
 
     /**
