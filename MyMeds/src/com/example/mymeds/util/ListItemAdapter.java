@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +26,7 @@ public class ListItemAdapter extends BaseAdapter {
 	ArrayList<Medication> data = null;
 	int count=0;
 	TableLayout tempTable;
+	int timesTaken=0;
 
 	public ListItemAdapter(Context mContext,int layoutID, ArrayList<Medication> medData) {
 
@@ -37,7 +39,6 @@ public class ListItemAdapter extends BaseAdapter {
 
 
 	public View setFirstView(int position, View root, TableLayout table){
-
 		tempTable = table;
 		final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
 
@@ -47,7 +48,7 @@ public class ListItemAdapter extends BaseAdapter {
 		t1.setText(data.get(position).getDisplayName());
 
 		TextView t2 = (TextView) row.findViewById(R.id.time);
-		t2.setText(data.get(position).getTime());
+		t2.setText(String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
 
 		row.setOnClickListener(new OnClickListener() {
 			@Override
@@ -56,20 +57,20 @@ public class ListItemAdapter extends BaseAdapter {
 			}
 		});
 
-		Switch taken = (Switch) row.findViewById(R.id.pillTaken);	
+		final Switch taken = (Switch) row.findViewById(R.id.pillTaken);	
 		taken.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if(isChecked){
-					if(toAdd.getFrequency().size()>1){
-						tempTable.removeView(row);
-						row.setPadding(5, 20, 5, 20);
-						tempTable.addView(row, new TableLayout.LayoutParams(
-								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-					}
-					else{
-						Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
-						tempTable.removeView(row);
-					}
+				taken.toggle();
+				if(toAdd.getFrequency().size()>1){
+					tempTable.removeView(row);
+					timesTaken = timesTaken++;
+					row.setPadding(5, 20, 5, 20);
+					tempTable.addView(row, new TableLayout.LayoutParams(
+							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				}
+				else{
+					Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
+					tempTable.removeView(row);
 				}
 
 			}
@@ -90,8 +91,18 @@ public class ListItemAdapter extends BaseAdapter {
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
+		TextView t3 = (TextView) row.findViewById(R.id.dosage);
+		t3.setText(String.valueOf(data.get(position).getFrequency().get(0).getUnits()) + "x" + data.get(position).getFrequency().get(0).getDosage());
+
 		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
 		t2.setText(String.valueOf(data.get(position).getRemaining()));
+
+		TextView t4 = (TextView) row.findViewById(R.id.status);
+		if(data.get(position).getRemaining()>=25){
+			t4.setBackgroundColor(Color.GREEN);
+		}else{
+			t4.setBackgroundColor(Color.RED);
+		}
 
 		row.setOnClickListener(new OnClickListener() {
 			@Override

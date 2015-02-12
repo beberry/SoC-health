@@ -11,8 +11,8 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:showDividers="middle"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:showDividers="middle" >
 
         <TextView
             android:id="@+id/headerName"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Remaining"
+            android:text="Dosage"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -40,17 +40,32 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Notification"
+            android:text="Remaining"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/headerStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Status"
             android:textSize="20sp"
             android:textStyle="bold" />
     </TableRow>
 
-    <TableLayout
-        android:id="@+id/listview"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="10dp"
-        android:stretchColumns="1" />
+        android:layout_height="wrap_content" >
+
+        <TableLayout
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="30dp"
+            android:stretchColumns="1" />
+    </ScrollView>
 
 </LinearLayout>

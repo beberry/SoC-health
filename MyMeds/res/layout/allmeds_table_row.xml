@@ -7,7 +7,6 @@
 
     <!-- Remove cell_shape drawable background to remove white background from the table -->
 
-
     <!-- Short name of the medicine. -->
 
     <TextView
@@ -15,24 +14,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:gravity="center"
+        android:gravity="start"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="bold" />
 
     <!-- The dosage. -->
-    <!--
+
     <TextView
         android:id="@+id/dosage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center|center"
+        android:layout_gravity="start"
+        android:gravity="start"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="normal" />
-    -->
-
 
     <!-- Display the tablets left. -->
 
@@ -41,10 +38,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="start"
+        android:gravity="center"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="10dp" />
 
     <!-- The field to store red / green / amber notification image depending on the stock. -->
 

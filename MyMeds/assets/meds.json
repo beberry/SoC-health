@@ -25,7 +25,7 @@
             "type": "pill",
             "startTime": 140003824,
             "endTime": 143003824,
-            "remaining": 56,
+            "remaining": 20,
             "frequency":[
                 {
                     "time": 17,
@@ -47,7 +47,7 @@
             "type": "pill",
             "startTime": 140003824,
             "endTime": 143003824,
-            "remaining": 75,
+            "remaining": 84,
             "frequency":[
                 {
                     "time": 9,

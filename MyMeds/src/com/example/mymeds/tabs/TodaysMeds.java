@@ -1,12 +1,10 @@
 package com.example.mymeds.tabs;
 
 import java.util.ArrayList;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.TableLayout;
-
 import com.example.mymeds.R;
 import com.example.mymeds.util.ListItemAdapter;
 import com.example.mymeds.util.Medication;

@@ -11,8 +11,8 @@
     <TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:showDividers="middle"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:showDividers="middle" >
 
         <TextView
             android:id="@+id/headerName"
@@ -45,12 +45,17 @@
             android:textStyle="bold" />
     </TableRow>
 
-    <TableLayout
-        android:id="@+id/listview"
+    <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="30dp"
-        android:stretchColumns="1" />
+        android:layout_height="wrap_content" >
+
+        <TableLayout
+            android:id="@+id/listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="30dp"
+            android:stretchColumns="1" />
+    </ScrollView>
 
 </RelativeLayout>
