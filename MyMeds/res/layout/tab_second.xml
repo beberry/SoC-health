@@ -67,5 +67,4 @@
             android:paddingTop="30dp"
             android:stretchColumns="1" />
     </ScrollView>
-
 </LinearLayout>
