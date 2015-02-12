@@ -6,8 +6,8 @@
             "displayName": "Steroid Cream",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 143003824,
+            "startTime": 1423738637000,
+            "endTime": 1426157837000,
             "remaining": 56,
             "repeatPeriod": 2,
             "frequency":[
@@ -24,15 +24,15 @@
             "displayName": "Opium",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 143003824,
+            "startTime": 1423738637000,
+            "endTime": 1426157837000,
             "remaining": 56,
             "repeatPeriod": 2,
             "frequency":[
                 {
                     "time": 12,
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 5
                 }
             ]
         }

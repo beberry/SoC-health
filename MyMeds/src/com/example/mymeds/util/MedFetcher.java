@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.mymeds.tabs.FutureMeds;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
@@ -20,14 +22,13 @@ public class MedFetcher {
 	public void loadAssets(Context c)
 	{
 		mContext = c;
+		loadValues();
 	};
 	
 	
-	public Medication[] daysMedication(long day)
+	public ArrayList<Medication> daysMedication(long day)
 	{
 		ArrayList<Medication> daysMeds = new ArrayList<Medication>();
-		
-		loadValues();
 		
 		for (int i=0;i<allmeds.size();i++){
 			
@@ -46,7 +47,72 @@ public class MedFetcher {
 		}
 		
 		
-		return  (Medication[]) daysMeds.toArray();
+		return  daysMeds;
+	};
+	
+	
+	public ArrayList<futureMedDetails>  futureMedication(long sDay, long eDay)
+	{
+		ArrayList<futureMedDetails> futureMeds = new ArrayList<futureMedDetails>();
+		
+		long millisDiff = eDay - sDay;
+		
+		long daysDiff = (int)(millisDiff / 86400000);
+		
+		long currDay = sDay;
+		
+		for (int i = 0;i < daysDiff;i++)
+		{
+			ArrayList<Medication> daysMeds = daysMedication(sDay);
+			 combineLists(futureMeds, daysMeds);
+					
+			 sDay += 86400000;
+		}
+		
+		return futureMeds;
+	};
+	
+	
+	private ArrayList<futureMedDetails> combineLists(ArrayList<futureMedDetails> futureMeds, ArrayList<Medication> daysMeds)
+	{
+		for(int i = 0;i < daysMeds.size();i++){
+			int id = daysMeds.get(i).getMedId();
+			
+			int found = 0;
+			int  totalUnits = 0;
+			
+			for(int j = 0; j < futureMeds.size(); j++){
+				
+				if(id == futureMeds.get(j).getMedId()){
+					found = 1;
+					totalUnits = unitsTotal(daysMeds.get(i).getFrequency());						
+					futureMeds.get(j).increaseAmountNeeded(totalUnits);
+					break;
+				}
+				
+			}
+			
+			if(found == 0){
+										
+				totalUnits = unitsTotal(daysMeds.get(i).getFrequency());
+				
+				futureMedDetails newMed = new futureMedDetails(id, daysMeds.get(i).getMedName(),daysMeds.get(i).getDisplayName(), totalUnits);
+				futureMeds.add(newMed);
+			}
+		
+		}	
+		
+		return futureMeds;
+	};
+	
+	private int unitsTotal(ArrayList<Frequency> frequency){
+		int totalUnits = 0;
+		
+		for(int i = 0; i<frequency.size();i++){
+			totalUnits += frequency.get(i).units;
+		}
+		
+		return totalUnits;
 	};
 	
 	
@@ -67,6 +133,7 @@ public class MedFetcher {
 			JSONArray medIndex = jsonObject.getJSONArray("medication");
 
 			for(int k=0;k<medIndex.length();k++){
+				frequencyList = new ArrayList<Frequency>();
 				Medication med = new Medication();
 
 				JSONObject tempCheck = medIndex.getJSONObject(k);
