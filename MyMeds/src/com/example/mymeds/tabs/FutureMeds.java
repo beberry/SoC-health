@@ -1,6 +1,7 @@
 package com.example.mymeds.tabs;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -19,9 +20,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.PopupWindow;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.mymeds.R;
+import com.example.mymeds.util.ListItemAdapter;
+import com.example.mymeds.util.ListItemAdapterFuture;
+import com.example.mymeds.util.MedFetcher;
+import com.example.mymeds.util.futureMedDetails;
 
 public class FutureMeds extends FragmentActivity {
 
@@ -135,19 +141,36 @@ public void onDateSet(DatePicker view, int selectedYear,
 			endDateText.setText(date);
 			eMilli = c.getTimeInMillis();
 			
-			differenceInDays();
+			getMedication();
 		}
 		
 }
 };	
 	
-public void differenceInDays()
+public void getMedication()
 {
 	
 	long millisDiff = eMilli - sMilli;
 		
 	daysDiff = (int)(millisDiff / 86400000);
-		
+	
+	MedFetcher mf = new MedFetcher();
+	mf.loadAssets(this);
+	
+	ArrayList<futureMedDetails>  futureMeds =  mf.futureMedication(sMilli,eMilli);
+	
+	ListItemAdapterFuture adapter;
+	
+	TableLayout listViewItems = (TableLayout) findViewById(R.id.futurelistview);
+	listViewItems.removeAllViewsInLayout();
+
+	// our adapter instance
+	adapter = new ListItemAdapterFuture(this, R.id.futurelistview, futureMeds);
+
+	for(int i=0;i<futureMeds.size();i++){
+		adapter.setFirstView(i, this.findViewById(R.layout.tab_third), listViewItems);
+	}
+	listViewItems.requestLayout();
 };
 
 
