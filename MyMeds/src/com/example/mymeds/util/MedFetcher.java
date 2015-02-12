@@ -1,10 +1,5 @@
 package com.example.mymeds.util;
 
-<<<<<<< HEAD
-import java.util.ArrayList;
-
-import android.content.Context;
-=======
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,34 +13,12 @@ import com.example.mymeds.tabs.FutureMeds;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
->>>>>>> origin/DatePickersCreation
 
 public class MedFetcher {
 
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 	Context mContext;
-<<<<<<< HEAD
 
-	public void loadAssets(Context c)
-	{
-		mContext = c;
-	};
-
-
-	public ArrayList<Medication> daysMedication(long day, ArrayList<Medication> inMeds)
-	{
-		ArrayList<Medication> daysMeds = inMeds;
-
-		for (int i=0;i<allmeds.size();i++){
-
-			long st = allmeds.get(i).startTime;
-			long et = allmeds.get(i).endTime;
-
-			long stDiff = day - st;
-
-
-=======
-	
 	public void loadAssets(Context c)
 	{
 		mContext = c;
@@ -64,8 +37,6 @@ public class MedFetcher {
 			
 			long stDiff = day - st;
 			
-			
->>>>>>> origin/DatePickersCreation
 			if(stDiff >= 0 && !(day >et)){
 				if(stDiff % allmeds.get(i).repeatPeriod == 0)
 				{
@@ -73,13 +44,6 @@ public class MedFetcher {
 				}				
 			}				
 		}
-<<<<<<< HEAD
-
-		return  daysMeds;
-	};
-}
-=======
-		
 		
 		return  daysMeds;
 	};
@@ -156,7 +120,7 @@ public class MedFetcher {
 		try {
 			// read file from assets
 			AssetManager assetManager = mContext.getAssets();
-			InputStream is = assetManager.open("allmeds.json");
+			InputStream is = assetManager.open("meds.json");
 			int size = is.available();
 			byte[] buffer = new byte[size];
 			is.read(buffer);
@@ -221,4 +185,3 @@ public class MedFetcher {
 	}
 
 }
->>>>>>> origin/DatePickersCreation

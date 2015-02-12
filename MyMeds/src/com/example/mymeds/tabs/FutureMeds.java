@@ -167,7 +167,6 @@ public void onDateSet(DatePicker view, int selectedYear,
 	
 public void getMedication()
 {
-	
 	long millisDiff = eMilli - sMilli;
 		
 	daysDiff = (int)(millisDiff / 86400000);

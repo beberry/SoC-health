@@ -69,7 +69,7 @@ public class TodaysMeds extends Activity {
 				int itemID = tempCheck.getInt("index");
 				String itemName = tempCheck.getString("name");
 				String displayName = tempCheck.getString("displayName");
-				String time = tempCheck.getString("time");
+				String time = Integer.toString(tempCheck.getInt("time"));
 
 				if(meds.contains((Integer)med.getMedId())==false){
 					System.out.println("adding "+ itemID + " to the list");

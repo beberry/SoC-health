@@ -37,9 +37,10 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
-import com.example.mymeds.tabs.AllMeds;
-import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
+import com.example.mymeds.tabs.AllMeds;
+import com.example.mymeds.tabs.FutureMeds;
+
 import com.example.mymeds.util.AlarmReceiver;
 import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
@@ -84,7 +85,7 @@ public class MainActivity extends TabActivity {
 				.setIndicator("All Meds", null)
 				.setContent(intentAll);
 
-		Intent intentProfile = new Intent().setClass(this, MyProfile.class);
+		Intent intentProfile = new Intent().setClass(this, FutureMeds.class);
 		TabSpec tabSpecProfile = tabHost
 				.newTabSpec("Profile")
 				.setIndicator("Profile", null)
@@ -212,7 +213,7 @@ public class MainActivity extends TabActivity {
 	public void calculateMeds(){
 		MedFetcher medFetcher = new MedFetcher();
 		Calendar c = new GregorianCalendar();
-		todaysmeds = medFetcher.daysMedication(c.getTime().getTime(), allmeds);
+		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
 
 	public boolean loadValues(){
@@ -274,7 +275,6 @@ public class MainActivity extends TabActivity {
 			}
 		} catch (IOException e) {
 			Log.e("IOException","Error loading file");
-			e.printStackTrace();
 			return false;
 		} catch (JSONException e) {
 			Log.e("JSONException","JSON exception");

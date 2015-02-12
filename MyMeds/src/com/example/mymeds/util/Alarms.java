@@ -45,7 +45,7 @@ public class Alarms {
 		try {
 			// read file from assets
 			AssetManager assetManager = context.getAssets();
-			InputStream is = assetManager.open("allmeds.json");
+			InputStream is = assetManager.open("meds.json");
 			int size = is.available();
 			byte[] buffer = new byte[size];
 			is.read(buffer);
