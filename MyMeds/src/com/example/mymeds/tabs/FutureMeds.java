@@ -152,7 +152,7 @@ public void onDateSet(DatePicker view, int selectedYear,
 			startDateText.setText(date);
 			sMilli = c.getTimeInMillis();
 			
-			//differenceInDays();
+			getMedication();
 		}
 		else
 		{
