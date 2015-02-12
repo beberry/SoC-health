@@ -125,9 +125,7 @@ public class MainActivity extends TabActivity {
 	public boolean onOptionsItemSelected(MenuItem item)
 	{		
 		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
-		//Log.d("Problem Determination", "action_exit id: " + R.id.action_exit);
 
-		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
 		this.startActivity(new Intent(this, SettingsActivity.class));
 		return true;
 

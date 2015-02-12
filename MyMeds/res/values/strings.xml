@@ -55,6 +55,17 @@
 		<item>Extra Large</item>
 	</string-array>
     
+    <!-- Medication Input Activity -->
+    <string name="activity_medication_input">Add Medication</string>
+    
+    <string-array name="MedicationTypeArray">
+        <item>Tablet</item>
+		<item>Cream/Gel</item>
+		<item>Inhaler</item>
+		<item>Injection</item>
+		<item>Liquid</item>
+	</string-array>
+    
     <!-- Notifications Service -->
     <string name="local_service_started">STARTED</string>
     <string name="local_service_label">Notification</string>

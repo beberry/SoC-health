@@ -37,6 +37,13 @@
             android:name="com.example.mymeds.activites.SettingsActivity"
             android:label="@string/activity_settings" >
         </activity>
+        
+        <!-- MedicationInput Activity -->
+        <activity
+            android:name="com.example.mymeds.activites.MedicationInputActivity"
+            android:label="@string/activity_medication_input" >
+        </activity>
+        
         <activity android:name="com.example.mymeds.tabs.AllMeds" />
         <activity android:name="com.example.mymeds.tabs.FutureMeds" />
         <activity android:name="com.example.mymeds.tabs.TodaysMeds" />
