@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/cell_shape"
     android:padding="20dp" >
+
     <!-- Remove cell_shape drawable background to remove white background from the table -->
 
     <TextView
@@ -11,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:gravity="start|center"
+        android:gravity="center"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="bold" />
@@ -20,20 +21,21 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center|center"
+        android:layout_gravity="start"
+        android:gravity="start"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="normal" />
 
-    <ToggleButton
+    <Switch
         android:id="@+id/pillTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:gravity="end|center"
+        android:layout_gravity="start"
+        android:gravity="start"
         android:padding="10dp"
-        android:textOff="Not Taken"
-        android:textOn="Pill Taken" />
+        android:checked="false"
+        android:textOff="0"
+        android:textOn="|" />
 
 </TableRow>

@@ -14,17 +14,20 @@ import com.example.mymeds.util.Medication;
 public class TodaysMeds extends Activity {
 	Context mContext;
 	ListItemAdapter adapter;
-	ArrayList<Medication> meds = new ArrayList<Medication>();
+	public ArrayList<Medication> meds = new ArrayList<Medication>();
+	public TodaysMeds today;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_first);
-
+		today  = new TodaysMeds();
 		mContext = this;
 
 		meds = getIntent().getParcelableArrayListExtra("meds");
 
+		System.out.println(meds.get(1).getFrequency().size());
+		
 		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
 
 		// our adapter instance

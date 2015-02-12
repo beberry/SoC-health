@@ -3,7 +3,6 @@ package com.example.mymeds.activites;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -63,7 +62,7 @@ public class MainActivity extends TabActivity {
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putParcelableArrayListExtra("meds", todaysmeds);
+		intentToday.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Meds")
 				.setIndicator("Todays Meds", null)
@@ -247,7 +246,8 @@ public class MainActivity extends TabActivity {
 				long startTime = tempCheck.getLong("startTime");
 				long endTime = tempCheck.getLong("endTime");
 				int remaining = tempCheck.getInt("remaining");
-				//								int repeatPeriod = tempCheck.getInt("repeatPeriod");
+				//int repeatPeriod = tempCheck.getInt("repeatPeriod");
+
 				JSONArray frequency = tempCheck.getJSONArray("frequency");
 				for(int i=0;i<frequency.length();i++){
 					JSONObject frequencyObject = frequency.getJSONObject(i);
@@ -270,12 +270,19 @@ public class MainActivity extends TabActivity {
 					med.setStartTime(startTime);
 					med.setEndTime(endTime);
 					med.setRemaining(remaining);
-					//					med.setRepeatPeriod(repeatPeriod);
-					med.setFrequency(frequencyList);
+					//med.setRepeatPeriod(repeatPeriod);
+					System.out.println(med.getMedId() + "    " + frequencyList.size());
+
+					if(frequencyList.size() == frequency.length()){
+						med.setFrequency(frequencyList);
+						frequencyList.clear();
+					}
 					allmeds.add(med);
 				}else{
 					med = null;
-				}			}
+					frequencyList=null;
+				}			
+			}
 		} catch (IOException e) {
 			Log.e("IOException","Error loading file");
 			e.printStackTrace();

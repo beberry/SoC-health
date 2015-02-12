@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ public class ListItemAdapter extends BaseAdapter {
 	Context mContext;
 	ArrayList<Medication> data = null;
 	int count=0;
+	TableLayout tempTable;
 
 	public ListItemAdapter(Context mContext,int layoutID, ArrayList<Medication> medData) {
 
@@ -34,30 +38,46 @@ public class ListItemAdapter extends BaseAdapter {
 
 	public View setFirstView(int position, View root, TableLayout table){
 
-		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
-		
+		tempTable = table;
+		final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+
 		final Medication toAdd = data.get(position);
 
-		for(int i=0;i<toAdd.frequency.size();i++){
-			System.out.println(toAdd.frequency.get(i).getTime());
-		}
-		
+		System.out.println("pill no: "+position + " no of times to take: " + toAdd.frequency.size());
+
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
 		TextView t2 = (TextView) row.findViewById(R.id.time);
 		t2.setText(data.get(position).getTime());
-		
+
 		row.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(mContext, toAdd.getDisplayName(), Toast.LENGTH_LONG).show();
 			}
 		});
 
+		Switch taken = (Switch) row.findViewById(R.id.pillTaken);	
+		taken.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+					if(toAdd.getFrequency().size()>1){
+						tempTable.removeView(row);
+						row.setPadding(5, 20, 5, 20);
+						tempTable.addView(row, new TableLayout.LayoutParams(
+								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					}
+					else{
+						Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
+						tempTable.removeView(row);
+					}
+				}
+
+			}
+		});
 		row.setPadding(5, 20, 5, 20);
-		table.addView(row, new TableLayout.LayoutParams(
+		tempTable.addView(row, new TableLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
 		return root;
@@ -67,19 +87,21 @@ public class ListItemAdapter extends BaseAdapter {
 
 		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.allmeds_table_row, null);
 
+		final Medication toAdd = data.get(position);
+
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
-<<<<<<< HEAD
-		//TextView t2 = (TextView) row.findViewById(R.id.dosage);
-		//t2.setText(String.valueOf(data.get(position).getRemaining()));
-||||||| merged common ancestors
-		TextView t2 = (TextView) row.findViewById(R.id.time);
+		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
 		t2.setText(String.valueOf(data.get(position).getRemaining()));
-=======
-		TextView t2 = (TextView) row.findViewById(R.id.dosage);
-		t2.setText(String.valueOf(data.get(position).getRemaining()));
->>>>>>> ade06749f7c05a8be03aeeef2748275da627dfbd
+
+		row.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(mContext, toAdd.getDisplayName(), Toast.LENGTH_LONG).show();
+				return;
+			}
+		});
 
 		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(

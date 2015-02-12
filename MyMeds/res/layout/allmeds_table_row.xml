@@ -4,15 +4,18 @@
     android:layout_height="wrap_content"
     android:background="@drawable/cell_shape"
     android:padding="20dp" >
+
     <!-- Remove cell_shape drawable background to remove white background from the table -->
 
-	<!-- Short name of the medicine. -->
+
+    <!-- Short name of the medicine. -->
+
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:gravity="start|center"
+        android:gravity="center"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="bold" />
@@ -27,20 +30,22 @@
         android:gravity="center|center"
         android:padding="10dp"
         android:textSize="15sp"
-        android:textStyle="normal" /> -->
+        android:textStyle="normal" />
+    -->
+
 
     <!-- Display the tablets left. -->
+
     <TextView
         android:id="@+id/ammountLeft"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center|center"
+        android:gravity="start"
         android:padding="10dp"
         android:textSize="15sp"
         android:textStyle="normal" />
-    
-    <!-- The field to store red / green / amber notification image depending on the stock. -->
 
+    <!-- The field to store red / green / amber notification image depending on the stock. -->
 
 </TableRow>
