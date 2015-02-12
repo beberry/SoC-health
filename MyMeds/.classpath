@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="libs/jackson-core-asl-1.9.2.jar"/>
 	<classpathentry kind="lib" path="libs/jackson-mapper-asl-1.9.2.jar"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="C:/Users/David/android-sdks/extras/android/support/v4/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

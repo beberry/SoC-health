@@ -38,7 +38,7 @@
             android:label="@string/activity_settings" >
         </activity>
         <activity android:name="com.example.mymeds.tabs.AllMeds" />
-        <activity android:name="com.example.mymeds.tabs.MyProfile" />
+        <activity android:name="com.example.mymeds.tabs.FutureMeds" />
         <activity android:name="com.example.mymeds.tabs.TodaysMeds" />
     </application>
 

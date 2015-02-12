@@ -10,13 +10,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+<<<<<<< HEAD
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Switch;
+=======
+>>>>>>> origin/DatePickersCreation
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.mymeds.R;
 
 import com.example.mymeds.R;
 
@@ -86,6 +91,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 	public View setSecondView(int position, View root, TableLayout table){
 
+<<<<<<< HEAD
 		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.allmeds_table_row, null);
 
 		final Medication toAdd = data.get(position);
@@ -114,6 +120,16 @@ public class ListItemAdapter extends BaseAdapter {
 			}
 		});
 
+=======
+		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+
+		TextView t1 = (TextView) row.findViewById(R.id.name);
+		t1.setText(data.get(position).getDisplayName());
+
+		TextView t2 = (TextView) row.findViewById(R.id.time);
+		t2.setText(String.valueOf(data.get(position).getRemaining()));
+
+>>>>>>> origin/DatePickersCreation
 		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));

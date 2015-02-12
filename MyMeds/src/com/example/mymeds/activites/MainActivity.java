@@ -165,7 +165,7 @@ public class MainActivity extends TabActivity {
 			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
 		}
 	}
-
+	
 	private void onRightSwipe() {
 		if(tabHost.getCurrentTab()>0){
 			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
@@ -206,6 +206,7 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
+
 	}
 
 	public void calculateMeds(){
