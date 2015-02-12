@@ -2,6 +2,10 @@ package com.example.mymeds.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,6 +14,8 @@ import org.json.JSONObject;
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MainActivity;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -44,10 +50,10 @@ public class NotificationService extends Service {
      */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int value = intent.getIntExtra("id", 0);
-        Log.v("INFO", Integer.toString(value));
-        showNotification(value);
-        setAlarms();
+        int id = intent.getIntExtra("id", 0);
+        //String time = intent.getStringExtra("time", 0);
+        //Log.v("INFO", Integer.toString(value));
+        showNotification(id);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -70,59 +76,6 @@ public class NotificationService extends Service {
 
         // Send the notification.
         notificationManager.notify(id, notification);
-    }
-    
-    /**
-     * Go through the mymeds json file and set an alarm for each piece of medication to be
-     * taken during the day
-     */
-    public void setAlarms(){
-    	
-		String jsonTime = null;
-		String dosage = null;
-		String units = null;
-		String name = null;
-		
-    	try {
-			// read file from assets
-			AssetManager assetManager = this.getAssets();
-			InputStream is = assetManager.open("allmeds.json");
-			int size = is.available();
-			byte[] buffer = new byte[size];
-			is.read(buffer);
-			is.close();
-			String bufferString = new String(buffer);
-
-			JSONObject jsonObject = new JSONObject(bufferString);
-			JSONArray medIndex = jsonObject.getJSONArray("medication");
-			JSONObject record;
-
-			for (int k = 0; k < medIndex.length(); k++) {
-				record = medIndex.getJSONObject(k);
-				//work to get into frequency to get time
-				name = record.getString("displayName");
-				JSONArray freqIndex = record.getJSONArray("frequency");
-				JSONObject freq;
-				for(int t = 0; t<freqIndex.length(); t++){
-					freq = freqIndex.getJSONObject(t);
-					jsonTime = freq.getString("time");
-					dosage = freq.getString("dosage");
-					units = freq.getString("units");
-					Log.v("Time", jsonTime);
-					Log.v("Dosage", dosage);
-					Log.v("Units", units);
-					Log.v("Name", name);
-					
-				}
-				
-			}
-		} catch (IOException e) {
-			Log.e("IOException", "Error loading file");
-			e.printStackTrace();
-		} catch (JSONException e) {
-			Log.e("JSONException", "JSON exception");
-			e.printStackTrace();
-		}
     }
 
     /**

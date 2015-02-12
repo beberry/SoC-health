@@ -16,6 +16,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent serviceIntent = new Intent(context, NotificationService.class);
         serviceIntent.putExtra("id", intent.getIntExtra("id", 0));
+        serviceIntent.putExtra("time", intent.getIntExtra("time", 0));
         context.startService(serviceIntent);
     }
 }

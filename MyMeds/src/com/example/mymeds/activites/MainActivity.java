@@ -1,14 +1,25 @@
 package com.example.mymeds.activites;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +37,7 @@ import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.AlarmReceiver;
+import com.example.mymeds.util.NotificationService;
 
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
@@ -65,20 +77,11 @@ public class MainActivity extends TabActivity {
 
 		tabHost.setCurrentTab(0);
 		
-		/*** Testing Notifications ***/
-		Calendar calendar = Calendar.getInstance();
-        int testValues[] = {5000, 20000};
-
-        for (int id = 0; id < 2; id++) {
-            Intent myIntent = new Intent(MainActivity.this, AlarmReceiver.class);
-            myIntent.putExtra("id", id);
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(MainActivity.this, id, myIntent, 0);
-
-            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-            alarmManager.setExact(AlarmManager.RTC, calendar.getTimeInMillis() + testValues[id], pendingIntent);
-        }
+		setAlarms();
+		
 
 	}
+
 
 	/**
 	 * Creates the Menu Bar.
