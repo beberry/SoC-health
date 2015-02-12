@@ -51,8 +51,8 @@ public class MainActivity extends TabActivity {
 
 		Intent intentProfile = new Intent().setClass(this, FutureMeds.class);
 		TabSpec tabSpecProfile = tabHost
-				.newTabSpec("Profile")
-				.setIndicator("Profile", null)
+				.newTabSpec("Future Meds")
+				.setIndicator("Future Meds", null)
 				.setContent(intentProfile);
 
 		// add all tabs 
