@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +21,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
@@ -38,28 +42,43 @@ import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.AlarmReceiver;
 import com.example.mymeds.util.Alarms;
-import com.example.mymeds.util.NotificationService;
+import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.MedFetcher;
+import com.example.mymeds.util.Medication;
+import com.example.mymeds.util.NotificationsService;
 
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
+	ArrayList<Medication> allmeds = new ArrayList<Medication>();
+	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
+	Context mContext;
 
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		mContext=this;
 
+		if(allmeds.size()==0){
+			loadValues();
+			calculateMeds();
+		}
+
+		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
 		Resources ressources = getResources(); 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
+		intentToday.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Meds")
 				.setIndicator("Todays Meds", null)
 				.setContent(intentToday);
 
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
+		intentAll.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecAll = tabHost
 				.newTabSpec("All Meds")
 				.setIndicator("All Meds", null)
@@ -75,7 +94,6 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
-
 		tabHost.setCurrentTab(0);
 		
 		Alarms alarm = new Alarms(getApplicationContext());
@@ -188,5 +206,80 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
+	}
+
+	public void calculateMeds(){
+		MedFetcher medFetcher = new MedFetcher();
+		Calendar c = new GregorianCalendar();
+		todaysmeds = medFetcher.daysMedication(c.getTime().getTime(), allmeds);
+	}
+
+	public boolean loadValues(){
+
+		try {
+			// read file from assets
+			AssetManager assetManager = mContext.getAssets();
+			InputStream is = assetManager.open("meds.json");
+			int size = is.available();
+			byte[] buffer = new byte[size];
+			is.read(buffer);
+			is.close();
+			String bufferString = new String(buffer);	
+
+			JSONObject jsonObject = new JSONObject(bufferString);
+			JSONArray medIndex = jsonObject.getJSONArray("medication");
+
+			for(int k=0;k<medIndex.length();k++){
+				Medication med = new Medication();
+				ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
+
+				JSONObject tempCheck = medIndex.getJSONObject(k);
+				int itemID = tempCheck.getInt("index");
+				String itemName = tempCheck.getString("name");
+				String displayName = tempCheck.getString("displayName");
+				String description = tempCheck.getString("description");
+				String type = tempCheck.getString("type");
+				long startTime = tempCheck.getLong("startTime");
+				long endTime = tempCheck.getLong("endTime");
+				int remaining = tempCheck.getInt("remaining");
+				//int repeatPeriod = tempCheck.getInt("repeatPeriod");
+
+				JSONArray frequency = tempCheck.getJSONArray("frequency");
+				for(int i=0;i<frequency.length();i++){
+					JSONObject frequencyObject = frequency.getJSONObject(i);
+					int time = frequencyObject.getInt("time");
+					String dosage = frequencyObject.getString("dosage");
+					int units = frequencyObject.getInt("units");
+					Frequency frequency2 = new Frequency();
+					frequency2.setDosage(dosage);
+					frequency2.setUnits(units);
+					frequency2.setTime(time);
+					frequencyList.add(frequency2);
+				}
+
+				if(allmeds.contains((Integer)med.getMedId())==false){
+					med.setMedId(itemID);
+					med.setMedName(itemName);
+					med.setDisplayName(displayName);
+					med.setDescription(description);
+					med.setType(type);
+					med.setStartTime(startTime);
+					med.setEndTime(endTime);
+					med.setRemaining(remaining);
+					//med.setRepeatPeriod(repeatPeriod);
+					med.setFrequency(frequencyList);
+					allmeds.add(med);
+				}
+			}
+		} catch (IOException e) {
+			Log.e("IOException","Error loading file");
+			e.printStackTrace();
+			return false;
+		} catch (JSONException e) {
+			Log.e("JSONException","JSON exception");
+			e.printStackTrace();			
+			return false;
+		}
+		return true;
 	}
 }
