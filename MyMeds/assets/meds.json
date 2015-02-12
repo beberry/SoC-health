@@ -38,6 +38,38 @@
                     "units": 2
                 }
             ]
+        },
+        {
+            "index": 2,
+            "name": "Paracetamol",
+            "displayName": "Painkillers",
+            "description": "easy",
+            "type": "pill",
+            "startTime": 140003824,
+            "endTime": 143003824,
+            "remaining": 75,
+            "frequency":[
+                {
+                    "time": 9,
+                    "dosage": "500mg",
+                    "units": 2
+                },
+                {
+                    "time": 13,
+                    "dosage": "500mg",
+                    "units": 2
+                },
+                {
+                    "time": 17,
+                    "dosage": "500mg",
+                    "units": 2
+                },
+                {
+                    "time": 21,
+                    "dosage": "500mg",
+                    "units": 2
+                }
+            ]
         }
     ]
 }

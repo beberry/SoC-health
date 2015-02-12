@@ -219,7 +219,6 @@ public class MainActivity extends TabActivity {
 	}
 
 	public boolean loadValues(){
-		ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
 
 		try {
 			// read file from assets
@@ -236,6 +235,7 @@ public class MainActivity extends TabActivity {
 
 			for(int k=0;k<medIndex.length();k++){
 				Medication med = new Medication();
+				ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
 
 				JSONObject tempCheck = medIndex.getJSONObject(k);
 				int itemID = tempCheck.getInt("index");
@@ -271,17 +271,9 @@ public class MainActivity extends TabActivity {
 					med.setEndTime(endTime);
 					med.setRemaining(remaining);
 					//med.setRepeatPeriod(repeatPeriod);
-					System.out.println(med.getMedId() + "    " + frequencyList.size());
-
-					if(frequencyList.size() == frequency.length()){
-						med.setFrequency(frequencyList);
-						frequencyList.clear();
-					}
+					med.setFrequency(frequencyList);
 					allmeds.add(med);
-				}else{
-					med = null;
-					frequencyList=null;
-				}			
+				}
 			}
 		} catch (IOException e) {
 			Log.e("IOException","Error loading file");

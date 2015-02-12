@@ -26,8 +26,6 @@ public class TodaysMeds extends Activity {
 
 		meds = getIntent().getParcelableArrayListExtra("meds");
 
-		System.out.println(meds.get(1).getFrequency().size());
-		
 		TableLayout listViewItems = (TableLayout) findViewById(R.id.listview);
 
 		// our adapter instance

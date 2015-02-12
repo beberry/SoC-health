@@ -43,8 +43,6 @@ public class ListItemAdapter extends BaseAdapter {
 
 		final Medication toAdd = data.get(position);
 
-		System.out.println("pill no: "+position + " no of times to take: " + toAdd.frequency.size());
-
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
