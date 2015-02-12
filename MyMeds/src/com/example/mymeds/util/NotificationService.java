@@ -1,27 +1,13 @@
 package com.example.mymeds.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MainActivity;
 
-import android.annotation.SuppressLint;
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -51,16 +37,19 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int id = intent.getIntExtra("id", 0);
-        //String time = intent.getStringExtra("time", 0);
+        String time = intent.getStringExtra("time");
+        String dosage = intent.getStringExtra("dosage");
+        String units = intent.getStringExtra("units");
+        String name = intent.getStringExtra("name");
         //Log.v("INFO", Integer.toString(value));
-        showNotification(id);
+        showNotification(getID(id, time), time, dosage, units, name);
         return super.onStartCommand(intent, flags, startId);
     }
 
     /**
      * Builds & Displays a notification.
      */
-    private void showNotification(int id) {
+    private void showNotification(int id, String time, String dosage, String units, String name) {
         //Initialise notificationManager
         notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
@@ -70,14 +59,26 @@ public class NotificationService extends Service {
 
         //Create the notification with a icon and text.
         Notification notification = new Notification.Builder(this)
-                .setContentText("Alarm!!!!!!!").setSmallIcon(R.drawable.ic_launcher)
+        		.setContentTitle("Pop dem pills Muthafucker")
+                .setContentText(name +": "+dosage+" "+units).setSmallIcon(R.drawable.ic_launcher)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setContentIntent(contentIntent).build();
 
         // Send the notification.
         notificationManager.notify(id, notification);
+        Log.v("HERE", String.valueOf(id) +" "+time);
     }
-
+    
+    /**
+     * Get the id based on the id & time of a medication
+     */
+    public int getID(int id, String time) {
+		StringBuilder idValue = new StringBuilder();
+		idValue.append(id);
+		idValue.append(time);
+    	return Integer.valueOf(idValue.toString());
+    }
+    
     /**
      * Called by the system to notify a Service that it is no longer used and is being removed.
      */

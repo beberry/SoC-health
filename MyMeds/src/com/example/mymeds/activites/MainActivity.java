@@ -37,6 +37,7 @@ import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.MyProfile;
 import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.AlarmReceiver;
+import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.NotificationService;
 
 public class MainActivity extends TabActivity {
@@ -77,9 +78,8 @@ public class MainActivity extends TabActivity {
 
 		tabHost.setCurrentTab(0);
 		
-		setAlarms();
-		
-
+		Alarms alarm = new Alarms(getApplicationContext());
+		alarm.setAlarms();
 	}
 
 

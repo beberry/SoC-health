@@ -12,8 +12,13 @@
             "repeatPeriod": 2,
             "frequency":[
             	{
-            		"time": 1143,
+            		"time": 1305,
             		"dosage": "500mg",
+            		"units": 2
+            	},
+            	{
+            		"time": 1306,
+            		"dosage": "200mg",
             		"units": 2
             	}
             ]
@@ -30,7 +35,7 @@
             "repeatPeriod": 2,
             "frequency":[
                 {
-                    "time": 1230,
+                    "time": 1233,
                     "dosage": "500mg",
                     "units": 2
                 }
