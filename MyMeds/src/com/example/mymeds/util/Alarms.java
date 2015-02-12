@@ -40,7 +40,7 @@ public class Alarms {
 		String units = null;
 		String name = null;
 		int id;
-		int alarmTime;
+		String alarmTime;
 
 		try {
 			// read file from assets
@@ -58,7 +58,6 @@ public class Alarms {
 
 			for (int k = 0; k < medIndex.length(); k++) {
 				record = medIndex.getJSONObject(k);
-				// work to get into frequency to get time
 				name = record.getString("displayName");
 				id = record.getInt("index");
 				JSONArray freqIndex = record.getJSONArray("frequency");
@@ -67,9 +66,7 @@ public class Alarms {
 					freq = freqIndex.getJSONObject(t);
 					dosage = freq.getString("dosage");
 					units = freq.getString("units");
-					alarmTime = freq.getInt("time");
-					Log.v("Dosage", dosage);
-					Log.v("Units", units);
+					alarmTime = freq.getString("time");
 					Log.v("Name", name);
 					
 					//Calculate idValue for individual alarms
@@ -83,35 +80,22 @@ public class Alarms {
 					int month = c.get(Calendar.MONTH);
 					int day = c.get(Calendar.DAY_OF_MONTH);
 
-					LinkedList<Integer> stack = new LinkedList<Integer>();
-
-					while (alarmTime > 0) {
-						stack.push(alarmTime % 10);
-						alarmTime = alarmTime / 10;
-					}
-
-					int fMin = (stack.pop());
-					int sMin = (stack.pop());
-					int fHour = (stack.pop());
-					int sHour = (stack.pop());
+					LinkedList<String> stack = getTimeOfDose(alarmTime);
+				
+					int sMin = Integer.valueOf(stack.pop());
+					int fMin = Integer.valueOf(stack.pop());
+					int sHour = Integer.valueOf(stack.pop());
+					int fHour = Integer.valueOf(stack.pop());
 
 					StringBuilder sb = new StringBuilder();
-
 					sb.append(fMin);
 					sb.append(sMin);
-
-					int hour = Integer.parseInt(sb.toString());
+					int minute = Integer.parseInt(sb.toString());
 
 					StringBuilder sb2 = new StringBuilder();
-
 					sb2.append(fHour);
 					sb2.append(sHour);
-
-					int minute = Integer.parseInt(sb2.toString());
-
-					StringBuilder displayTime = new StringBuilder();
-					displayTime.append(sb.toString());
-					displayTime.append(sb2.toString());
+					int hour = Integer.parseInt(sb2.toString());
 
 					c.set(year, month, day, hour, minute, 00);
 					long time = c.getTimeInMillis();
@@ -120,12 +104,11 @@ public class Alarms {
 					SimpleDateFormat df2 = new SimpleDateFormat(
 							"dd/MM/yy HH:mm:ss");
 					String dateText = df2.format(date);
-
-					Log.v("time fucker", dateText);
+					Log.v("Alarm Time", dateText);
 
 					Intent myIntent = new Intent(context, AlarmReceiver.class);
 					myIntent.putExtra("id", id);
-					myIntent.putExtra("time", displayTime.toString());
+					myIntent.putExtra("time", alarmTime);
 					myIntent.putExtra("dosage", dosage);
 					myIntent.putExtra("units", units);
 					myIntent.putExtra("name", name); 
@@ -137,6 +120,7 @@ public class Alarms {
 							.getSystemService(Context.ALARM_SERVICE);
 					alarmManager
 							.setExact(AlarmManager.RTC, time, pendingIntent);
+					Log.v("","");
 				}
 			}
 		} catch (IOException e) {
@@ -146,5 +130,15 @@ public class Alarms {
 			Log.e("JSONException", "JSON exception");
 			e.printStackTrace();
 		}
+	}
+	
+	public LinkedList<String> getTimeOfDose(String alarmTime) {
+		LinkedList<String> stack = new LinkedList<String>();
+		String value;
+		for(int i = 0; i < alarmTime.length(); i++) {
+			value = String.valueOf(alarmTime.charAt(i));
+			stack.push(value);
+		}
+		return stack;
 	}
 }
