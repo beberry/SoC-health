@@ -37,8 +37,11 @@ public class ListItemAdapterFuture extends BaseAdapter {
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
-		TextView t2 = (TextView) row.findViewById(R.id.amount);
-		t2.setText(Integer.toString(data.get(position).getAmountNeeded()));
+		TextView t2 = (TextView) row.findViewById(R.id.realName);
+		t2.setText(data.get(position).getMedName());
+		
+		TextView t3 = (TextView) row.findViewById(R.id.amount);
+		t3.setText(Integer.toString(data.get(position).getAmountNeeded()));
 
 		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(

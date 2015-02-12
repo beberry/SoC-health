@@ -33,10 +33,11 @@ public class FutureMeds extends FragmentActivity {
 
 	PopupWindow pw;
 
-	long startDate, def = 0;
+	long startDate, def, sMilli, eMilli = 0;
 	boolean startPressed =false;
 	int year, month, day =0;
-	long sMilli, eMilli = 0;
+	
+	final int DAY = 86400000;
 	
 	int daysDiff = 0;
 	
@@ -44,13 +45,30 @@ public class FutureMeds extends FragmentActivity {
 	 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		final Calendar c = Calendar.getInstance();
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar cal = new GregorianCalendar(year, month, day);
+		sMilli = cal.getTimeInMillis();
+		eMilli = sMilli + 7*DAY;
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tab_third);
+		getMedication();
 
 		final Button startBtn = (Button) findViewById(R.id.start);
 		final Button endBtn = (Button)    findViewById(R.id.end);
 		startDateText = (TextView)    findViewById(R.id.startDate);
 		endDateText = (TextView)    findViewById(R.id.endDate);
+		
+		String date = formatter.format(cal.getTime());
+		startDateText.setText(date);
+		cal.setTimeInMillis(eMilli);
+		date = formatter.format(cal.getTime());
+		endDateText.setText(date);
 
 		startBtn.setOnClickListener(new OnClickListener() {
 			@Override
@@ -163,7 +181,6 @@ public void getMedication()
 	
 	TableLayout listViewItems = (TableLayout) findViewById(R.id.futurelistview);
 	listViewItems.removeAllViewsInLayout();
-
 	// our adapter instance
 	adapter = new ListItemAdapterFuture(this, R.id.futurelistview, futureMeds);
 
