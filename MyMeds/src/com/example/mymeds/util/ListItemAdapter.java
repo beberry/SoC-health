@@ -38,16 +38,16 @@ public class ListItemAdapter extends BaseAdapter {
 	}
 
 
-	public View setFirstView(int position, View root, TableLayout table){
+	public View setFirstView(final int position, View root, TableLayout table){
 		tempTable = table;
 		final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
 
 		final Medication toAdd = data.get(position);
 
-		TextView t1 = (TextView) row.findViewById(R.id.name);
+		final TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
-		TextView t2 = (TextView) row.findViewById(R.id.time);
+		final TextView t2 = (TextView) row.findViewById(R.id.time);
 		t2.setText(String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
 
 		row.setOnClickListener(new OnClickListener() {
@@ -64,9 +64,11 @@ public class ListItemAdapter extends BaseAdapter {
 				if(toAdd.getFrequency().size()>1){
 					tempTable.removeView(row);
 					timesTaken = timesTaken++;
+					t2.setText(String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
 					row.setPadding(5, 20, 5, 20);
 					tempTable.addView(row, new TableLayout.LayoutParams(
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 				}
 				else{
 					Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
