@@ -97,7 +97,8 @@ public class MainActivity extends TabActivity {
 		tabHost.setCurrentTab(0);
 		
 		Alarms alarm = new Alarms(getApplicationContext());
-		alarm.setAlarms();
+		//alarm.setAllAlarms();
+		alarm.addAlarm(0);
 	}
 
 
@@ -216,7 +217,6 @@ public class MainActivity extends TabActivity {
 	}
 
 	public boolean loadValues(){
-
 		try {
 			// read file from assets
 			AssetManager assetManager = mContext.getAssets();
