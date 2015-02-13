@@ -147,7 +147,7 @@ public class MedFetcher {
 				JSONArray frequency = tempCheck.getJSONArray("frequency");
 				for(int i=0;i<frequency.length();i++){
 					JSONObject frequencyObject = frequency.getJSONObject(i);
-					int time = frequencyObject.getInt("time");
+					String time = frequencyObject.getString("time");
 					String dosage = frequencyObject.getString("dosage");
 					int units = frequencyObject.getInt("units");
 					Frequency frequency2 = new Frequency();

@@ -3,8 +3,8 @@ package com.example.mymeds.util;
 //another class to handle item's id and name
 public class Frequency {
 
-	String dosage;
-	int time, units;
+	String dosage, time;
+	int units;
 
 	// constructor
 	public Frequency(){
@@ -19,11 +19,11 @@ public class Frequency {
 		this.dosage = dosage;
 	}
 
-	public int getTime() {
+	public String getTime() {
 		return time;
 	}
 
-	public void setTime(int time) {
+	public void setTime(String time) {
 		this.time = time;
 	}
 

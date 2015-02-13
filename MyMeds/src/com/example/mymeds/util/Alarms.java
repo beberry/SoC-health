@@ -82,7 +82,7 @@ public class Alarms {
 						Frequency freq = new Frequency();
 						freq.setDosage(frequencyObject.getString("dosage"));
 						freq.setUnits(frequencyObject.getInt("units"));
-						freq.setTime(frequencyObject.getInt("time"));
+						freq.setTime(frequencyObject.getString("time"));
 						frequencyList.add(freq);
 					}
 					med.setFrequency(frequencyList);
@@ -122,8 +122,9 @@ public class Alarms {
 					units = freqObject.getString("units");
 					time = freqObject.getString("time");
 					
-					long alarmTime = calculateTimeOfAlarm(time, cal);
-					printFormattedDate(alarmTime, name);
+					cal = calculateTimeOfAlarm(time, cal);
+					long alarmTime = cal.getTimeInMillis();
+					printFormattedDate(alarmTime, name, "Set All Alarms");
 
 					Intent myIntent = new Intent(context, AlarmReceiver.class);
 					myIntent.putExtra("id", id);
@@ -163,8 +164,9 @@ public class Alarms {
 		}
 
 		Calendar cal = getSpecifiedTime(med.getStartTime());
-		long time = calculateTimeOfAlarm(freqTime, cal);
-		printFormattedDate(time, med.getMedName());
+		cal = calculateTimeOfAlarm(freqTime, cal);
+		long time = cal.getTimeInMillis();
+		printFormattedDate(time, med.getMedName(), "Added Alarm");
 
 		Intent myIntent = new Intent(context, AlarmReceiver.class);
 		myIntent.putExtra("id", id);
@@ -178,7 +180,41 @@ public class Alarms {
 		alarmManager.set(AlarmManager.RTC, time, pendingIntent);
 	}
 
-	public long calculateTimeOfAlarm(String alarmTime, Calendar cal) {
+	public void setNextAlarm(int medID, int alarmID, String time) {
+		Medication med = getMedicationById(medID);
+		int repeatPeriod = med.getRepeatPeriod();
+		ArrayList<Frequency> freqList = med.getFrequency();
+		Frequency freqIndex;
+		String dosage = null, freqTime = null;
+		Calendar cal = Calendar.getInstance();
+		int units = 0;
+		for (int i = 0; i < freqList.size(); i++) {
+			freqIndex = freqList.get(i);
+			if (time.equals(freqIndex.getTime())) {
+				freqTime = freqIndex.getTime();
+				units = freqIndex.getUnits();
+				dosage = freqIndex.getDosage();
+				
+				cal = calculateTimeOfAlarm(String.valueOf(freqTime), cal);
+				cal.add(Calendar.DAY_OF_MONTH, repeatPeriod);
+				long alarmTime = cal.getTimeInMillis();
+				printFormattedDate(alarmTime, med.getMedName(), "Next Alarm");
+				
+				Intent myIntent = new Intent(context, AlarmReceiver.class);
+				myIntent.putExtra("id", medID);
+				myIntent.putExtra("time", freqTime);
+				myIntent.putExtra("dosage", dosage);
+				myIntent.putExtra("units", String.valueOf(units));
+				myIntent.putExtra("name", med.getMedName());
+
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(medID, freqTime), myIntent, 0);
+				AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+				alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
+			}
+		}
+	}
+
+	public Calendar calculateTimeOfAlarm(String alarmTime, Calendar cal) {
 		LinkedList<String> stack = new LinkedList<String>();
 		String value;
 		for (int i = 0; i < alarmTime.length(); i++) {
@@ -204,7 +240,7 @@ public class Alarms {
 		cal.set(Calendar.HOUR_OF_DAY, hour);
 		cal.set(Calendar.MINUTE, minute);
 		cal.set(Calendar.SECOND, 0);
-		return cal.getTimeInMillis();
+		return cal;
 	}
 
 	public Calendar getSpecifiedTime(long time) {
@@ -218,12 +254,12 @@ public class Alarms {
 	 * Used for testing purposes to print out the date/time in a readable format.
 	 * @param time
 	 */
-	private void printFormattedDate(long time, String name) {
+	private void printFormattedDate(long time, String name, String label) {
 		Date date = new Date(time);
 		SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String dateText = df2.format(date);
 		Log.v("Name", name);
-		Log.v("Alarm Time", dateText);
+		Log.v(label, dateText);
 	}
 	
 	/**

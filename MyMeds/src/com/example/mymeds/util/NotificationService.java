@@ -42,8 +42,7 @@ public class NotificationService extends Service {
 			String dosage = intent.getStringExtra("dosage");
 			String units = intent.getStringExtra("units");
 			String name = intent.getStringExtra("name");
-			// Log.v("INFO", Integer.toString(value));
-			showNotification(getID(id, time), time, dosage, units, name);
+			showNotification(id, time, dosage, units, name);
 		}
 		return START_STICKY;
 	}
@@ -70,8 +69,10 @@ public class NotificationService extends Service {
 				.setContentIntent(contentIntent).build();
 
 		// Send the notification.
-		notificationManager.notify(id, notification);
-		Log.v("HERE", String.valueOf(id) + " " + time);
+		notificationManager.notify(getID(id, time), notification);
+		
+		Alarms alarm = new Alarms(this);
+		alarm.setNextAlarm(id, getID(id, time), time);	
 	}
 
 	/**
