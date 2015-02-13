@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="24h format"	
+        android:hint="24h format"
+        android:minEms="2"	
 	    />
     
     <EditText 
@@ -19,7 +20,9 @@
         android:inputType="number"
         android:singleLine="true"
         android:hint="Mg, Ml"
+        android:minEms="2"
         	android:layout_toRightOf="@+id/timeTextBox"
+        	
 	    />
     
      <EditText 
@@ -29,7 +32,9 @@
         android:inputType="number"
         android:singleLine="true"
         android:hint="2 pills. 1 injection"
+        android:minEms="2"
         	android:layout_toRightOf="@+id/dosageTextBox"
+        	
 	    />
     
      <!-- Remove Row -->

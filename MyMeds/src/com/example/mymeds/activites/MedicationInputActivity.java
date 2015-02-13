@@ -1,14 +1,21 @@
 package com.example.mymeds.activites;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.mymeds.R;
 
 import android.app.Activity;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -19,6 +26,8 @@ public class MedicationInputActivity extends Activity{
 
 	public TableLayout frequencyTable;
 	
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,6 +36,8 @@ public class MedicationInputActivity extends Activity{
 		//Obtain frequencyTable from the layout_medication_input.xml 
 		frequencyTable = (TableLayout)findViewById(R.id.frequencyTable);
 		addTableHeader();
+		addFrequency(this.findViewById(R.id.frequencyTable));
+				
 	} 
 	
 	/**
@@ -38,6 +49,7 @@ public class MedicationInputActivity extends Activity{
 	{
 		TableRow inputRow = (TableRow) LayoutInflater.from(getApplicationContext()).inflate(R.layout.frequency_table_row, null);
 		
+		//Button to remove the row.
 		Button removeButton = (Button)inputRow.findViewById(R.id.buttonRemoveFrequency);
 		
 		removeButton.setOnClickListener(new OnClickListener() {
@@ -48,8 +60,6 @@ public class MedicationInputActivity extends Activity{
 		      }
 		      });
 
-		
-		
 		frequencyTable.addView(inputRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 	}
@@ -72,6 +82,61 @@ public class MedicationInputActivity extends Activity{
 	 */
 	public void addInput(View view)
 	{
+		//Find UI components.
+		EditText editMedicineName = (EditText) findViewById(R.id.editMedicineName);
+		EditText editDisplayName = (EditText) findViewById(R.id.editDisplayName);
+		EditText editDescription = (EditText) findViewById(R.id.editDescription);
+		Spinner spinnerMedicationType = (Spinner) findViewById(R.id.spinnerMedicationType);
+		EditText editStartDate = (EditText) findViewById(R.id.editStartDate);
+		EditText editEndDate = (EditText) findViewById(R.id.editEndDate);
+		EditText editRemaining = (EditText) findViewById(R.id.editRemaining);
+		EditText editRepeatPeriod = (EditText) findViewById(R.id.editRepeatPeriod);
+		
+		//Extract data from UI components.
+		String medicineName = editMedicineName.getText().toString();
+		String displayName = editDisplayName.getText().toString();
+		String description = editDescription.getText().toString();
+		String type = (String) spinnerMedicationType.getSelectedItem();
+		String startDate = editStartDate.getText().toString();
+		String endDate = editEndDate.getText().toString();
+		String remaining = editRemaining.getText().toString();
+		String repeatPeriod = editRepeatPeriod.getText().toString();
+		
+		List<Integer> listTime = new ArrayList<Integer>();
+		List<Integer> listDosage = new ArrayList<Integer>();
+		List<Integer> listUnit = new ArrayList<Integer>();
+		
+		TableRow tableRow;
+		EditText frequencyTime;
+		EditText frequencyDosage;
+		EditText frequencyUnit;
+		
+		//Get contents from each table row
+		for(int i = 1; i < frequencyTable.getChildCount(); i++)
+		{
+			//Get table row
+			tableRow = (TableRow) frequencyTable.getChildAt(i);
+			
+			//Get table cells
+			frequencyTime = (EditText) tableRow.getChildAt(0);
+			frequencyDosage = (EditText) tableRow.getChildAt(1);
+			frequencyUnit = (EditText) tableRow.getChildAt(2);
+			
+			//Add cell data to Lists (parse to int)
+			listTime.add(Integer.valueOf(frequencyTime.getText().toString()));
+			listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
+			listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
+			
+			Log.d("Problem Determination", "Time: " + frequencyTime.getText().toString());
+			Log.d("Problem Determination", "Dosage: " + frequencyDosage.getText().toString());
+			Log.d("Problem Determination", "Unit: " + frequencyUnit.getText().toString());
+			
+			Log.d("Problem Determination", "List Time: " + listTime.get(0));
+			Log.d("Problem Determination", "List Dosage: " + listTime.get(0));
+			Log.d("Problem Determination", "List Unit: " + listTime.get(0));
+
+		}
+		
 		Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
 		finish();
 	}
@@ -88,19 +153,23 @@ public class MedicationInputActivity extends Activity{
 		finish();
 	}
 
+	/**
+	 * Adds a Header Row with column titles.
+	 */
 	private void addTableHeader()
 	{
 		//Header row
 		TableRow headerRow = new TableRow(this);
-		headerRow.setPadding(40, 50, 10, 5);
+		headerRow.setPadding(5, 0, 0, 10);//40 50 10 5
 		headerRow.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 		//Title
 		TextView headerTitle = new TextView(this);
 		
-		headerTitle.setTextSize(15);
+		headerTitle.setTextSize(20);
 		headerTitle.setText("Time"); 
 		headerTitle.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+		headerTitle.setGravity(Gravity.CENTER);
 		
 		headerRow.addView(headerTitle);
 		
@@ -108,9 +177,10 @@ public class MedicationInputActivity extends Activity{
 		//Dosage
 		TextView headerDosage = new TextView(this);
 		
-		headerDosage.setTextSize(15);
+		headerDosage.setTextSize(20);
 		headerDosage.setText("Dosage"); 
 		headerDosage.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+		headerDosage.setGravity(Gravity.CENTER);
 		
 		headerRow.addView(headerDosage);	
 		
@@ -118,13 +188,13 @@ public class MedicationInputActivity extends Activity{
 		//Units
 		TextView headerUnits = new TextView(this);
 		
-		headerUnits.setTextSize(15);
-		headerUnits.setText("Units"); 
+		headerUnits.setTextSize(20);
+		headerUnits.setText("Servings"); 
 		headerUnits.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
+		headerUnits.setGravity(Gravity.CENTER);
 		
 		headerRow.addView(headerUnits);
-		
-		
+				
 		frequencyTable.addView(headerRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 }
