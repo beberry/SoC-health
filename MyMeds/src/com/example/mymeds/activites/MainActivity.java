@@ -97,8 +97,9 @@ public class MainActivity extends TabActivity {
 		tabHost.setCurrentTab(0);
 		
 		Alarms alarm = new Alarms(getApplicationContext());
-		//alarm.setAllAlarms();
-		alarm.addAlarm(0);
+		alarm.setAllAlarms();
+		//alarm.addAlarm(0);
+		//alarm.setNextAlarm(0, 02300, "2300");
 	}
 
 
@@ -248,7 +249,7 @@ public class MainActivity extends TabActivity {
 				JSONArray frequency = tempCheck.getJSONArray("frequency");
 				for(int i=0;i<frequency.length();i++){
 					JSONObject frequencyObject = frequency.getJSONObject(i);
-					int time = frequencyObject.getInt("time");
+					String time = frequencyObject.getString("time");
 					String dosage = frequencyObject.getString("dosage");
 					int units = frequencyObject.getInt("units");
 					Frequency frequency2 = new Frequency();
