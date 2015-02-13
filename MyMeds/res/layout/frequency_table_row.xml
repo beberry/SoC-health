@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="24h format"
+        android:hint="24h Format"
         android:minEms="2"	
 	    />
     
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="Mg, Ml"
+        android:hint="Mg/Ml"
         android:minEms="2"
         	android:layout_toRightOf="@+id/timeTextBox"
         	
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="2 pills. 1 injection"
+        android:hint="2 Pills. 1 Drop"
         android:minEms="2"
         	android:layout_toRightOf="@+id/dosageTextBox"
         	

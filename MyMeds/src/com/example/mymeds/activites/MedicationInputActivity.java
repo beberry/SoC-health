@@ -137,6 +137,12 @@ public class MedicationInputActivity extends Activity{
 
 		}
 		
+		//Calculate StartTime and EndTime | Parse '/' out from Dates
+		//TODO
+		
+		//Export to AllMed.json
+		//TODO
+		
 		Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
 		finish();
 	}
@@ -166,8 +172,8 @@ public class MedicationInputActivity extends Activity{
 		//Title
 		TextView headerTitle = new TextView(this);
 		
-		headerTitle.setTextSize(20);
-		headerTitle.setText("Time"); 
+		headerTitle.setTextSize(15);
+		headerTitle.setText("Time Taken"); 
 		headerTitle.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 		headerTitle.setGravity(Gravity.CENTER);
 		
@@ -177,7 +183,7 @@ public class MedicationInputActivity extends Activity{
 		//Dosage
 		TextView headerDosage = new TextView(this);
 		
-		headerDosage.setTextSize(20);
+		headerDosage.setTextSize(15);
 		headerDosage.setText("Dosage"); 
 		headerDosage.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 		headerDosage.setGravity(Gravity.CENTER);
@@ -188,7 +194,7 @@ public class MedicationInputActivity extends Activity{
 		//Units
 		TextView headerUnits = new TextView(this);
 		
-		headerUnits.setTextSize(20);
+		headerUnits.setTextSize(15);
 		headerUnits.setText("Servings"); 
 		headerUnits.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 		headerUnits.setGravity(Gravity.CENTER);

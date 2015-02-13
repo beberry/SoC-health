@@ -59,11 +59,11 @@
     <string name="activity_medication_input">Add Medication</string>
     
     <string-array name="MedicationTypeArray">
-        <item>Tablet</item>
-		<item>Cream/Gel</item>
-		<item>Inhaler</item>
-		<item>Injection</item>
-		<item>Liquid</item>
+        <item>Oral</item>
+		<item>Inhalation</item>
+		<item>Parenteral</item>
+		<item>Topical</item>
+		<item>Suppository</item>
 	</string-array>
     
     <!-- Notifications Service -->
