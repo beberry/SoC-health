@@ -1,11 +1,16 @@
 package com.example.mymeds.activites;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.example.mymeds.R;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +19,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -26,19 +33,137 @@ public class MedicationInputActivity extends Activity{
 
 	public TableLayout frequencyTable;
 	
+	private EditText editMedicineName;
+	private EditText editDisplayName;
+	private EditText editDescription;
+	private Spinner spinnerMedicationType;
+	private EditText editStartDate;
+	private EditText editEndDate;
+	private EditText editRemaining;
+	private EditText editRepeatPeriod;
 	
+	PopupWindow datePicker;
+	
+	long startDate, def, sMilli, eMilli = 0;
+	boolean startPressed = false;
+	int year, month, day = 0;
+	
+	final int DAY = 86400000;
+	static final int DATE_DIALOG_ID = 999;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_medication_input);
 		
+		//Find UI components.
+		 editMedicineName = (EditText) findViewById(R.id.editMedicineName);
+		 editDisplayName = (EditText) findViewById(R.id.editDisplayName);
+		 editDescription = (EditText) findViewById(R.id.editDescription);
+		 spinnerMedicationType = (Spinner) findViewById(R.id.spinnerMedicationType);
+		 editStartDate = (EditText) findViewById(R.id.editStartDate);
+		 editEndDate = (EditText) findViewById(R.id.editEndDate);
+		 editRemaining = (EditText) findViewById(R.id.editRemaining);
+		 editRepeatPeriod = (EditText) findViewById(R.id.editRepeatPeriod);
+		
+		//Add onclicklistener for datePicker
+		editStartDate.setOnClickListener(new View.OnClickListener() {
+	        @Override
+	        public void onClick(View v) {
+	        	Log.d("Problem Determination", "editStartDate clicked");
+	        	startPressed = true;
+	        	onDateEntrySelected(startPressed, System.currentTimeMillis());
+	        }
+
+	    });
+		
+		//Add onclicklistener for datePicker
+		editEndDate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Log.d("Problem Determination", "editStartDate clicked");
+				startPressed = false;
+				onDateEntrySelected(startPressed, System.currentTimeMillis());
+			}
+
+		});
+		
 		//Obtain frequencyTable from the layout_medication_input.xml 
 		frequencyTable = (TableLayout)findViewById(R.id.frequencyTable);
 		addTableHeader();
 		addFrequency(this.findViewById(R.id.frequencyTable));
-				
+		
+		//Setup Date Picker variables
+		final Calendar c = Calendar.getInstance();
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		Calendar cal = new GregorianCalendar(year, month, day);
+		sMilli = cal.getTimeInMillis();
+		eMilli = sMilli + 7*DAY;
+		
+		
 	} 
+	
+	public void onDateEntrySelected(boolean startDate, long defaultDate) {
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(defaultDate);
+		year = c.get(Calendar.YEAR);
+		month = c.get(Calendar.MONTH);
+		day = c.get(Calendar.DAY_OF_MONTH);
+		showDialog(DATE_DIALOG_ID);
+				
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DATE_DIALOG_ID:
+		   return new DatePickerDialog(this, datePickerListener, 
+                         year, month,day);
+		}
+		return null;
+	}
+	
+	private DatePickerDialog.OnDateSetListener datePickerListener 
+    = new DatePickerDialog.OnDateSetListener() {
+
+// when dialog box is closed, below method will be called.
+public void onDateSet(DatePicker view, int selectedYear,
+	int selectedMonth, int selectedDay) {
+	
+	Log.d("Problem Determination", "onDateSet ENTRY");
+	
+		year = selectedYear;
+		month = selectedMonth;
+		day = selectedDay;
+		//Log.d("Problem Determination", "selectedYear: " + selectedYear);
+		//Log.d("Problem Determination", "selectedMonth: " + selectedMonth);
+		//Log.d("Problem Determination", "selectedDay: " + selectedDay);
+		
+		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+		
+		Calendar c = new GregorianCalendar(year, month, day);
+		
+		
+		String date = formatter.format(c.getTime());
+		Log.d("test", "." + startPressed);
+		if (startPressed)
+		{
+			editStartDate.setText(date);
+			sMilli = c.getTimeInMillis();
+			Log.d("Problem Determination", "editStartDate setText");
+		}
+		else
+		{
+			editEndDate.setText(date);
+			sMilli = c.getTimeInMillis();
+			Log.d("Problem Determination", "editEndDate setText");
+		}
+		
+}
+};	
 	
 	/**
 	 * Called when User presses add Frequency button.
@@ -54,11 +179,11 @@ public class MedicationInputActivity extends Activity{
 		
 		removeButton.setOnClickListener(new OnClickListener() {
 
-		     @Override
-		      public void onClick(View pos) {
-		    	 buttonRemoveFrequency(pos);
-		      }
-		      });
+			@Override
+			public void onClick(View pos) {
+				buttonRemoveFrequency(pos);
+			}
+		});
 
 		frequencyTable.addView(inputRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
@@ -81,17 +206,7 @@ public class MedicationInputActivity extends Activity{
 	 * @param view
 	 */
 	public void addInput(View view)
-	{
-		//Find UI components.
-		EditText editMedicineName = (EditText) findViewById(R.id.editMedicineName);
-		EditText editDisplayName = (EditText) findViewById(R.id.editDisplayName);
-		EditText editDescription = (EditText) findViewById(R.id.editDescription);
-		Spinner spinnerMedicationType = (Spinner) findViewById(R.id.spinnerMedicationType);
-		EditText editStartDate = (EditText) findViewById(R.id.editStartDate);
-		EditText editEndDate = (EditText) findViewById(R.id.editEndDate);
-		EditText editRemaining = (EditText) findViewById(R.id.editRemaining);
-		EditText editRepeatPeriod = (EditText) findViewById(R.id.editRepeatPeriod);
-		
+	{		
 		//Extract data from UI components.
 		String medicineName = editMedicineName.getText().toString();
 		String displayName = editDisplayName.getText().toString();
@@ -118,9 +233,9 @@ public class MedicationInputActivity extends Activity{
 			tableRow = (TableRow) frequencyTable.getChildAt(i);
 			
 			//Get table cells
-			frequencyTime = (EditText) tableRow.getChildAt(0);
-			frequencyDosage = (EditText) tableRow.getChildAt(1);
-			frequencyUnit = (EditText) tableRow.getChildAt(2);
+			frequencyTime = (EditText) tableRow.getChildAt(0); //Time
+			frequencyDosage = (EditText) tableRow.getChildAt(1); //Dosage
+			frequencyUnit = (EditText) tableRow.getChildAt(2); //Unit
 			
 			//Add cell data to Lists (parse to int)
 			listTime.add(Integer.valueOf(frequencyTime.getText().toString()));
@@ -140,7 +255,7 @@ public class MedicationInputActivity extends Activity{
 		//Calculate StartTime and EndTime | Parse '/' out from Dates
 		//TODO
 		
-		//Export to AllMed.json
+		//Export to AllMed.json, save to device
 		//TODO
 		
 		Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();

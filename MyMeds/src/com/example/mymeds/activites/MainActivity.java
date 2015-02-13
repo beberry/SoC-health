@@ -85,14 +85,16 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
-
-		tabHost.setCurrentTab(1);
+		tabHost.setCurrentTab(0);
 
 		if (!isMyServiceRunning()){
 			Log.v("NotificationsService", "Running");
 			Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
 			getApplicationContext().startService(serviceIntent);
 		}
+
+		//Alarms alarm = new Alarms(getApplicationContext());
+		//alarm.setAlarms();
 	}
 
 	private boolean isMyServiceRunning() {
@@ -132,6 +134,7 @@ public class MainActivity extends TabActivity {
 
 		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
 		this.startActivity(new Intent(this, SettingsActivity.class));
+		this.startActivity(new Intent(this, MedicationInputActivity.class));
 		return true;
 
 	}

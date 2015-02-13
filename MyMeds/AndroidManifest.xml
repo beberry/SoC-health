@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <uses-sdk
-        android:minSdkVersion="18"
+        android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
     <application
@@ -38,6 +38,8 @@
             android:name="com.example.mymeds.activites.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/activity_settings" >
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden" >
         </activity>
 
         <!-- MedicationInput Activity -->
@@ -45,6 +47,8 @@
             android:name="com.example.mymeds.activites.MedicationInputActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/activity_medication_input" >
+            android:screenOrientation="portrait"
+   			android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity
             android:name="com.example.mymeds.tabs.AllMeds"
