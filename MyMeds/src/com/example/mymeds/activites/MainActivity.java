@@ -71,7 +71,7 @@ public class MainActivity extends TabActivity {
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putParcelableArrayListExtra("meds", allmeds);
+		intentToday.putParcelableArrayListExtra("meds", todaysmeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Meds")
 				.setIndicator("Todays Meds", null)
@@ -227,6 +227,7 @@ public class MainActivity extends TabActivity {
 
 	public void calculateMeds(){
 		MedFetcher medFetcher = new MedFetcher();
+		medFetcher.loadAssets(mContext);
 		Calendar c = new GregorianCalendar();
 		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
