@@ -232,6 +232,9 @@ public class MainActivity extends TabActivity {
 	}
 
 	public String readFile(String filename) {
+		//TODO: Remove this method once adding medication is completed.
+		writeFromAsset("medication.json");
+		
 		// http://stackoverflow.com/questions/9095610/android-fileinputstream-read-txt-file-to-string
 		StringBuffer json = new StringBuffer("");
 		
@@ -251,11 +254,7 @@ public class MainActivity extends TabActivity {
 		}
 		catch (FileNotFoundException fnfe)
 		{
-			Log.i("FileNotFound", "File could not be located, will create");
-			
-			//TODO: Remove this method once adding medication is completed.
-			writeFromAsset("medication.json");
-			readFile("medication.json");
+			Log.w("FileNotFound", "File could not be located, will create");
 		}
 		catch (IOException ioe) {
 			Log.e("JSONRead", "An IO Exception occured when reading file");
@@ -339,7 +338,7 @@ public class MainActivity extends TabActivity {
 					long startTime = tempCheck.getLong("startTime");
 					long endTime = tempCheck.getLong("endTime");
 					int remaining = tempCheck.getInt("remaining");
-					//int repeatPeriod = tempCheck.getInt("repeatPeriod");
+					int repeatPeriod = tempCheck.getInt("repeatPeriod");
 	
 					JSONArray frequency = tempCheck.getJSONArray("frequency");
 					for(int i=0;i<frequency.length();i++){
@@ -363,7 +362,7 @@ public class MainActivity extends TabActivity {
 						med.setStartTime(startTime);
 						med.setEndTime(endTime);
 						med.setRemaining(remaining);
-						//med.setRepeatPeriod(repeatPeriod);
+						med.setRepeatPeriod(repeatPeriod);
 						med.setFrequency(frequencyList);
 						allmeds.add(med);
 					}
