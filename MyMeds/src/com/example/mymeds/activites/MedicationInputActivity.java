@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.example.mymeds.R;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.TableRow.LayoutParams;
 
@@ -43,13 +47,20 @@ public class MedicationInputActivity extends Activity{
 	private EditText editRepeatPeriod;
 	
 	PopupWindow datePicker;
+	PopupWindow timePicker;
 	
 	long startDate, def, sMilli, eMilli = 0;
-	boolean startPressed = false;
+	boolean dateStartPressed = false;
+	boolean timeStartPressed = false;
+	boolean is24Hour = true;
 	int year, month, day = 0;
+	int hour, minute = 0;
+	int selectedHour, selectedMinute = 0;
+	String selectedTime = "";
 	
 	final int DAY = 86400000;
 	static final int DATE_DIALOG_ID = 999;
+	static final int TIME_DIALOG_ID = 100;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +68,22 @@ public class MedicationInputActivity extends Activity{
 		setContentView(R.layout.layout_medication_input);
 		
 		//Find UI components.
-		 editMedicineName = (EditText) findViewById(R.id.editMedicineName);
-		 editDisplayName = (EditText) findViewById(R.id.editDisplayName);
-		 editDescription = (EditText) findViewById(R.id.editDescription);
-		 spinnerMedicationType = (Spinner) findViewById(R.id.spinnerMedicationType);
-		 editStartDate = (EditText) findViewById(R.id.editStartDate);
-		 editEndDate = (EditText) findViewById(R.id.editEndDate);
-		 editRemaining = (EditText) findViewById(R.id.editRemaining);
-		 editRepeatPeriod = (EditText) findViewById(R.id.editRepeatPeriod);
+		editMedicineName = (EditText) findViewById(R.id.editMedicineName);
+		editDisplayName = (EditText) findViewById(R.id.editDisplayName);
+		editDescription = (EditText) findViewById(R.id.editDescription);
+		spinnerMedicationType = (Spinner) findViewById(R.id.spinnerMedicationType);
+		editStartDate = (EditText) findViewById(R.id.editStartDate);
+		editEndDate = (EditText) findViewById(R.id.editEndDate);
+		editRemaining = (EditText) findViewById(R.id.editRemaining);
+		editRepeatPeriod = (EditText) findViewById(R.id.editRepeatPeriod);
 		
 		//Add onclicklistener for datePicker
 		editStartDate.setOnClickListener(new View.OnClickListener() {
 	        @Override
 	        public void onClick(View v) {
 	        	Log.d("Problem Determination", "editStartDate clicked");
-	        	startPressed = true;
-	        	onDateEntrySelected(startPressed, System.currentTimeMillis());
+	        	dateStartPressed = true;
+	        	onDateEntrySelected(dateStartPressed, System.currentTimeMillis());
 	        }
 
 	    });
@@ -82,8 +93,8 @@ public class MedicationInputActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				Log.d("Problem Determination", "editStartDate clicked");
-				startPressed = false;
-				onDateEntrySelected(startPressed, System.currentTimeMillis());
+				dateStartPressed = false;
+				onDateEntrySelected(dateStartPressed, System.currentTimeMillis());
 			}
 
 		});
@@ -102,8 +113,7 @@ public class MedicationInputActivity extends Activity{
 		Calendar cal = new GregorianCalendar(year, month, day);
 		sMilli = cal.getTimeInMillis();
 		eMilli = sMilli + 7*DAY;
-		
-		
+				
 	} 
 	
 	public void onDateEntrySelected(boolean startDate, long defaultDate) {
@@ -120,50 +130,49 @@ public class MedicationInputActivity extends Activity{
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_DIALOG_ID:
-		   return new DatePickerDialog(this, datePickerListener, 
-                         year, month,day);
+		   return new DatePickerDialog(this, datePickerListener, year, month, day);
+
 		}
 		return null;
 	}
 	
-	private DatePickerDialog.OnDateSetListener datePickerListener 
-    = new DatePickerDialog.OnDateSetListener() {
+	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
-// when dialog box is closed, below method will be called.
-public void onDateSet(DatePicker view, int selectedYear,
-	int selectedMonth, int selectedDay) {
-	
-	Log.d("Problem Determination", "onDateSet ENTRY");
-	
-		year = selectedYear;
-		month = selectedMonth;
-		day = selectedDay;
-		//Log.d("Problem Determination", "selectedYear: " + selectedYear);
-		//Log.d("Problem Determination", "selectedMonth: " + selectedMonth);
-		//Log.d("Problem Determination", "selectedDay: " + selectedDay);
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-		
-		Calendar c = new GregorianCalendar(year, month, day);
-		
-		
-		String date = formatter.format(c.getTime());
-		Log.d("test", "." + startPressed);
-		if (startPressed)
-		{
-			editStartDate.setText(date);
-			sMilli = c.getTimeInMillis();
-			Log.d("Problem Determination", "editStartDate setText");
+		// when dialog box is closed, below method will be called.
+		public void onDateSet(DatePicker view, int selectedYear,
+				int selectedMonth, int selectedDay) {
+
+			Log.d("Problem Determination", "onDateSet ENTRY");
+
+			year = selectedYear;
+			month = selectedMonth;
+			day = selectedDay;
+			//Log.d("Problem Determination", "selectedYear: " + selectedYear);
+			//Log.d("Problem Determination", "selectedMonth: " + selectedMonth);
+			//Log.d("Problem Determination", "selectedDay: " + selectedDay);
+
+			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+			Calendar c = new GregorianCalendar(year, month, day);
+
+
+			String date = formatter.format(c.getTime());
+			Log.d("test", "." + dateStartPressed);
+			if (dateStartPressed)
+			{
+				editStartDate.setText(date);
+				sMilli = c.getTimeInMillis();
+				Log.d("Problem Determination", "editStartDate setText");
+			}
+			else
+			{
+				editEndDate.setText(date);
+				sMilli = c.getTimeInMillis();
+				Log.d("Problem Determination", "editEndDate setText");
+			}
+
 		}
-		else
-		{
-			editEndDate.setText(date);
-			sMilli = c.getTimeInMillis();
-			Log.d("Problem Determination", "editEndDate setText");
-		}
-		
-}
-};	
+	};	
 	
 	/**
 	 * Called when User presses add Frequency button.
@@ -177,6 +186,7 @@ public void onDateSet(DatePicker view, int selectedYear,
 		//Button to remove the row.
 		Button removeButton = (Button)inputRow.findViewById(R.id.buttonRemoveFrequency);
 		
+		//Button Listener
 		removeButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -185,6 +195,39 @@ public void onDateSet(DatePicker view, int selectedYear,
 			}
 		});
 
+		
+		final EditText editTime = (EditText)inputRow.findViewById(R.id.timeTextBox);
+		
+		//Add onclicklistener for timePicker
+		editTime.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+								
+				// Process to get Current Time
+		        final Calendar c = Calendar.getInstance();
+		        int mHour = c.get(Calendar.HOUR_OF_DAY);
+		        int mMinute = c.get(Calendar.MINUTE);
+
+		        TimePickerDialog tpd = new TimePickerDialog(MedicationInputActivity.this, //same Activity Context like before
+		        new TimePickerDialog.OnTimeSetListener() {
+
+		            @Override
+		            public void onTimeSet(TimePicker view, int hour,
+		                    int minute) {
+		            	
+		            	String finalHour = String.valueOf(hour);
+		            	if(finalHour.length() < 2)
+		            	{
+		            		finalHour = '0' + finalHour; //Prevent removal of 0's at start
+		            	}
+		                editTime.setText(finalHour + String.valueOf(minute)); //You set the time for the EditText created
+		            }
+		        }, mHour, mMinute, true); //true = is24Hour format
+		        tpd.show();
+			}
+		});
+
+		//Add new Row
 		frequencyTable.addView(inputRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		
 	}
@@ -252,8 +295,10 @@ public void onDateSet(DatePicker view, int selectedYear,
 
 		}
 		
-		//Calculate StartTime and EndTime | Parse '/' out from Dates
+		//Calculate StartTime and EndTime | Parse '/' out from Dates, append the Time.
 		//TODO
+		long startTime = 0;
+		long endTime = 0;
 		
 		//Export to AllMed.json, save to device
 		//TODO
