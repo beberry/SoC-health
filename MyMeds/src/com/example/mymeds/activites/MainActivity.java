@@ -228,7 +228,7 @@ public class MainActivity extends TabActivity {
 
 	public void calculateMeds(){
 		MedFetcher medFetcher = new MedFetcher();
-		medFetcher.loadAssets(mContext);
+		medFetcher.loadAssets(mContext, allmeds);
 		Calendar c = new GregorianCalendar();
 		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
