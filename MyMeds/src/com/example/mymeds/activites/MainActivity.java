@@ -97,8 +97,8 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
 		
-		Alarms alarm = new Alarms(getApplicationContext());
-		alarm.setAlarms();
+		//Alarms alarm = new Alarms(getApplicationContext());
+		//alarm.setAlarms();
 	}
 
 
@@ -126,7 +126,7 @@ public class MainActivity extends TabActivity {
 	{		
 		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
 
-		this.startActivity(new Intent(this, SettingsActivity.class));
+		this.startActivity(new Intent(this, MedicationInputActivity.class));
 		return true;
 
 	}
