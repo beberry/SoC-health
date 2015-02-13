@@ -19,8 +19,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.example.mymeds.activites.MainActivity;
-
 public class Alarms {
 	private Context context;
 
@@ -34,7 +32,6 @@ public class Alarms {
 	 */
 	@SuppressLint("NewApi")
 	public void setAlarms() {
-
 		String jsonTime = null;
 		String dosage = null;
 		String units = null;
@@ -60,6 +57,8 @@ public class Alarms {
 				record = medIndex.getJSONObject(k);
 				name = record.getString("displayName");
 				id = record.getInt("index");
+				Calendar cal = getSpecifiedTime(record.getLong("startTime"));
+						
 				JSONArray freqIndex = record.getJSONArray("frequency");
 				JSONObject freq;
 				for (int t = 0; t < freqIndex.length(); t++) {
@@ -75,13 +74,7 @@ public class Alarms {
 					idValue.append(alarmTime);
 					Log.v("ID", idValue.toString());
 
-					Calendar c = Calendar.getInstance();
-					int year = c.get(Calendar.YEAR);
-					int month = c.get(Calendar.MONTH);
-					int day = c.get(Calendar.DAY_OF_MONTH);
-
 					LinkedList<String> stack = getTimeOfDose(alarmTime);
-				
 					int sMin = Integer.valueOf(stack.pop());
 					int fMin = Integer.valueOf(stack.pop());
 					int sHour = Integer.valueOf(stack.pop());
@@ -97,14 +90,16 @@ public class Alarms {
 					sb2.append(sHour);
 					int hour = Integer.parseInt(sb2.toString());
 
-					c.set(year, month, day, hour, minute, 00);
-					long time = c.getTimeInMillis();
+					cal.set(Calendar.HOUR_OF_DAY, hour);
+					cal.set(Calendar.MINUTE, minute);
+					cal.set(Calendar.SECOND, 0);
+					long time = cal.getTimeInMillis();
 
 					Date date = new Date(time);
 					SimpleDateFormat df2 = new SimpleDateFormat(
-							"dd/MM/yy HH:mm:ss");
+							"dd/MM/yyyy HH:mm:ss");
 					String dateText = df2.format(date);
-					Log.v("Alarm Time", dateText);
+					Log.v("Alarm Time", dateText);	
 
 					Intent myIntent = new Intent(context, AlarmReceiver.class);
 					myIntent.putExtra("id", id);
@@ -140,5 +135,12 @@ public class Alarms {
 			stack.push(value);
 		}
 		return stack;
+	}
+	
+	public Calendar getSpecifiedTime(long time) {
+		time = time*1000;
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(time);
+		return cal;
 	}
 }

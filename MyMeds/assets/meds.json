@@ -6,12 +6,12 @@
             "displayName": "Steroid Cream",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 140003824,
+            "startTime": 1421994054,
+            "endTime": 1421994054,
             "remaining": 56,
             "frequency":[
             	{
-            		"time": "0256",
+            		"time": "2300",
             		"dosage": "500mg",
             		"units": 2
             	}
