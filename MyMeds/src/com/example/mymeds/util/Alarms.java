@@ -108,13 +108,9 @@ public class Alarms {
 					myIntent.putExtra("units", units);
 					myIntent.putExtra("name", name); 
 
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(
-							context, Integer.valueOf(idValue.toString()),
-							myIntent, 0);
-					AlarmManager alarmManager = (AlarmManager) context
-							.getSystemService(Context.ALARM_SERVICE);
-					alarmManager
-							.setExact(AlarmManager.RTC, time, pendingIntent);
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, Integer.valueOf(idValue.toString()),myIntent, 0);
+					AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+					alarmManager.set(AlarmManager.RTC, time, pendingIntent);
 					Log.v("","");
 				}
 			}
