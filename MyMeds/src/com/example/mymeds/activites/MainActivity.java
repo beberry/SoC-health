@@ -46,7 +46,6 @@ import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
-import com.example.mymeds.util.NotificationsService;
 
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
