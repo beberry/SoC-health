@@ -47,7 +47,8 @@
             android:name="com.example.mymeds.activites.MedicationInputActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/activity_medication_input" 
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.example.mymeds.tabs.AllMeds"

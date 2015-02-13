@@ -305,6 +305,7 @@ public class MedicationInputActivity extends Activity{
 		
 		Log.d("PD", "parsing StartDate");
 		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
+		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
 		Log.d("PD", "long startTime: " + startTime);
 		
 		//Export to AllMed.json, save to device
@@ -339,7 +340,7 @@ public class MedicationInputActivity extends Activity{
 		//Title
 		TextView headerTitle = new TextView(this);
 		
-		headerTitle.setTextSize(15);
+		headerTitle.setTextSize(20);
 		headerTitle.setText("Time Taken"); 
 		headerTitle.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 		headerTitle.setGravity(Gravity.CENTER);
@@ -350,7 +351,7 @@ public class MedicationInputActivity extends Activity{
 		//Dosage
 		TextView headerDosage = new TextView(this);
 		
-		headerDosage.setTextSize(15);
+		headerDosage.setTextSize(20);
 		headerDosage.setText("Dosage"); 
 		headerDosage.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 		headerDosage.setGravity(Gravity.CENTER);
@@ -361,7 +362,7 @@ public class MedicationInputActivity extends Activity{
 		//Units
 		TextView headerUnits = new TextView(this);
 		
-		headerUnits.setTextSize(15);
+		headerUnits.setTextSize(20);
 		headerUnits.setText("Servings"); 
 		headerUnits.setPaintFlags(Paint.UNDERLINE_TEXT_FLAG);
 		headerUnits.setGravity(Gravity.CENTER);
