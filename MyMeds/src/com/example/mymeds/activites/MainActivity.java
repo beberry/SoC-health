@@ -3,10 +3,6 @@ package com.example.mymeds.activites;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -15,16 +11,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -37,17 +29,15 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
-import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.FutureMeds;
-
-import com.example.mymeds.util.AlarmReceiver;
-import com.example.mymeds.util.Alarms;
+import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
 import com.example.mymeds.util.NotificationsService;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
@@ -68,7 +58,6 @@ public class MainActivity extends TabActivity {
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
-		Resources ressources = getResources(); 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
@@ -87,8 +76,8 @@ public class MainActivity extends TabActivity {
 
 		Intent intentProfile = new Intent().setClass(this, FutureMeds.class);
 		TabSpec tabSpecProfile = tabHost
-				.newTabSpec("Profile")
-				.setIndicator("Profile", null)
+				.newTabSpec("Future")
+				.setIndicator("Future", null)
 				.setContent(intentProfile);
 
 		// add all tabs 
@@ -96,11 +85,26 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
-		
+
+		if (!isMyServiceRunning()){
+			Log.v("NotificationsService", "Running");
+			Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
+			getApplicationContext().startService(serviceIntent);
+		}
+
 		//Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAlarms();
 	}
 
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (NotificationsService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Creates the Menu Bar.
@@ -124,11 +128,15 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{		
-		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
-
-		this.startActivity(new Intent(this, MedicationInputActivity.class));
-		return true;
-
+		switch(item.getItemId()){
+		case R.id.action_settings:
+			this.startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.add_medication:
+			this.startActivity(new Intent(this, MedicationInputActivity.class));
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -164,7 +172,7 @@ public class MainActivity extends TabActivity {
 			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
 		}
 	}
-	
+
 	private void onRightSwipe() {
 		if(tabHost.getCurrentTab()>0){
 			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
@@ -205,7 +213,6 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
-
 	}
 
 	public void calculateMeds(){
@@ -273,6 +280,7 @@ public class MainActivity extends TabActivity {
 			}
 		} catch (IOException e) {
 			Log.e("IOException","Error loading file");
+			e.printStackTrace();
 			return false;
 		} catch (JSONException e) {
 			Log.e("JSONException","JSON exception");

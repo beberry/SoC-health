@@ -6,9 +6,10 @@
             "displayName": "Steroid Cream",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 140003824,
+            "startTime":  1423483966000,
+            "endTime": 1455019966000,
             "remaining": 56,
+            "repeatPeriod": 2,
             "frequency":[
             	{
             		"time": 1200,
@@ -23,9 +24,10 @@
             "displayName": "Opium",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 143003824,
+            "startTime": 1423483966000,
+            "endTime": 1455019966000,
             "remaining": 20,
+            "repeatPeriod": 1,
             "frequency":[
                 {
                     "time": 1000,
@@ -45,9 +47,10 @@
             "displayName": "Painkillers",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 143003824,
+            "startTime":  1391947966000,
+            "endTime": 1486642366000,
             "remaining": 84,
+            "repeatPeriod": 1,
             "frequency":[
                 {
                     "time": 1000,

@@ -16,14 +16,15 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.Holo.Light" >
-        
-        <service android:name="com.example.mymeds.util.NotificationService"
-                 android:enabled="true" />
+        <service
+            android:name="com.example.mymeds.util.NotificationService"
+            android:enabled="true" />
 
-        <receiver android:name="com.example.mymeds.util.AlarmReceiver"/>
+        <receiver android:name="com.example.mymeds.util.AlarmReceiver" />
 
         <activity
             android:name=".activites.MainActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,22 +36,29 @@
         <!-- SettingsActivity -->
         <activity
             android:name="com.example.mymeds.activites.SettingsActivity"
-            android:label="@string/activity_settings"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/activity_settings" >
             android:screenOrientation="portrait"
-   			android:configChanges="orientation|keyboardHidden" >
+   			android:configChanges="orientation|keyboardHidden" >
         </activity>
-        
+
         <!-- MedicationInput Activity -->
         <activity
             android:name="com.example.mymeds.activites.MedicationInputActivity"
-            android:label="@string/activity_medication_input"
+            android:configChanges="orientation|screenSize"
+            android:label="@string/activity_medication_input" >
             android:screenOrientation="portrait"
-   			android:configChanges="orientation|keyboardHidden" >
+   			android:configChanges="orientation|keyboardHidden" >
         </activity>
-        
-        <activity android:name="com.example.mymeds.tabs.AllMeds" />
-        <activity android:name="com.example.mymeds.tabs.FutureMeds" />
-        <activity android:name="com.example.mymeds.tabs.TodaysMeds" />
+        <activity
+            android:name="com.example.mymeds.tabs.AllMeds"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="com.example.mymeds.tabs.FutureMeds"
+            android:configChanges="orientation|screenSize" />
+        <activity
+            android:name="com.example.mymeds.tabs.TodaysMeds"
+            android:configChanges="orientation|screenSize" />
     </application>
 
 </manifest>

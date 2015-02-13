@@ -1,13 +1,17 @@
 package com.example.mymeds.util;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.mymeds.libs.PojoMapper;
 import com.example.mymeds.tabs.FutureMeds;
 
 import android.content.Context;
@@ -16,6 +20,7 @@ import android.util.Log;
 
 public class MedFetcher {
 
+	final String JSON_PATH = "meds.json";
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 	Context mContext;
 
@@ -182,6 +187,47 @@ public class MedFetcher {
 			return false;
 		}
 		return true;
+	}
+	
+	private void saveJson(ArrayList<Medication> modifiedMeds){
+		mContext.deleteFile(JSON_PATH);
+		String string  = "";
+		try {
+			string = PojoMapper.toJson(modifiedMeds, true);
+		} catch (JsonMappingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (JsonGenerationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		FileOutputStream outputStream;
+
+		try {
+		  outputStream = mContext.openFileOutput(JSON_PATH, Context.MODE_PRIVATE);
+		  outputStream.write(string.getBytes());
+		  outputStream.close();
+		} catch (Exception e) {
+		  e.printStackTrace();
+		}
+	}
+	
+	public void modifyQuantity(int medId, int quantConsumed){
+		loadValues();
+		for(int i=0; i<allmeds.size(); i++){
+			Medication currentMed = allmeds.get(i);
+			if(currentMed.getMedId()==medId){
+				Medication modMed = currentMed;
+				//TODO: No checking this results in a positive number currently
+				modMed.setRemaining(currentMed.getRemaining()-quantConsumed);
+				allmeds.set(i, modMed);
+				break;
+			}
+		}
+		saveJson(allmeds);
 	}
 
 }

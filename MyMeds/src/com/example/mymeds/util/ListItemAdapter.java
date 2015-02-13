@@ -65,8 +65,9 @@ public class ListItemAdapter extends BaseAdapter {
 		taken.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				taken.toggle();
+				Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
+				tempTable.removeView(row);
 				if(toAdd.getFrequency().size()>1){
-					tempTable.removeView(row);
 					timesTaken = timesTaken++;
 					t2.setText(String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
 					row.setPadding(5, 20, 5, 20);
@@ -74,11 +75,6 @@ public class ListItemAdapter extends BaseAdapter {
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 				}
-				else{
-					Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
-					tempTable.removeView(row);
-				}
-
 			}
 		});
 		row.setPadding(5, 20, 5, 20);
