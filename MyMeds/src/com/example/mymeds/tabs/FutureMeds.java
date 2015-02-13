@@ -172,7 +172,7 @@ public void getMedication()
 	daysDiff = (int)(millisDiff / 86400000);
 	
 	MedFetcher mf = new MedFetcher();
-	mf.loadAssets(this);
+	mf.loadAssets(this, getIntent().getParcelableArrayListExtra("meds"));
 	
 	ArrayList<futureMedDetails>  futureMeds =  mf.futureMedication(sMilli,eMilli);
 	

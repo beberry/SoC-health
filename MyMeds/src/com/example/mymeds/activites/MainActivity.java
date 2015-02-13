@@ -84,11 +84,12 @@ public class MainActivity extends TabActivity {
 				.setIndicator("All Meds", null)
 				.setContent(intentAll);
 
-		Intent intentProfile = new Intent().setClass(this, FutureMeds.class);
+		Intent intentFuture = new Intent().setClass(this, FutureMeds.class);
+		intentFuture.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecProfile = tabHost
 				.newTabSpec("Future")
 				.setIndicator("Future", null)
-				.setContent(intentProfile);
+				.setContent(intentFuture);
 
 		// add all tabs 
 		tabHost.addTab(tabSpecToday);

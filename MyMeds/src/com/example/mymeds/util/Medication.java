@@ -8,10 +8,10 @@ import android.os.Parcelable;
 //another class to handle item's id and name
 public class Medication implements Parcelable{
 
-	public int medId;
-	public String medName, displayName, description, type, time;
-	long startTime, endTime;
-	int remaining, repeatPeriod;
+	private int medId;
+	private String medName, displayName, description, type, time;
+	private long startTime, endTime;
+	private int remaining, repeatPeriod;
 	ArrayList<Frequency> frequency;
 
 	// constructor
