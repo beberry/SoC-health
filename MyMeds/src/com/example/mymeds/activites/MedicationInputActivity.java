@@ -290,8 +290,8 @@ public class MedicationInputActivity extends Activity{
 			Log.d("Problem Determination", "Unit: " + frequencyUnit.getText().toString());
 			
 			Log.d("Problem Determination", "List Time: " + listTime.get(0));
-			Log.d("Problem Determination", "List Dosage: " + listTime.get(0));
-			Log.d("Problem Determination", "List Unit: " + listTime.get(0));
+			Log.d("Problem Determination", "List Dosage: " + listDosage.get(0));
+			Log.d("Problem Determination", "List Unit: " + listUnit.get(0));
 
 		}
 		
@@ -299,6 +299,13 @@ public class MedicationInputActivity extends Activity{
 		//TODO
 		long startTime = 0;
 		long endTime = 0;
+		
+		String parsedStartDate = startDate.replaceAll("/", "");
+		String parsedEndDate = endDate.replaceAll("/", "");
+		
+		Log.d("PD", "parsing StartDate");
+		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
+		Log.d("PD", "long startTime: " + startTime);
 		
 		//Export to AllMed.json, save to device
 		//TODO
