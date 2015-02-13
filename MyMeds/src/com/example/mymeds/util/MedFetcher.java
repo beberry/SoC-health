@@ -148,7 +148,8 @@ public class MedFetcher {
 				long startTime = tempCheck.getLong("startTime");
 				long endTime = tempCheck.getLong("endTime");
 				int remaining = tempCheck.getInt("remaining");
-				int repeatPeriod = tempCheck.getInt("repeatPeriod");
+				//int repeatPeriod = tempCheck.getInt("repeatPeriod");
+				
 				JSONArray frequency = tempCheck.getJSONArray("frequency");
 				for(int i=0;i<frequency.length();i++){
 					JSONObject frequencyObject = frequency.getJSONObject(i);
@@ -171,7 +172,7 @@ public class MedFetcher {
 					med.setStartTime(startTime);
 					med.setEndTime(endTime);
 					med.setRemaining(remaining);
-					med.setRepeatPeriod(repeatPeriod);
+					//med.setRepeatPeriod(repeatPeriod);
 					med.setFrequency(frequencyList);
 					allmeds.add(med);
 				}else{
