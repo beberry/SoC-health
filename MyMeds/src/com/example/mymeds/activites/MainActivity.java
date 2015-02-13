@@ -17,7 +17,6 @@ import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -38,6 +37,7 @@ import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
 import com.example.mymeds.util.NotificationsService;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
@@ -58,7 +58,6 @@ public class MainActivity extends TabActivity {
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
-		Resources ressources = getResources(); 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
@@ -98,7 +97,7 @@ public class MainActivity extends TabActivity {
 	}
 
 	private boolean isMyServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(getApplicationContext().ACTIVITY_SERVICE);
+		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
 			if (NotificationsService.class.getName().equals(service.service.getClassName())) {
 				return true;
@@ -129,14 +128,15 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{		
-		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
-		//Log.d("Problem Determination", "action_exit id: " + R.id.action_exit);
-
-		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
-		this.startActivity(new Intent(this, SettingsActivity.class));
-		this.startActivity(new Intent(this, MedicationInputActivity.class));
-		return true;
-
+		switch(item.getItemId()){
+		case R.id.action_settings:
+			this.startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.add_medication:
+			this.startActivity(new Intent(this, MedicationInputActivity.class));
+			return true;
+		}
+		return false;
 	}
 
 	/**
