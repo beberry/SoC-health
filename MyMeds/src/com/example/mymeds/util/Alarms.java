@@ -3,6 +3,7 @@ package com.example.mymeds.util;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -19,8 +20,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.example.mymeds.activites.MainActivity;
-
 public class Alarms {
 	private Context context;
 
@@ -29,122 +28,250 @@ public class Alarms {
 	}
 
 	/**
-	 * Go through the mymeds json file and set an alarm for each piece of
-	 * medication to be taken during the day
+	 * Load JSON from Assets and return jsonString.
+	 * @return json
 	 */
-	@SuppressLint("NewApi")
-	public void setAlarms() {
-
-		String jsonTime = null;
-		String dosage = null;
-		String units = null;
-		String name = null;
-		int id;
-		int alarmTime;
-
+	public String loadJSON() {
+		String json = null;
 		try {
-			// read file from assets
-			AssetManager assetManager = context.getAssets();
-			InputStream is = assetManager.open("meds.json");
+			InputStream is = context.getAssets().open("meds.json");
 			int size = is.available();
 			byte[] buffer = new byte[size];
 			is.read(buffer);
 			is.close();
-			String bufferString = new String(buffer);
+			json = new String(buffer, "UTF-8");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+		return json;
+	}
 
-			JSONObject jsonObject = new JSONObject(bufferString);
+	/**
+	 * This will get a Medication based on a ID.
+	 * 
+	 * @param actualIndex
+	 * @return
+	 */
+	public Medication getMedicationById(int actualIndex) {
+		Medication med = new Medication();
+		try {
+			JSONObject jsonObject = new JSONObject(loadJSON());
 			JSONArray medIndex = jsonObject.getJSONArray("medication");
-			JSONObject record;
+			JSONObject medObject;
 
 			for (int k = 0; k < medIndex.length(); k++) {
-				record = medIndex.getJSONObject(k);
-				// work to get into frequency to get time
-				name = record.getString("displayName");
-				id = record.getInt("index");
-				JSONArray freqIndex = record.getJSONArray("frequency");
-				JSONObject freq;
-				for (int t = 0; t < freqIndex.length(); t++) {
-					freq = freqIndex.getJSONObject(t);
-					dosage = freq.getString("dosage");
-					units = freq.getString("units");
-					alarmTime = freq.getInt("time");
-					Log.v("Dosage", dosage);
-					Log.v("Units", units);
-					Log.v("Name", name);
-					
-					//Calculate idValue for individual alarms
-					StringBuilder idValue = new StringBuilder();
-					idValue.append(id);
-					idValue.append(alarmTime);
-					Log.v("ID", idValue.toString());
+				medObject = medIndex.getJSONObject(k);
+				int jsonIndex = medObject.getInt("index");
 
-					Calendar c = Calendar.getInstance();
-					int year = c.get(Calendar.YEAR);
-					int month = c.get(Calendar.MONTH);
-					int day = c.get(Calendar.DAY_OF_MONTH);
+				if (jsonIndex == actualIndex) {
+					med.setMedId(actualIndex);
+					med.setMedName(medObject.getString("name"));
+					med.setDisplayName(medObject.getString("displayName"));
+					med.setDescription(medObject.getString("description"));
+					med.setType(medObject.getString("type"));
+					med.setStartTime(medObject.getLong("startTime"));
+					med.setEndTime(medObject.getLong("endTime"));
+					med.setRemaining(medObject.getInt("remaining"));
+					med.setRepeatPeriod(medObject.getInt("repeatPeriod"));
 
-					LinkedList<Integer> stack = new LinkedList<Integer>();
-
-					while (alarmTime > 0) {
-						stack.push(alarmTime % 10);
-						alarmTime = alarmTime / 10;
+					JSONArray freqIndex = medObject.getJSONArray("frequency");
+					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
+					for (int i = 0; i < freqIndex.length(); i++) {
+						JSONObject frequencyObject = freqIndex.getJSONObject(i);
+						Frequency freq = new Frequency();
+						freq.setDosage(frequencyObject.getString("dosage"));
+						freq.setUnits(frequencyObject.getInt("units"));
+						freq.setTime(frequencyObject.getString("time"));
+						frequencyList.add(freq);
 					}
+					med.setFrequency(frequencyList);
+				}
+			}
+		} catch (JSONException e) {
+			Log.e("JSONException", "JSON exception");
+			e.printStackTrace();
+			return null;
+		}
+		return med;
+	}
 
-					int fMin = (stack.pop());
-					int sMin = (stack.pop());
-					int fHour = (stack.pop());
-					int sHour = (stack.pop());
+	/**
+	 * This sets alarms for all the Medication's in the JSON file.
+	 */
+	public void setAllAlarms() {
+		String dosage = null, units = null, name = null, time = null;
+		int id;
 
-					StringBuilder sb = new StringBuilder();
+		try {
+			JSONObject jsonObject = new JSONObject(loadJSON());
+			JSONArray medIndex = jsonObject.getJSONArray("medication");
+			JSONObject medObject;
 
-					sb.append(fMin);
-					sb.append(sMin);
+			for (int k = 0; k < medIndex.length(); k++) {
+				medObject = medIndex.getJSONObject(k);
+				name = medObject.getString("displayName");
+				id = medObject.getInt("index");
+				Calendar cal = getSpecifiedTime(medObject.getLong("startTime"));
 
-					int hour = Integer.parseInt(sb.toString());
-
-					StringBuilder sb2 = new StringBuilder();
-
-					sb2.append(fHour);
-					sb2.append(sHour);
-
-					int minute = Integer.parseInt(sb2.toString());
-
-					StringBuilder displayTime = new StringBuilder();
-					displayTime.append(sb.toString());
-					displayTime.append(sb2.toString());
-
-					c.set(year, month, day, hour, minute, 00);
-					long time = c.getTimeInMillis();
-
-					Date date = new Date(time);
-					SimpleDateFormat df2 = new SimpleDateFormat(
-							"dd/MM/yy HH:mm:ss");
-					String dateText = df2.format(date);
-
-					Log.v("time fucker", dateText);
+				JSONArray freqIndex = medObject.getJSONArray("frequency");
+				JSONObject freqObject;
+				for (int t = 0; t < freqIndex.length(); t++) {
+					freqObject = freqIndex.getJSONObject(t);
+					dosage = freqObject.getString("dosage");
+					units = freqObject.getString("units");
+					time = freqObject.getString("time");
+					
+					cal = calculateTimeOfAlarm(time, cal);
+					long alarmTime = cal.getTimeInMillis();
+					printFormattedDate(alarmTime, name, "Set All Alarms");
 
 					Intent myIntent = new Intent(context, AlarmReceiver.class);
 					myIntent.putExtra("id", id);
-					myIntent.putExtra("time", displayTime.toString());
+					myIntent.putExtra("time", time);
 					myIntent.putExtra("dosage", dosage);
 					myIntent.putExtra("units", units);
-					myIntent.putExtra("name", name); 
+					myIntent.putExtra("name", name);
 
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(
-							context, Integer.valueOf(idValue.toString()),
-							myIntent, 0);
-					AlarmManager alarmManager = (AlarmManager) context
-							.getSystemService(Context.ALARM_SERVICE);
-					alarmManager
-							.setExact(AlarmManager.RTC, time, pendingIntent);
+					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, time), myIntent, 0);
+					AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+					alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
+					Log.v("", "");
 				}
 			}
-		} catch (IOException e) {
-			Log.e("IOException", "Error loading file");
-			e.printStackTrace();
 		} catch (JSONException e) {
 			Log.e("JSONException", "JSON exception");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * This adds an alarm for an Medication based on the MedID.
+	 * 
+	 * @param id
+	 */
+	public void addAlarm(int id) {
+		Medication med = getMedicationById(id);
+		ArrayList<Frequency> frequencyList = med.getFrequency();
+		Frequency freqObject;
+		String dosage = null, freqTime = null;
+		int units = 0;
+		for (int i = 0; i < frequencyList.size(); i++) {
+			freqObject = frequencyList.get(i);
+			freqTime = String.valueOf(freqObject.getTime());
+			units = freqObject.getUnits();
+			dosage = freqObject.getDosage();
+		}
+
+		Calendar cal = getSpecifiedTime(med.getStartTime());
+		cal = calculateTimeOfAlarm(freqTime, cal);
+		long time = cal.getTimeInMillis();
+		printFormattedDate(time, med.getMedName(), "Added Alarm");
+
+		Intent myIntent = new Intent(context, AlarmReceiver.class);
+		myIntent.putExtra("id", id);
+		myIntent.putExtra("time", freqTime);
+		myIntent.putExtra("dosage", dosage);
+		myIntent.putExtra("units", String.valueOf(units));
+		myIntent.putExtra("name", med.getMedName());
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, freqTime), myIntent, 0);
+		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		alarmManager.set(AlarmManager.RTC, time, pendingIntent);
+	}
+
+	public void setNextAlarm(int medID, int alarmID, String time) {
+		Medication med = getMedicationById(medID);
+		int repeatPeriod = med.getRepeatPeriod();
+		ArrayList<Frequency> freqList = med.getFrequency();
+		Frequency freqIndex;
+		String dosage = null, freqTime = null;
+		Calendar cal = Calendar.getInstance();
+		int units = 0;
+		for (int i = 0; i < freqList.size(); i++) {
+			freqIndex = freqList.get(i);
+			if (time.equals(freqIndex.getTime())) {
+				freqTime = freqIndex.getTime();
+				units = freqIndex.getUnits();
+				dosage = freqIndex.getDosage();
+				
+				cal = calculateTimeOfAlarm(String.valueOf(freqTime), cal);
+				cal.add(Calendar.DAY_OF_MONTH, repeatPeriod);
+				long alarmTime = cal.getTimeInMillis();
+				printFormattedDate(alarmTime, med.getMedName(), "Next Alarm");
+				
+				Intent myIntent = new Intent(context, AlarmReceiver.class);
+				myIntent.putExtra("id", medID);
+				myIntent.putExtra("time", freqTime);
+				myIntent.putExtra("dosage", dosage);
+				myIntent.putExtra("units", String.valueOf(units));
+				myIntent.putExtra("name", med.getMedName());
+
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(medID, freqTime), myIntent, 0);
+				AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+				alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
+			}
+		}
+	}
+
+	public Calendar calculateTimeOfAlarm(String alarmTime, Calendar cal) {
+		LinkedList<String> stack = new LinkedList<String>();
+		String value;
+		for (int i = 0; i < alarmTime.length(); i++) {
+			value = String.valueOf(alarmTime.charAt(i));
+			stack.push(value);
+		}
+		
+		int sMin = Integer.valueOf(stack.pop());
+		int fMin = Integer.valueOf(stack.pop());
+		int sHour = Integer.valueOf(stack.pop());
+		int fHour = Integer.valueOf(stack.pop());
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(fMin);
+		sb.append(sMin);
+		int minute = Integer.parseInt(sb.toString());
+
+		StringBuilder sb2 = new StringBuilder();
+		sb2.append(fHour);
+		sb2.append(sHour);
+		int hour = Integer.parseInt(sb2.toString());
+
+		cal.set(Calendar.HOUR_OF_DAY, hour);
+		cal.set(Calendar.MINUTE, minute);
+		cal.set(Calendar.SECOND, 0);
+		return cal;
+	}
+
+	public Calendar getSpecifiedTime(long time) {
+		time = time * 1000;
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(time);
+		return cal;
+	}
+
+	/**
+	 * Used for testing purposes to print out the date/time in a readable format.
+	 * @param time
+	 */
+	private void printFormattedDate(long time, String name, String label) {
+		Date date = new Date(time);
+		SimpleDateFormat df2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String dateText = df2.format(date);
+		Log.v("Name", name);
+		Log.v(label, dateText);
+	}
+	
+	/**
+	 * Calculates AlarmId based on a medID and an alarmTime.
+	 * @param medID
+	 * @param alarmTime
+	 * @return
+	 */
+	private int calcaluteAlarmId(int medID, String alarmTime) {
+		StringBuilder idValue = new StringBuilder();
+		idValue.append(medID);
+		idValue.append(alarmTime);
+		return Integer.valueOf(idValue.toString());
 	}
 }
