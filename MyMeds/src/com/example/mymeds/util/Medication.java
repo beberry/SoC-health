@@ -1,6 +1,8 @@
 package com.example.mymeds.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -118,6 +120,16 @@ public class Medication implements Parcelable{
 		description = in.readString ();
 		type = in.readString ();
 
+		repeatPeriod = in.readInt();
+		
+		ArrayList pArray = in.readArrayList(Frequency.class.getClassLoader());
+		Frequency[] resultArray = null;
+		
+		if (pArray != null) {
+			//resultArray = Arrays.copyOf(pArray, pArray.size(), Frequency[].class);
+		}
+		
+		frequency = new ArrayList<Frequency>(pArray);
 		index = in.readInt();
 		remaining = in.readInt();
 		startTime = in.readLong();
@@ -145,10 +157,15 @@ public class Medication implements Parcelable{
 		dest.writeString(description);
 		dest.writeString(type);
 
+		Frequency[] outArray = new Frequency[frequency.size()];
+		dest.writeTypedArray(frequency.toArray(outArray), flags);
+		
 		dest.writeInt(index);
 		dest.writeInt(remaining);
 		dest.writeLong(startTime);
-		dest.writeLong(endTime);	
+		dest.writeLong(endTime);
+		dest.writeInt(repeatPeriod);
+
 	}
 
 }
