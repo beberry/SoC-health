@@ -1,7 +1,7 @@
 {
     "medication": [
         {
-            "index": 0,
+            "index": 1,
             "name": "Hydrocortisone",
             "displayName": "Steroid Cream",
             "description": "easy",
@@ -19,7 +19,7 @@
             ]
         },
         {
-            "index": 1,
+            "index": 2,
             "name": "Oxycodone",
             "displayName": "Opium",
             "description": "easy",
@@ -42,7 +42,7 @@
             ]
         },
         {
-            "index": 2,
+            "index": 3,
             "name": "Paracetamol",
             "displayName": "Painkillers",
             "description": "easy",

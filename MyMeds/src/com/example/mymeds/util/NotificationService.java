@@ -1,14 +1,20 @@
 package com.example.mymeds.util;
 
+import java.util.Calendar;
+
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MainActivity;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class NotificationService extends Service {
@@ -50,26 +56,36 @@ public class NotificationService extends Service {
 	/**
 	 * Builds & Displays a notification.
 	 */
-	private void showNotification(int id, String time, String dosage,
-			String units, String name) {
+	private void showNotification(int id, String time, String dosage, String units, String name) {
 		// Initialise notificationManager
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-		// The PendingIntent to launch a activity if the user selects the
-		// notification.
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				new Intent(this, MainActivity.class), 0);
-
-		// Create the notification with a icon and text.
-		Notification notification = new Notification.Builder(this)
-				.setContentTitle("Pop dem pills Muthafucker")
-				.setContentText(name + ": " + dosage + " " + units)
-				.setSmallIcon(R.drawable.ic_launcher)
-				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentIntent(contentIntent).build();
+		
+		Log.v("ID", String.valueOf(getID(id, time)));
+		
+		Intent snoozeIntent = new Intent(this, SnoozeReceiver.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt("id", id);
+		bundle.putString("time", time);
+		bundle.putString("dosage", dosage);
+		bundle.putString("units", units);
+		bundle.putString("name", name);
+		bundle.putInt("alarmID", getID(id, time));
+		Log.v("alarmID ns", String.valueOf(getID(id, time)));
+		snoozeIntent.putExtras(bundle);
+		
+		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this, getID(id, time), snoozeIntent, 0);
+		
+		NotificationCompat.Builder builder =
+		        new NotificationCompat.Builder(this)
+		        .setSmallIcon(R.drawable.ic_launcher)
+		        .setContentTitle("Time for Pill")
+		        .setContentText(name + ": " + dosage + "  x" + units)
+		        .setDefaults(Notification.DEFAULT_ALL)
+		        .setStyle(new NotificationCompat.BigTextStyle().bigText(name + ": " + dosage + "  x" + units))
+		        .addAction (R.drawable.ic_launcher, "Snooze", snoozePendingIntent);
 
 		// Send the notification.
-		notificationManager.notify(getID(id, time), notification);
+		notificationManager.notify(getID(id, time), builder.build());
 		
 		Alarms alarm = new Alarms(this);
 		alarm.setNextAlarm(id, getID(id, time), time);	

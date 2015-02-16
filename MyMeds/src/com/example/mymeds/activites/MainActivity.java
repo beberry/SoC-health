@@ -97,8 +97,8 @@ public class MainActivity extends TabActivity {
 		tabHost.setCurrentTab(0);
 		
 		Alarms alarm = new Alarms(getApplicationContext());
-		alarm.setAllAlarms();
-		//alarm.addAlarm(0);
+		//alarm.setAllAlarms();
+		alarm.addAlarm(1);
 		//alarm.setNextAlarm(0, 02300, "2300");
 	}
 
