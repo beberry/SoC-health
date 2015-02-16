@@ -6,8 +6,8 @@ import android.os.Parcelable;
 //another class to handle item's id and name
 public class Frequency implements Parcelable{
 
-	String dosage, time;
-	int units;
+	String dosage;
+	int time, units;
 
 	// constructor
 	public Frequency(){
@@ -22,11 +22,11 @@ public class Frequency implements Parcelable{
 		this.dosage = dosage;
 	}
 
-	public String getTime() {
+	public int getTime() {
 		return time;
 	}
 
-	public void setTime(String time) {
+	public void setTime(int time) {
 		this.time = time;
 	}
 
