@@ -175,6 +175,8 @@ public class SettingsActivity extends Activity{
 			e.printStackTrace();
 			Toast.makeText(getApplicationContext(), "Error Saving Settings", Toast.LENGTH_LONG).show();
 		}
+		
+		finish();
 	}
 
 	private String readFromSettings()
