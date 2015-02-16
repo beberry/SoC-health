@@ -85,7 +85,14 @@ public class ListItemAdapter extends BaseAdapter {
 				tempTable.removeView(row);
 				if(toAdd.getFrequency().size()>1){
 					timesTaken = timesTaken++;
-					t2.setText(String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
+
+					String takeTime = String.valueOf(String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
+
+					String h = takeTime.substring( 0,2);
+					String m = takeTime.substring( 2,takeTime.length());
+
+					t2.setText( h+ ":" + m);
+					
 					row.setPadding(5, 20, 5, 20);
 					tempTable.addView(row, new TableLayout.LayoutParams(
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -110,7 +117,7 @@ public class ListItemAdapter extends BaseAdapter {
 		TextView t1 = (TextView) row.findViewById(R.id.name);
 		t1.setText(data.get(position).getDisplayName());
 
-		TextView t3 = (TextView) row.findViewById(R.id.dosage);
+		//TextView t3 = (TextView) row.findViewById(R.id.dosage);
 		//		t3.setText(String.valueOf(data.get(position).getFrequency().get(0).getUnits()) + "x" + data.get(position).getFrequency().get(0).getDosage());
 
 		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
@@ -124,14 +131,14 @@ public class ListItemAdapter extends BaseAdapter {
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);
 			t2.setTextAppearance(mContext, R.style.textLarge);
-			t3.setTextAppearance(mContext, R.style.textLarge);
+			//t3.setTextAppearance(mContext, R.style.textLarge);
 			t4.setTextAppearance(mContext, R.style.textLarge);
 		}
 		else
 		{
 			t1.setTextAppearance(mContext, R.style.textNormal);
 			t2.setTextAppearance(mContext, R.style.textNormal);
-			t3.setTextAppearance(mContext, R.style.textNormal);
+			//t3.setTextAppearance(mContext, R.style.textNormal);
 			t4.setTextAppearance(mContext, R.style.textNormal);
 		}
 		if(data.get(position).getRemaining()>=25){
