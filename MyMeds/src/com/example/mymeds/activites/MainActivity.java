@@ -74,21 +74,21 @@ public class MainActivity extends TabActivity {
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		intentToday.putParcelableArrayListExtra("meds", todaysmeds);
 		TabSpec tabSpecToday = tabHost
-				.newTabSpec("Todays Meds")
+				.newTabSpec("Todays Medication")
 				.setIndicator("Todays Meds", null)
 				.setContent(intentToday);
 
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
 		intentAll.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecAll = tabHost
-				.newTabSpec("All Meds")
+				.newTabSpec("All Medication")
 				.setIndicator("All Meds", null)
 				.setContent(intentAll);
 
 		Intent intentFuture = new Intent().setClass(this, FutureMeds.class);
 		intentFuture.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecProfile = tabHost
-				.newTabSpec("Future")
+				.newTabSpec("My Record")
 				.setIndicator("Future", null)
 				.setContent(intentFuture);
 
