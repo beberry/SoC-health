@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,19 @@ public class ListItemAdapter extends BaseAdapter {
 		String m = takeTime.substring( 2,takeTime.length());
 		
 		t2.setText( h+ ":" + m);
+		
+		SharedPreferences prefs = mContext.getSharedPreferences(
+			      "com.example.mymeds", Context.MODE_PRIVATE);
+		if(prefs.getInt("textSize", -1) == 1)
+		{
+			t1.setTextAppearance(mContext, R.style.textLarge);
+			t2.setTextAppearance(mContext, R.style.textLarge);
+		}
+		else
+		{
+			t1.setTextAppearance(mContext, R.style.textNormal);
+			t2.setTextAppearance(mContext, R.style.textNormal);
+		}
 
 		row.setOnClickListener(new OnClickListener() {
 			@Override
@@ -107,6 +121,23 @@ public class ListItemAdapter extends BaseAdapter {
 		t2.setText(String.valueOf(data.get(position).getRemaining()));
 
 		TextView t4 = (TextView) row.findViewById(R.id.status);
+		
+		SharedPreferences prefs = mContext.getSharedPreferences(
+			      "com.example.mymeds", Context.MODE_PRIVATE);
+		if(prefs.getInt("textSize", -1) == 1)
+		{
+			t1.setTextAppearance(mContext, R.style.textLarge);
+			t2.setTextAppearance(mContext, R.style.textLarge);
+			t3.setTextAppearance(mContext, R.style.textLarge);
+			t4.setTextAppearance(mContext, R.style.textLarge);
+		}
+		else
+		{
+			t1.setTextAppearance(mContext, R.style.textNormal);
+			t2.setTextAppearance(mContext, R.style.textNormal);
+			t3.setTextAppearance(mContext, R.style.textNormal);
+			t4.setTextAppearance(mContext, R.style.textNormal);
+		}
 		if(data.get(position).getRemaining()>=25){
 			t4.setBackgroundColor(Color.GREEN);
 		}else{
