@@ -38,6 +38,7 @@ import com.example.mymeds.tabs.FutureMeds;
 import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.JSONUtils;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
 
@@ -57,9 +58,7 @@ public class MainActivity extends TabActivity {
 		mContext=this;
 
 		createFile();
-
-		String json = readFile("meddata.json");
-		loadValues(json);
+		allmeds = JSONUtils.loadValues(this.getApplicationContext());
 		calculateMeds();
 
 		disableHardwareMenuKey();
@@ -249,94 +248,6 @@ public class MainActivity extends TabActivity {
 		medFetcher.loadAssets(mContext, allmeds);
 		Calendar c = new GregorianCalendar();
 		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
-	}
-
-	public String readFile(String filename) {
-		Log.i("json values", "reading file");
-
-		StringBuffer json = new StringBuffer("");
-
-		try {
-			File filesDir = getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, filename));
-			while(input.hasNext()){
-				json.append(input.next());
-			}
-			Log.i("Completed", "Medication read in from external file");
-			input.close();
-		}
-		catch (FileNotFoundException fnfe)
-		{
-			Log.w("FileNotFound", "File could not be located, will create");
-		}
-		catch (@SuppressWarnings("hiding") IOException ioe) {
-			Log.e("JSONRead", "An IO Exception occured when reading file");
-		}
-
-		return json.toString();
-	}
-
-
-	public boolean loadValues(String JSONstring){
-		if (JSONstring != "") {
-			try {
-				JSONObject jsonObject = new JSONObject(JSONstring);
-				JSONArray medIndex = jsonObject.getJSONArray("medication");
-				Log.d("WHAT THE FUCK", medIndex.toString());
-
-				for(int k=0;k<medIndex.length();k++){
-					Medication med = new Medication();
-					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
-
-					JSONObject tempCheck = medIndex.getJSONObject(k);
-					int itemID = tempCheck.getInt("index");
-					String itemName = tempCheck.getString("name");
-					String displayName = tempCheck.getString("displayName");
-					String description = tempCheck.getString("description");
-					String type = tempCheck.getString("type");
-					long startTime = tempCheck.getLong("startTime");
-					long endTime = tempCheck.getLong("endTime");
-					int remaining = tempCheck.getInt("remaining");
-					int repeatPeriod = tempCheck.getInt("repeatPeriod");
-
-					JSONArray frequency = tempCheck.getJSONArray("frequency");
-					for(int i=0;i<frequency.length();i++){
-						JSONObject frequencyObject = frequency.getJSONObject(i);
-						String time = frequencyObject.getString("time");
-						String dosage = frequencyObject.getString("dosage");
-						int units = frequencyObject.getInt("units");
-						Frequency frequency2 = new Frequency();
-						frequency2.setDosage(dosage);
-						frequency2.setUnits(units);
-						frequency2.setTime(time);
-						frequencyList.add(frequency2);
-					}
-
-					if(allmeds.contains((Integer)med.getIndex())==false){
-						med.setIndex(itemID);
-						med.setName(itemName);
-						med.setDisplayName(displayName);
-						med.setDescription(description);
-						med.setType(type);
-						med.setStartTime(startTime);
-						med.setEndTime(endTime);
-						med.setRemaining(remaining);
-						med.setRepeatPeriod(repeatPeriod);
-						med.setFrequency(frequencyList);
-						allmeds.add(med);
-					}
-				}
-			} catch (JSONException e) {
-				Log.e("JSONException","JSON exception");
-				e.printStackTrace();			
-				return false;
-			}
-
-			return true;
-		}
-		else {
-			return false;
-		}
 	}
 
 	@Override

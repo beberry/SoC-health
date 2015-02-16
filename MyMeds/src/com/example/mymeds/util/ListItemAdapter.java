@@ -26,6 +26,7 @@ public class ListItemAdapter extends BaseAdapter {
 	int count=0;
 	TableLayout tempTable;
 	int timesTaken=0;
+	MedFetcher mMedFetcher = new MedFetcher();
 
 	public ListItemAdapter(Context mContext,int layoutID, ArrayList<Medication> medData) {
 
@@ -34,6 +35,7 @@ public class ListItemAdapter extends BaseAdapter {
 		this.mContext = mContext;
 		this.data = medData;
 		this.count=medData.size();
+		mMedFetcher.loadAssets(mContext, medData);
 	}
 
 
@@ -97,6 +99,11 @@ public class ListItemAdapter extends BaseAdapter {
 					tempTable.addView(row, new TableLayout.LayoutParams(
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
+					
+					//Modify and update the numbers of pills remaining for this pill
+					mMedFetcher.modifyQuantity(toAdd.getIndex(), toAdd.getFrequency().get(timesTaken).getUnits());
+					//Force refresh of data
+					data = JSONUtils.loadValues(mContext);
 				}
 
 			}

@@ -2,6 +2,8 @@ package com.example.mymeds.util;
 
 import java.util.ArrayList;
 
+import com.example.mymeds.libs.PojoMapper;
+
 import android.content.Context;
 
 public class MedFetcher {
@@ -120,6 +122,7 @@ public class MedFetcher {
 				break;
 			}
 		}
+		JSONUtils.writeToFile(allmeds, mContext);
 
 	}
 

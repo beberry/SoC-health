@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.example.mymeds.R;
 import com.example.mymeds.libs.PojoMapper;
 import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.JSONUtils;
 import com.example.mymeds.util.Medication;
 
 @SuppressLint("SimpleDateFormat")
@@ -369,7 +370,7 @@ public class MedicationInputActivity extends Activity{
 		System.out.println("FINAL PART IS "+final_json);
 		meds.add(med);
 
-		writeToFile(PojoMapper.toJson(meds, true));
+		JSONUtils.writeToFile(meds, this);
 
 		Intent intent = new Intent();
 		intent.putParcelableArrayListExtra("meddata", meds);
@@ -415,41 +416,6 @@ public class MedicationInputActivity extends Activity{
 			e.printStackTrace();
 		}
 		return json.toString();
-	}
-
-	@SuppressWarnings("resource")
-	private void writeToFile(String med)
-	{
-		String filename = "meddata.json";
-		StringBuffer json = new StringBuffer("");
-
-
-
-		try {
-			File filesDir = getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, filename));
-			
-			while(input.hasNext()){
-				json.append(input.next());
-			}
-
-			FileOutputStream fos = new FileOutputStream(new File(getFilesDir()+"//"+filename), true);
-
-			System.out.println(med);
-			String temp = "{ \"medication\": ";
-			String temp2 = "}";
-			med = temp+med+temp2;
-			fos = openFileOutput(filename, Context.MODE_PRIVATE);
-
-			fos.write(med.getBytes());
-
-			fos.close();
-			input.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 
 	/**
