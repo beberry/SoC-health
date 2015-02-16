@@ -72,7 +72,7 @@ public class MainActivity extends TabActivity {
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putParcelableArrayListExtra("meds", todaysmeds);
+		intentToday.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Todays Medication")
 				.setIndicator("Todays Meds", null)
