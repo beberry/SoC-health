@@ -165,33 +165,24 @@ public class MedicationInputActivity extends Activity{
 		public void onDateSet(DatePicker view, int selectedYear,
 				int selectedMonth, int selectedDay) {
 
-			Log.d("Problem Determination", "onDateSet ENTRY");
-
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			//Log.d("Problem Determination", "selectedYear: " + selectedYear);
-			//Log.d("Problem Determination", "selectedMonth: " + selectedMonth);
-			//Log.d("Problem Determination", "selectedDay: " + selectedDay);
 
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-
 			Calendar c = new GregorianCalendar(year, month, day);
 
-
 			String date = formatter.format(c.getTime());
-			Log.d("test", "." + dateStartPressed);
+
 			if (dateStartPressed)
 			{
 				editStartDate.setText(date);
 				sMilli = c.getTimeInMillis();
-				Log.d("Problem Determination", "editStartDate setText");
 			}
 			else
 			{
 				editEndDate.setText(date);
 				sMilli = c.getTimeInMillis();
-				Log.d("Problem Determination", "editEndDate setText");
 			}
 
 		}
@@ -309,14 +300,6 @@ public class MedicationInputActivity extends Activity{
 			listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
 			listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
 
-			Log.d("Problem Determination", "Time: " + frequencyTime.getText().toString());
-			Log.d("Problem Determination", "Dosage: " + frequencyDosage.getText().toString());
-			Log.d("Problem Determination", "Unit: " + frequencyUnit.getText().toString());
-
-			Log.d("Problem Determination", "List Time: " + listTime.get(0));
-			Log.d("Problem Determination", "List Dosage: " + listDosage.get(0));
-			Log.d("Problem Determination", "List Unit: " + listUnit.get(0));
-
 		}
 
 		//Calculate StartTime and EndTime | Parse '/' out from Dates, append the Time.
@@ -327,10 +310,8 @@ public class MedicationInputActivity extends Activity{
 		String parsedStartDate = startDate.replaceAll("/", "");
 		String parsedEndDate = endDate.replaceAll("/", "");
 
-		Log.d("PD", "parsing StartDate");
 		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
 		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
-		Log.d("PD", "long startTime: " + startTime);
 
 		//Store in MedicationStore
 		ArrayList<Frequency> freq = new ArrayList<Frequency>();
@@ -357,16 +338,15 @@ public class MedicationInputActivity extends Activity{
 
 		med.setFrequency(freq);
 
-		Log.i("Add medication",med.toString());
 		String new_med_json = PojoMapper.toJson(med, true);
 		String med_json = getMedsJSON();
-		System.out.println("MED JSON "+med_json);
 		String first_part = med_json.substring(0, med_json.lastIndexOf("]"));
-		System.out.println("THE FIRST PART IS " +first_part);
+		
 		first_part += ","+ new_med_json;
+		
 		String json_end = med_json.substring(med_json.lastIndexOf(']'), med_json.length()); 
 		String final_json = first_part + json_end;
-		System.out.println("FINAL PART IS "+final_json);
+		
 		meds.add(med);
 
 		writeToFile(PojoMapper.toJson(meds, true));
@@ -383,13 +363,17 @@ public class MedicationInputActivity extends Activity{
 		String filename = "meddata.json";
 		String content = null;
 		File file = new File(filename); //for ex foo.txt
-		try {
+		
+		try 
+		{
 			FileReader reader = new FileReader(file);
 			char[] chars = new char[(int) file.length()];
 			reader.read(chars);
 			content = new String(chars);
 			reader.close();
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
 		}
 		return content;
@@ -399,8 +383,6 @@ public class MedicationInputActivity extends Activity{
 	{
 		String filename = "meddata.json";
 		StringBuffer json = new StringBuffer("");
-
-
 
 		try {
 			File filesDir = getFilesDir();
@@ -423,8 +405,6 @@ public class MedicationInputActivity extends Activity{
 		String filename = "meddata.json";
 		StringBuffer json = new StringBuffer("");
 
-
-
 		try {
 			File filesDir = getFilesDir();
 			Scanner input = new Scanner(new File(filesDir, filename));
@@ -435,10 +415,11 @@ public class MedicationInputActivity extends Activity{
 
 			FileOutputStream fos = new FileOutputStream(new File(getFilesDir()+"//"+filename), true);
 
-			System.out.println(med);
 			String temp = "{ \"medication\": ";
 			String temp2 = "}";
+			
 			med = temp+med+temp2;
+			
 			fos = openFileOutput(filename, Context.MODE_PRIVATE);
 
 			fos.write(med.getBytes());
@@ -449,7 +430,6 @@ public class MedicationInputActivity extends Activity{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 	}
 
 	/**
@@ -484,7 +464,6 @@ public class MedicationInputActivity extends Activity{
 
 		headerRow.addView(headerTitle);
 
-
 		//Dosage
 		TextView headerDosage = new TextView(this);
 
@@ -494,7 +473,6 @@ public class MedicationInputActivity extends Activity{
 		headerDosage.setGravity(Gravity.CENTER);
 
 		headerRow.addView(headerDosage);	
-
 
 		//Units
 		TextView headerUnits = new TextView(this);
