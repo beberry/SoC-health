@@ -30,4 +30,13 @@
         <item name="android:background">?android:attr/listDivider</item>
     </style>
 
+    <!-- Text Sizes -->
+    <style name="TextNormal">
+        <item name="android:textSize">20sp</item>
+    </style>
+    
+    <style name="TextLarge">
+        <item name="android:textSize">30sp</item>
+    </style>
+    
 </resources>
