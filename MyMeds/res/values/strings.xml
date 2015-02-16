@@ -18,13 +18,9 @@
     
     <!-- Settings Activity -->
     <string-array name="SoundsSelectionArray">
-		<item>Beep1</item>
-		<item>Beep2</item>
-		<item>Beep3</item>
-		<item>Ring1</item>
-		<item>Ring2</item>
-		<item>Ring3</item>
-		<item>Vibrate</item>
+		<item>Alarm Sound</item>
+		<item>Ringtone Sound</item>
+		<item>Notification Sound</item>
 	</string-array>
 	
     <string-array name="SnoozeTimeArray">
