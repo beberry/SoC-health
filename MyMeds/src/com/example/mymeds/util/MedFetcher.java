@@ -1,23 +1,8 @@
 package com.example.mymeds.util;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.example.mymeds.libs.PojoMapper;
-import com.example.mymeds.tabs.FutureMeds;
-
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.os.Parcelable;
-import android.util.Log;
 
 public class MedFetcher {
 

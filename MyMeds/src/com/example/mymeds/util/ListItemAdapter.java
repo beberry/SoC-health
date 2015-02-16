@@ -94,7 +94,7 @@ public class ListItemAdapter extends BaseAdapter {
 		t1.setText(data.get(position).getDisplayName());
 
 		TextView t3 = (TextView) row.findViewById(R.id.dosage);
-		t3.setText(String.valueOf(data.get(position).getFrequency().get(0).getUnits()) + "x" + data.get(position).getFrequency().get(0).getDosage());
+//		t3.setText(String.valueOf(data.get(position).getFrequency().get(0).getUnits()) + "x" + data.get(position).getFrequency().get(0).getDosage());
 
 		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
 		t2.setText(String.valueOf(data.get(position).getRemaining()));

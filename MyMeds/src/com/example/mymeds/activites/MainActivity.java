@@ -1,21 +1,20 @@
 package com.example.mymeds.activites;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -53,17 +52,19 @@ public class MainActivity extends TabActivity {
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
 	Context mContext;
+	File file;
 
 	public void onCreate(Bundle savedInstanceState) {
+		System.out.println(getFilesDir());
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext=this;
 
-		if(allmeds.size()==0){
-			String json = readFile("medication.json");
-			loadValues(json);
-			calculateMeds();
-		}
+		createFile();
+
+		String json = readFile("meddata.json");
+		loadValues(json);
+		calculateMeds();
 
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
@@ -107,6 +108,11 @@ public class MainActivity extends TabActivity {
 		//alarm.setAlarms();
 	}
 
+	public void onResume(Bundle savedInstanceState){
+		super.onResume();
+
+	}
+
 	private boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
@@ -144,10 +150,37 @@ public class MainActivity extends TabActivity {
 			this.startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.add_medication:
-			this.startActivity(new Intent(this, MedicationInputActivity.class));
+			this.startActivityForResult(new Intent(this, MedicationInputActivity.class), 100);
 			return true;
 		}
 		return false;
+	}
+
+	protected boolean createFile(){
+		file = new File(getFilesDir(), "meddata.json" );
+
+		if(!file.exists()){
+			try{
+				// read file from assets
+				AssetManager assetManager = getAssets();
+				InputStream is = assetManager.open("meds.json");
+				int size = is.available();
+				byte[] buffer = new byte[size];
+				is.read(buffer);
+				is.close();
+				String bufferString = new String(buffer);	
+
+				Writer writer = new BufferedWriter(new FileWriter(file));
+				writer.write(bufferString);
+				writer.close();
+				is.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -234,25 +267,17 @@ public class MainActivity extends TabActivity {
 	}
 
 	public String readFile(String filename) {
-		//TODO: Remove this method once adding medication is completed.
-		writeFromAsset("medication.json");
-		
-		// http://stackoverflow.com/questions/9095610/android-fileinputstream-read-txt-file-to-string
+		Log.i("json values", "reading file");
+
 		StringBuffer json = new StringBuffer("");
-		
+
 		try {
-			FileInputStream fis = openFileInput(filename);
-			InputStreamReader isr = new InputStreamReader(fis) ;
-	        BufferedReader buffreader = new BufferedReader(isr) ;
-
-	        String readString = buffreader.readLine();
-            while ( readString != null ) {
-                json.append(readString);
-                readString = buffreader.readLine();
-            }
-
-            isr.close();
-            Log.i("Completed", "Medication read in from external file");
+			File filesDir = getFilesDir();
+			Scanner input = new Scanner(new File(filesDir, filename));
+			while(input.hasNext()){
+				json.append(input.next());
+			}
+			Log.i("Completed", "Medication read in from external file");
 		}
 		catch (FileNotFoundException fnfe)
 		{
@@ -261,76 +286,21 @@ public class MainActivity extends TabActivity {
 		catch (IOException ioe) {
 			Log.e("JSONRead", "An IO Exception occured when reading file");
 		}
-		
+
 		return json.toString();
 	}
-	
-	public void writeFromAsset(String filename) {
-		String bufferString = new String();
-		
-		try {
-			// read file from assets
-			AssetManager assetManager = mContext.getAssets();
-			InputStream is = assetManager.open("meds.json");
-			int size = is.available();
-			byte[] buffer = new byte[size];
-			is.read(buffer);
-			is.close();
-			bufferString = new String(buffer);	
-		}
-		catch (Exception e) {
-			Log.e("ERROR", "Something went wrong!");
-		}
-		
-		try {
-			FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-			fos.write(bufferString.getBytes());
-			fos.close();
-		}
-		catch (FileNotFoundException fnfe) {
-			Log.i("FileNotFound", "File could not be located");
-		}
-		catch (IOException ioe) {
-			Log.e("FileWrite", "An IO Exception occured when writing file");
-		}
-	}
-	
-	public void writeFile(String filename) {
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = new String();
-		
-		try {
-			json = ow.writeValueAsString(allmeds);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.e("JSON Error", "Error occurred when parsing object into JSON");
-		}
-		
-		if (json != "") {
-			try {
-				FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-				fos.write(json.getBytes());
-				fos.close();
-			}
-			catch (FileNotFoundException fnfe) {
-				Log.i("FileNotFound", "File could not be located");
-			}
-			catch (IOException ioe) {
-				Log.e("FileWrite", "An IO Exception occured when writing file");
-			}
-		}
-	}
-	
+
+
 	public boolean loadValues(String JSONstring){
 		if (JSONstring != "") {
 			try {
 				JSONObject jsonObject = new JSONObject(JSONstring);
 				JSONArray medIndex = jsonObject.getJSONArray("medication");
-	
+
 				for(int k=0;k<medIndex.length();k++){
 					Medication med = new Medication();
 					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
-	
+
 					JSONObject tempCheck = medIndex.getJSONObject(k);
 					int itemID = tempCheck.getInt("index");
 					String itemName = tempCheck.getString("name");
@@ -341,7 +311,7 @@ public class MainActivity extends TabActivity {
 					long endTime = tempCheck.getLong("endTime");
 					int remaining = tempCheck.getInt("remaining");
 					int repeatPeriod = tempCheck.getInt("repeatPeriod");
-	
+
 					JSONArray frequency = tempCheck.getJSONArray("frequency");
 					for(int i=0;i<frequency.length();i++){
 						JSONObject frequencyObject = frequency.getJSONObject(i);
@@ -354,7 +324,7 @@ public class MainActivity extends TabActivity {
 						frequency2.setTime(time);
 						frequencyList.add(frequency2);
 					}
-	
+
 					if(allmeds.contains((Integer)med.getMedId())==false){
 						med.setMedId(itemID);
 						med.setMedName(itemName);
@@ -374,11 +344,22 @@ public class MainActivity extends TabActivity {
 				e.printStackTrace();			
 				return false;
 			}
-			
+
 			return true;
 		}
 		else {
 			return false;
 		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == 100) {
+			ArrayList<Medication> temp = new ArrayList<Medication>();
+			temp = data.getParcelableArrayListExtra("meddata");
+			allmeds.add(temp.get(0));
+
+		}
+
 	}
 }

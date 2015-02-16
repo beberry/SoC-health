@@ -1,24 +1,32 @@
 package com.example.mymeds.activites;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-import com.example.mymeds.R;
-import com.example.mymeds.libs.PojoMapper;
-import com.example.mymeds.stores.MedicationStore;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,10 +39,16 @@ import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
+import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import android.widget.TableRow.LayoutParams;
+
+import com.example.mymeds.R;
+import com.example.mymeds.libs.PojoMapper;
+import com.example.mymeds.stores.MedicationStore;
+import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.Medication;
 
 public class MedicationInputActivity extends Activity{
 
@@ -251,7 +265,7 @@ public class MedicationInputActivity extends Activity{
 	 * 
 	 * @param view
 	 */
-	public void addInput(View view)
+	public void addInput(View view) throws IOException
 	{		
 		//Extract data from UI components.
 		String medicineName = editMedicineName.getText().toString();
@@ -312,38 +326,105 @@ public class MedicationInputActivity extends Activity{
 		Log.d("PD", "long startTime: " + startTime);
 		
 		//Store in MedicationStore
-		MedicationStore medStore = new MedicationStore();
+		ArrayList<Frequency> freq = new ArrayList<Frequency>();
+		Medication med = new Medication();
+		med.setDisplayName(displayName);
+		med.setDisplayName(displayName);
+		med.setDescription(description);
+		med.setType(type);
+		med.setStartTime(startTime);
+		med.setEndTime(endTime);
+		med.setRemaining(Integer.valueOf(remaining));
+		med.setRepeatPeriod(Integer.valueOf(repeatPeriod));
 		
-		medStore.setMedicineName(medicineName);
-		medStore.setDisplayName(displayName);
-		medStore.setDescription(description);
-		medStore.setType(type);
-		medStore.setStartTime(startTime);
-		medStore.setEndTime(endTime);
-		medStore.setRemaining(remaining);
-		medStore.setRepeatPeriod(repeatPeriod);
-		medStore.setListTime(listTime);
-		medStore.setListDosage(listDosage);
-		medStore.setListUnit(listUnit);
+		for(int i =0;i<listTime.size();i++){
+			Frequency freq2 = new Frequency();
+
+			freq2.setTime(listTime.get(i));
+			freq2.setDosage(String.valueOf(listDosage.get(i)));
+			freq2.setUnits(listUnit.get(i));
+			
+//			if(!freq.contains((Integer)freq2.getTime())){
+				freq.add(freq2);
+				
+//				}
+		}
 		
-		//Export to AllMed.json
-		try
-		{
-			writeToJSON(PojoMapper.toJson(medStore, true));
-			Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "Error Saving Medication", Toast.LENGTH_LONG).show();
-		}
-	
+		med.setFrequency(freq);
+		
+		Log.i("Add medication",med.toString());
+		ArrayList<Medication> medication = new ArrayList<Medication>();
+		medication.add(med);
+//		MedicationStore medStore = new MedicationStore();
+//		
+//		medStore.setMedicineName(medicineName);
+//		medStore.setDisplayName(displayName);
+//		medStore.setDescription(description);
+//		medStore.setType(type);
+//		medStore.setStartTime(startTime);
+//		medStore.setEndTime(endTime);
+//		medStore.setRemaining(remaining);
+//		medStore.setRepeatPeriod(repeatPeriod);
+//		medStore.setListTime(listTime);
+//		medStore.setListDosage(listDosage);
+//		medStore.setListUnit(listUnit);
+//		
+		//writeToJSON(PojoMapper.toJson(medStore, true));
+		//writeFile("add.json", medStore);
+		createFile();
+		
+		Intent intent = new Intent();
+		intent.putParcelableArrayListExtra("meddata", medication);
+		setResult(100, intent);
 		finish();
 	}
 	
+	
 	private void writeToJSON(String json)
 	{
+		String filename = "all.json";
+		FileOutputStream outputStream;
+
+		if(json != "") //If JSON is not null
+		{
+			try 
+			{
+				outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
+				outputStream.write(json.getBytes());
+				outputStream.close();
+				
+				Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}
+	}
+	
+	public void writeFile(String filename, MedicationStore medStore) {
+		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		String json = new String();
 		
+		try {
+			json = ow.writeValueAsString(medStore);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Log.e("JSON Error", "Error occurred when parsing object into JSON");
+		}
+		
+		if (json != "") {
+			try {
+				FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
+				fos.write(json.getBytes());
+				fos.close();
+				Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
+			}
+			catch (FileNotFoundException fnfe) {
+				Log.i("FileNotFound", "File could not be located");
+			}
+			catch (IOException ioe) {
+				Log.e("FileWrite", "An IO Exception occured when writing file");
+			}
+		}
 	}
 	
 	/**
@@ -401,5 +482,33 @@ public class MedicationInputActivity extends Activity{
 		headerRow.addView(headerUnits);
 				
 		frequencyTable.addView(headerRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+	}
+
+	protected boolean createFile(){
+		File directory = new File(Environment.getExternalStorageDirectory().getPath()+"//SudoShip//");
+		directory.mkdirs();
+		File file = new File(directory, "winConditions.json" );
+
+		if(!file.exists()){
+			try{
+				// read file from assets
+				AssetManager assetManager = getAssets();
+				InputStream is = assetManager.open("meds.json");
+				int size = is.available();
+				byte[] buffer = new byte[size];
+				is.read(buffer);
+				is.close();
+				String bufferString = new String(buffer);	
+
+				Writer writer = new BufferedWriter(new FileWriter(file));
+				writer.write(bufferString);
+				writer.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
+		return true;
 	}
 }
