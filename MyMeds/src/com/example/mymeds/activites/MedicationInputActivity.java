@@ -348,7 +348,7 @@ public class MedicationInputActivity extends Activity{
 		for(int i =0;i<listTime.size();i++){
 			Frequency freq2 = new Frequency();
 
-			freq2.setTime(listTime.get(i));
+			freq2.setTime(String.valueOf(listTime.get(i)));
 			freq2.setDosage(String.valueOf(listDosage.get(i)));
 			freq2.setUnits(listUnit.get(i));
 

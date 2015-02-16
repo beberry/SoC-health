@@ -42,7 +42,7 @@ public class Frequency implements Parcelable{
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(dosage);
-		dest.writeInt(time);
+		dest.writeString(time);
 		dest.writeInt(units);
 		
 	}
@@ -65,7 +65,7 @@ public class Frequency implements Parcelable{
 	{
 		dosage = in.readString ();
 
-		time = in.readInt();
+		time = in.readString();
 		units = in.readInt();
 	}
 	

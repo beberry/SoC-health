@@ -40,6 +40,7 @@ import com.example.mymeds.R;
 import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.FutureMeds;
 import com.example.mymeds.tabs.TodaysMeds;
+import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
@@ -103,6 +104,7 @@ public class MainActivity extends TabActivity {
 
 		Alarms alarm = new Alarms(getApplicationContext());
 		alarm.setAllAlarms();
+		
 		//alarm.addAlarm(0);
 		//alarm.setNextAlarm(0, 02300, "2300");
 	}
@@ -289,24 +291,6 @@ public class MainActivity extends TabActivity {
 					Medication med = new Medication();
 					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
 
-	public boolean loadValues(){
-		try {
-			// read file from assets
-			AssetManager assetManager = mContext.getAssets();
-			InputStream is = assetManager.open("meds.json");
-			int size = is.available();
-			byte[] buffer = new byte[size];
-			is.read(buffer);
-			is.close();
-			String bufferString = new String(buffer);	
-
-			JSONObject jsonObject = new JSONObject(bufferString);
-			JSONArray medIndex = jsonObject.getJSONArray("medication");
-
-			for(int k=0;k<medIndex.length();k++){
-				Medication med = new Medication();
-				ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
-
 				JSONObject tempCheck = medIndex.getJSONObject(k);
 				int itemID = tempCheck.getInt("index");
 				String itemName = tempCheck.getString("name");
@@ -316,7 +300,7 @@ public class MainActivity extends TabActivity {
 				long startTime = tempCheck.getLong("startTime");
 				long endTime = tempCheck.getLong("endTime");
 				int remaining = tempCheck.getInt("remaining");
-				//int repeatPeriod = tempCheck.getInt("repeatPeriod");
+				int repeatPeriod = tempCheck.getInt("repeatPeriod");
 
 				JSONArray frequency = tempCheck.getJSONArray("frequency");
 				for(int i=0;i<frequency.length();i++){
@@ -343,6 +327,7 @@ public class MainActivity extends TabActivity {
 					med.setRepeatPeriod(repeatPeriod);
 					med.setFrequency(frequencyList);
 					allmeds.add(med);
+				}
 				}
 			} catch (JSONException e) {
 				Log.e("JSONException","JSON exception");
