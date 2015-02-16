@@ -1,5 +1,6 @@
 package com.example.mymeds.activites;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +10,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.example.mymeds.R;
+import com.example.mymeds.libs.PojoMapper;
+import com.example.mymeds.stores.MedicationStore;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -308,11 +311,39 @@ public class MedicationInputActivity extends Activity{
 		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
 		Log.d("PD", "long startTime: " + startTime);
 		
-		//Export to AllMed.json, save to device
-		//TODO
+		//Store in MedicationStore
+		MedicationStore medStore = new MedicationStore();
 		
-		Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
+		medStore.setMedicineName(medicineName);
+		medStore.setDisplayName(displayName);
+		medStore.setDescription(description);
+		medStore.setType(type);
+		medStore.setStartTime(startTime);
+		medStore.setEndTime(endTime);
+		medStore.setRemaining(remaining);
+		medStore.setRepeatPeriod(repeatPeriod);
+		medStore.setListTime(listTime);
+		medStore.setListDosage(listDosage);
+		medStore.setListUnit(listUnit);
+		
+		//Export to AllMed.json
+		try
+		{
+			writeToJSON(PojoMapper.toJson(medStore, true));
+			Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			Toast.makeText(getApplicationContext(), "Error Saving Medication", Toast.LENGTH_LONG).show();
+		}
+	
 		finish();
+	}
+	
+	private void writeToJSON(String json)
+	{
+		
 	}
 	
 	/**
