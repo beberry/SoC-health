@@ -119,21 +119,13 @@ public class Medication implements Parcelable{
 		displayName = in.readString ();
 		description = in.readString ();
 		type = in.readString ();
-
-		repeatPeriod = in.readInt();
-		
-		ArrayList pArray = in.readArrayList(Frequency.class.getClassLoader());
-		Frequency[] resultArray = null;
-		
-		if (pArray != null) {
-			//resultArray = Arrays.copyOf(pArray, pArray.size(), Frequency[].class);
-		}
-		
-		frequency = new ArrayList<Frequency>(pArray);
+	
+		frequency = (ArrayList<Frequency>) in.readArrayList(this.getClass().getClassLoader());
 		index = in.readInt();
 		remaining = in.readInt();
 		startTime = in.readLong();
 		endTime = in.readLong();
+		repeatPeriod = in.readInt();
 	}
 
 	public static final Parcelable.Creator<Medication> CREATOR
@@ -157,8 +149,7 @@ public class Medication implements Parcelable{
 		dest.writeString(description);
 		dest.writeString(type);
 
-		Frequency[] outArray = new Frequency[frequency.size()];
-		dest.writeTypedArray(frequency.toArray(outArray), flags);
+		dest.writeList(frequency);
 		
 		dest.writeInt(index);
 		dest.writeInt(remaining);

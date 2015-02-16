@@ -49,7 +49,6 @@ import android.widget.Toast;
 
 import com.example.mymeds.R;
 import com.example.mymeds.libs.PojoMapper;
-import com.example.mymeds.stores.MedicationStore;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.Medication;
 
@@ -481,33 +480,6 @@ public class MedicationInputActivity extends Activity{
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
-		}
-	}
-
-	public void writeFile(String filename, MedicationStore medStore) {
-		ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-		String json = new String();
-
-		try {
-			json = ow.writeValueAsString(medStore);
-		} catch (Exception e) {
-			e.printStackTrace();
-			Log.e("JSON Error", "Error occurred when parsing object into JSON");
-		}
-
-		if (json != "") {
-			try {
-				FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE);
-				fos.write(json.getBytes());
-				fos.close();
-				Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
-			}
-			catch (FileNotFoundException fnfe) {
-				Log.i("FileNotFound", "File could not be located");
-			}
-			catch (IOException ioe) {
-				Log.e("FileWrite", "An IO Exception occured when writing file");
-			}
 		}
 	}
 
