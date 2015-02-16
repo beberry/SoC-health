@@ -72,7 +72,7 @@ public class MainActivity extends TabActivity {
 				.newTabSpec("Todays Medication")
 				.setIndicator("Todays Meds", null)
 				.setContent(intentToday);
-
+		
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
 		intentAll.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecAll = tabHost
@@ -87,6 +87,8 @@ public class MainActivity extends TabActivity {
 				.setIndicator("Future", null)
 				.setContent(intentFuture);
 
+		tabHost.setBackgroundResource(R.drawable.ab_stacked_solid_health);;
+		
 		// add all tabs 
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);

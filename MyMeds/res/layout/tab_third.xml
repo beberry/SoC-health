@@ -22,7 +22,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="28dp"
         android:onClick="showDatePickerDialog"
-        android:text="End Date" />
+        android:text="End Date"
+        android:background="#54ABCB" />
 
     <Button
         android:id="@+id/start"
@@ -33,7 +34,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
         android:onClick="showDatePickerDialog"
-        android:text="Start Date" />
+        android:text="Start Date" 
+         android:background="#54ABCB"/>
 
     <TextView
         android:id="@+id/endDate"
