@@ -34,7 +34,7 @@ public class TodaysMeds extends Activity {
 		adapter = new ListItemAdapter(mContext, R.id.listview, meds);
 
 		SharedPreferences prefs = mContext.getSharedPreferences(
-			      "com.example.mymeds", Context.MODE_PRIVATE);
+				"com.example.mymeds", Context.MODE_PRIVATE);
 		TextView t1 = (TextView)findViewById(R.id.headerName);
 		TextView t2 = (TextView)findViewById(R.id.headerTaken);
 		TextView t3 = (TextView)findViewById(R.id.headerTime);
@@ -50,7 +50,7 @@ public class TodaysMeds extends Activity {
 			t2.setTextAppearance(mContext, R.style.textNormal);
 			t3.setTextAppearance(mContext, R.style.textNormal);
 		}
-		
+
 		for(int i=0;i<meds.size();i++){
 			adapter.setFirstView(i, this.findViewById(R.layout.tab_first), listViewItems);
 		}

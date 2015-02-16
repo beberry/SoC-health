@@ -1,9 +1,7 @@
 package com.example.mymeds.activites;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -17,9 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.ObjectWriter;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -52,6 +48,7 @@ import com.example.mymeds.libs.PojoMapper;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.Medication;
 
+@SuppressLint("SimpleDateFormat")
 public class MedicationInputActivity extends Activity{
 
 	public TableLayout frequencyTable;
@@ -83,6 +80,7 @@ public class MedicationInputActivity extends Activity{
 	static final int DATE_DIALOG_ID = 999;
 	static final int TIME_DIALOG_ID = 100;
 
+	@SuppressWarnings("unused")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -140,6 +138,7 @@ public class MedicationInputActivity extends Activity{
 
 	} 
 
+	@SuppressWarnings("deprecation")
 	public void onDateEntrySelected(boolean startDate, long defaultDate) {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(defaultDate);
@@ -203,6 +202,7 @@ public class MedicationInputActivity extends Activity{
 	 * Adds a new row of options for user to fill out.
 	 * @param view
 	 */
+	@SuppressLint("InflateParams")
 	public void addFrequency(View view)
 	{
 		TableRow inputRow = (TableRow) LayoutInflater.from(getApplicationContext()).inflate(R.layout.frequency_table_row, null);
@@ -368,22 +368,6 @@ public class MedicationInputActivity extends Activity{
 		String final_json = first_part + json_end;
 		System.out.println("FINAL PART IS "+final_json);
 		meds.add(med);
-		//		MedicationStore medStore = new MedicationStore();
-		//		
-		//		medStore.setMedicineName(medicineName);
-		//		medStore.setDisplayName(displayName);
-		//		medStore.setDescription(description);
-		//		medStore.setType(type);
-		//		medStore.setStartTime(startTime);
-		//		medStore.setEndTime(endTime);
-		//		medStore.setRemaining(remaining);
-		//		medStore.setRepeatPeriod(repeatPeriod);
-		//		medStore.setListTime(listTime);
-		//		medStore.setListDosage(listDosage);
-		//		medStore.setListUnit(listUnit);
-		//		
-		//writeToJSON(PojoMapper.toJson(medStore, true));
-		//writeFile("add.json", medStore);
 
 		writeToFile(PojoMapper.toJson(meds, true));
 
@@ -392,24 +376,25 @@ public class MedicationInputActivity extends Activity{
 		setResult(100, intent);
 		finish();
 	}
-	
+
+	@SuppressWarnings("unused")
 	private String getMedsNew()
 	{
-	   String filename = "meddata.json";
-	   String content = null;
-	   File file = new File(filename); //for ex foo.txt
-	   try {
-	       FileReader reader = new FileReader(file);
-	       char[] chars = new char[(int) file.length()];
-	       reader.read(chars);
-	       content = new String(chars);
-	       reader.close();
-	   } catch (IOException e) {
-	       e.printStackTrace();
-	   }
-	   return content;
+		String filename = "meddata.json";
+		String content = null;
+		File file = new File(filename); //for ex foo.txt
+		try {
+			FileReader reader = new FileReader(file);
+			char[] chars = new char[(int) file.length()];
+			reader.read(chars);
+			content = new String(chars);
+			reader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return content;
 	}
-	
+
 	private String getMedsJSON()
 	{
 		String filename = "meddata.json";
@@ -423,6 +408,7 @@ public class MedicationInputActivity extends Activity{
 			while(input.hasNext()){
 				json.append(input.next());
 			}
+			input.close();
 		}
 		catch(Exception e)
 		{
@@ -431,6 +417,7 @@ public class MedicationInputActivity extends Activity{
 		return json.toString();
 	}
 
+	@SuppressWarnings("resource")
 	private void writeToFile(String med)
 	{
 		String filename = "meddata.json";
@@ -441,10 +428,11 @@ public class MedicationInputActivity extends Activity{
 		try {
 			File filesDir = getFilesDir();
 			Scanner input = new Scanner(new File(filesDir, filename));
+			
 			while(input.hasNext()){
 				json.append(input.next());
 			}
-			
+
 			FileOutputStream fos = new FileOutputStream(new File(getFilesDir()+"//"+filename), true);
 
 			System.out.println(med);
@@ -456,31 +444,12 @@ public class MedicationInputActivity extends Activity{
 			fos.write(med.getBytes());
 
 			fos.close();
+			input.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-	}
-
-	private void writeToJSON(String json)
-	{
-		String filename = "meddata.json";
-		FileOutputStream outputStream;
-
-		if(json != "") //If JSON is not null
-		{
-			try 
-			{
-				outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
-				outputStream.write(json.getBytes());
-				outputStream.close();
-
-				Toast.makeText(getApplicationContext(), "Medication Added", Toast.LENGTH_LONG).show();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}	
-		}
 	}
 
 	/**

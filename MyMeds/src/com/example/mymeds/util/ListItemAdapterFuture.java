@@ -40,12 +40,12 @@ public class ListItemAdapterFuture extends BaseAdapter {
 
 		TextView t2 = (TextView) row.findViewById(R.id.realName);
 		t2.setText(data.get(position).getMedName());
-		
+
 		TextView t3 = (TextView) row.findViewById(R.id.amount);
 		t3.setText(Integer.toString(data.get(position).getAmountNeeded()));
-		
+
 		SharedPreferences prefs = mContext.getSharedPreferences(
-			      "com.example.mymeds", Context.MODE_PRIVATE);
+				"com.example.mymeds", Context.MODE_PRIVATE);
 		if(prefs.getInt("textSize", -1) == 1)
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);
@@ -89,5 +89,5 @@ public class ListItemAdapterFuture extends BaseAdapter {
 		return null;
 	}
 
-	
+
 }

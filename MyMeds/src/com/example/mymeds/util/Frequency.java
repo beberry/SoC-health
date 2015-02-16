@@ -38,15 +38,15 @@ public class Frequency implements Parcelable{
 		this.units = units;
 	}
 
-	
+
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(dosage);
 		dest.writeString(time);
 		dest.writeInt(units);
-		
+
 	}
-	
+
 	public static final Parcelable.Creator<Frequency> CREATOR
 	= new Parcelable.Creator<Frequency>() 
 	{
@@ -60,7 +60,7 @@ public class Frequency implements Parcelable{
 			return new Frequency[size];
 		}
 	};
-	
+
 	public Frequency (Parcel in)
 	{
 		dosage = in.readString ();
@@ -68,7 +68,7 @@ public class Frequency implements Parcelable{
 		time = in.readString();
 		units = in.readInt();
 	}
-	
+
 	@Override
 	public int describeContents() {
 		// TODO Auto-generated method stub

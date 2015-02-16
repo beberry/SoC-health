@@ -1,8 +1,6 @@
 package com.example.mymeds.util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -113,13 +111,14 @@ public class Medication implements Parcelable{
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
 	public Medication (Parcel in)
 	{
 		name = in.readString ();
 		displayName = in.readString ();
 		description = in.readString ();
 		type = in.readString ();
-	
+
 		frequency = (ArrayList<Frequency>) in.readArrayList(this.getClass().getClassLoader());
 		index = in.readInt();
 		remaining = in.readInt();
@@ -150,7 +149,7 @@ public class Medication implements Parcelable{
 		dest.writeString(type);
 
 		dest.writeList(frequency);
-		
+
 		dest.writeInt(index);
 		dest.writeInt(remaining);
 		dest.writeLong(startTime);

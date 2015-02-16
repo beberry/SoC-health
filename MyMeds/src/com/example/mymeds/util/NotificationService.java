@@ -1,15 +1,14 @@
 package com.example.mymeds.util;
 
-import com.example.mymeds.R;
-import com.example.mymeds.activites.MainActivity;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
+
+import com.example.mymeds.R;
+import com.example.mymeds.activites.MainActivity;
 
 public class NotificationService extends Service {
 	private NotificationManager notificationManager;
@@ -62,15 +61,15 @@ public class NotificationService extends Service {
 
 		// Create the notification with a icon and text.
 		Notification notification = new Notification.Builder(this)
-				.setContentTitle("Pop dem pills Muthafucker")
-				.setContentText(name + ": " + dosage + " " + units)
-				.setSmallIcon(R.drawable.ic_launcher)
-				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentIntent(contentIntent).build();
+		.setContentTitle("Pop dem pills Muthafucker")
+		.setContentText(name + ": " + dosage + " " + units)
+		.setSmallIcon(R.drawable.ic_launcher)
+		.setDefaults(Notification.DEFAULT_ALL)
+		.setContentIntent(contentIntent).build();
 
 		// Send the notification.
 		notificationManager.notify(getID(id, time), notification);
-		
+
 		Alarms alarm = new Alarms(this);
 		alarm.setNextAlarm(id, getID(id, time), time);	
 	}

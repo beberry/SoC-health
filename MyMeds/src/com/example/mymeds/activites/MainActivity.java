@@ -1,13 +1,11 @@
 package com.example.mymeds.activites;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -19,8 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -104,7 +100,7 @@ public class MainActivity extends TabActivity {
 
 		Alarms alarm = new Alarms(getApplicationContext());
 		alarm.setAllAlarms();
-		
+
 		//alarm.addAlarm(0);
 		//alarm.setNextAlarm(0, 02300, "2300");
 	}
@@ -267,12 +263,13 @@ public class MainActivity extends TabActivity {
 				json.append(input.next());
 			}
 			Log.i("Completed", "Medication read in from external file");
+			input.close();
 		}
 		catch (FileNotFoundException fnfe)
 		{
 			Log.w("FileNotFound", "File could not be located, will create");
 		}
-		catch (IOException ioe) {
+		catch (@SuppressWarnings("hiding") IOException ioe) {
 			Log.e("JSONRead", "An IO Exception occured when reading file");
 		}
 
@@ -291,43 +288,43 @@ public class MainActivity extends TabActivity {
 					Medication med = new Medication();
 					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
 
-				JSONObject tempCheck = medIndex.getJSONObject(k);
-				int itemID = tempCheck.getInt("index");
-				String itemName = tempCheck.getString("name");
-				String displayName = tempCheck.getString("displayName");
-				String description = tempCheck.getString("description");
-				String type = tempCheck.getString("type");
-				long startTime = tempCheck.getLong("startTime");
-				long endTime = tempCheck.getLong("endTime");
-				int remaining = tempCheck.getInt("remaining");
-				int repeatPeriod = tempCheck.getInt("repeatPeriod");
+					JSONObject tempCheck = medIndex.getJSONObject(k);
+					int itemID = tempCheck.getInt("index");
+					String itemName = tempCheck.getString("name");
+					String displayName = tempCheck.getString("displayName");
+					String description = tempCheck.getString("description");
+					String type = tempCheck.getString("type");
+					long startTime = tempCheck.getLong("startTime");
+					long endTime = tempCheck.getLong("endTime");
+					int remaining = tempCheck.getInt("remaining");
+					int repeatPeriod = tempCheck.getInt("repeatPeriod");
 
-				JSONArray frequency = tempCheck.getJSONArray("frequency");
-				for(int i=0;i<frequency.length();i++){
-					JSONObject frequencyObject = frequency.getJSONObject(i);
-					String time = frequencyObject.getString("time");
-					String dosage = frequencyObject.getString("dosage");
-					int units = frequencyObject.getInt("units");
-					Frequency frequency2 = new Frequency();
-					frequency2.setDosage(dosage);
-					frequency2.setUnits(units);
-					frequency2.setTime(time);
-					frequencyList.add(frequency2);
-				}
+					JSONArray frequency = tempCheck.getJSONArray("frequency");
+					for(int i=0;i<frequency.length();i++){
+						JSONObject frequencyObject = frequency.getJSONObject(i);
+						String time = frequencyObject.getString("time");
+						String dosage = frequencyObject.getString("dosage");
+						int units = frequencyObject.getInt("units");
+						Frequency frequency2 = new Frequency();
+						frequency2.setDosage(dosage);
+						frequency2.setUnits(units);
+						frequency2.setTime(time);
+						frequencyList.add(frequency2);
+					}
 
-				if(allmeds.contains((Integer)med.getIndex())==false){
-					med.setIndex(itemID);
-					med.setName(itemName);
-					med.setDisplayName(displayName);
-					med.setDescription(description);
-					med.setType(type);
-					med.setStartTime(startTime);
-					med.setEndTime(endTime);
-					med.setRemaining(remaining);
-					med.setRepeatPeriod(repeatPeriod);
-					med.setFrequency(frequencyList);
-					allmeds.add(med);
-				}
+					if(allmeds.contains((Integer)med.getIndex())==false){
+						med.setIndex(itemID);
+						med.setName(itemName);
+						med.setDisplayName(displayName);
+						med.setDescription(description);
+						med.setType(type);
+						med.setStartTime(startTime);
+						med.setEndTime(endTime);
+						med.setRemaining(remaining);
+						med.setRepeatPeriod(repeatPeriod);
+						med.setFrequency(frequencyList);
+						allmeds.add(med);
+					}
 				}
 			} catch (JSONException e) {
 				Log.e("JSONException","JSON exception");

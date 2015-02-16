@@ -1,7 +1,7 @@
 package com.example.mymeds.util;
 
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,17 +12,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.mymeds.R;
 import com.example.mymeds.R;
 
+@SuppressLint("InflateParams")
 public class ListItemAdapter extends BaseAdapter {
 
 	Context mContext;
@@ -51,17 +47,17 @@ public class ListItemAdapter extends BaseAdapter {
 		t1.setText(data.get(position).getDisplayName());
 
 		final TextView t2 = (TextView) row.findViewById(R.id.time);
-		
-		
+
+
 		String takeTime = String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime());
-		
+
 		String h = takeTime.substring( 0,2);
 		String m = takeTime.substring( 2,takeTime.length());
-		
+
 		t2.setText( h+ ":" + m);
-		
+
 		SharedPreferences prefs = mContext.getSharedPreferences(
-			      "com.example.mymeds", Context.MODE_PRIVATE);
+				"com.example.mymeds", Context.MODE_PRIVATE);
 		if(prefs.getInt("textSize", -1) == 1)
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);
@@ -95,7 +91,7 @@ public class ListItemAdapter extends BaseAdapter {
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 				}
-				
+
 			}
 		});
 		row.setPadding(5, 20, 5, 20);
@@ -115,15 +111,15 @@ public class ListItemAdapter extends BaseAdapter {
 		t1.setText(data.get(position).getDisplayName());
 
 		TextView t3 = (TextView) row.findViewById(R.id.dosage);
-//		t3.setText(String.valueOf(data.get(position).getFrequency().get(0).getUnits()) + "x" + data.get(position).getFrequency().get(0).getDosage());
+		//		t3.setText(String.valueOf(data.get(position).getFrequency().get(0).getUnits()) + "x" + data.get(position).getFrequency().get(0).getDosage());
 
 		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
 		t2.setText(String.valueOf(data.get(position).getRemaining()));
 
 		TextView t4 = (TextView) row.findViewById(R.id.status);
-		
+
 		SharedPreferences prefs = mContext.getSharedPreferences(
-			      "com.example.mymeds", Context.MODE_PRIVATE);
+				"com.example.mymeds", Context.MODE_PRIVATE);
 		if(prefs.getInt("textSize", -1) == 1)
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);

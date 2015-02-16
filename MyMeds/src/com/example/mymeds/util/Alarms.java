@@ -7,19 +7,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.util.Log;
 
+@SuppressLint("SimpleDateFormat")
 public class Alarms {
 	private Context context;
 
@@ -121,7 +119,7 @@ public class Alarms {
 					dosage = freqObject.getString("dosage");
 					units = freqObject.getString("units");
 					time = freqObject.getString("time");
-					
+
 					cal = calculateTimeOfAlarm(time, cal);
 					long alarmTime = cal.getTimeInMillis();
 					printFormattedDate(alarmTime, name, "Set All Alarms");
@@ -195,12 +193,12 @@ public class Alarms {
 				freqTime = freqIndex.getTime();
 				units = freqIndex.getUnits();
 				dosage = freqIndex.getDosage();
-				
+
 				cal = calculateTimeOfAlarm(String.valueOf(freqTime), cal);
 				cal.add(Calendar.DAY_OF_MONTH, repeatPeriod);
 				long alarmTime = cal.getTimeInMillis();
 				printFormattedDate(alarmTime, med.getName(), "Next Alarm");
-				
+
 				Intent myIntent = new Intent(context, AlarmReceiver.class);
 				myIntent.putExtra("id", medID);
 				myIntent.putExtra("time", freqTime);
@@ -222,7 +220,7 @@ public class Alarms {
 			value = String.valueOf(alarmTime.charAt(i));
 			stack.push(value);
 		}
-		
+
 		int sMin = Integer.valueOf(stack.pop());
 		int fMin = Integer.valueOf(stack.pop());
 		int sHour = Integer.valueOf(stack.pop());
@@ -261,7 +259,7 @@ public class Alarms {
 		Log.v("Name", name);
 		Log.v(label, dateText);
 	}
-	
+
 	/**
 	 * Calculates AlarmId based on a medID and an alarmTime.
 	 * @param medID

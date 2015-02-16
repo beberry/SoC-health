@@ -4,14 +4,10 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.TableLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mymeds.R;
 import com.example.mymeds.util.ListItemAdapter;
@@ -36,9 +32,9 @@ public class AllMeds extends Activity {
 		for(int i=0;i<allmeds.size();i++){
 			adapter.setSecondView(i,this.findViewById(R.layout.tab_second), listViewItems);
 		}
-		
+
 		SharedPreferences prefs = mContext.getSharedPreferences(
-			      "com.example.mymeds", Context.MODE_PRIVATE);
+				"com.example.mymeds", Context.MODE_PRIVATE);
 		TextView t1 = (TextView)findViewById(R.id.headerName);
 		TextView t2 = (TextView)findViewById(R.id.headerTaken);
 		TextView t3 = (TextView)findViewById(R.id.headerTime);
@@ -58,7 +54,7 @@ public class AllMeds extends Activity {
 			t4.setTextAppearance(mContext, R.style.textNormal);
 		}
 		listViewItems.requestLayout();
-		
+
 	}
 
 
