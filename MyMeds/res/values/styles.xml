@@ -31,11 +31,11 @@
     </style>
 
     <!-- Text Sizes -->
-    <style name="TextNormal">
+    <style name="textNormal">
         <item name="android:textSize">20sp</item>
     </style>
     
-    <style name="TextLarge">
+    <style name="textLarge">
         <item name="android:textSize">30sp</item>
     </style>
     

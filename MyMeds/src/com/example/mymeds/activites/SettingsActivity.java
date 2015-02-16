@@ -95,7 +95,7 @@ public class SettingsActivity extends Activity{
 			}
 			
 			
-		}
+		});
 		
 		SettingsStore store = null;
 		
