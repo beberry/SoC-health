@@ -133,7 +133,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return data.get(position).getMedId();
+		return data.get(position).getIndex();
 	}
 
 

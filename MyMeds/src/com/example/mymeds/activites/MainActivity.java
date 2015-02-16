@@ -150,7 +150,10 @@ public class MainActivity extends TabActivity {
 			this.startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		case R.id.add_medication:
-			this.startActivityForResult(new Intent(this, MedicationInputActivity.class), 100);
+			Intent intent = new Intent(this, MedicationInputActivity.class);
+			intent.putExtra("size", allmeds.size()+1);
+			intent.putParcelableArrayListExtra("meds", allmeds);
+			this.startActivityForResult(intent, 100);
 			return true;
 		}
 		return false;
@@ -296,6 +299,7 @@ public class MainActivity extends TabActivity {
 			try {
 				JSONObject jsonObject = new JSONObject(JSONstring);
 				JSONArray medIndex = jsonObject.getJSONArray("medication");
+				Log.d("WHAT THE FUCK", medIndex.toString());
 
 				for(int k=0;k<medIndex.length();k++){
 					Medication med = new Medication();
@@ -325,9 +329,9 @@ public class MainActivity extends TabActivity {
 						frequencyList.add(frequency2);
 					}
 
-					if(allmeds.contains((Integer)med.getMedId())==false){
-						med.setMedId(itemID);
-						med.setMedName(itemName);
+					if(allmeds.contains((Integer)med.getIndex())==false){
+						med.setIndex(itemID);
+						med.setName(itemName);
 						med.setDisplayName(displayName);
 						med.setDescription(description);
 						med.setType(type);
@@ -357,7 +361,8 @@ public class MainActivity extends TabActivity {
 		if (resultCode == 100) {
 			ArrayList<Medication> temp = new ArrayList<Medication>();
 			temp = data.getParcelableArrayListExtra("meddata");
-			allmeds.add(temp.get(0));
+			allmeds = temp;
+			this.recreate();
 
 		}
 

@@ -65,7 +65,7 @@ public class MedFetcher {
 	private ArrayList<futureMedDetails> combineLists(ArrayList<futureMedDetails> futureMeds, ArrayList<Medication> daysMeds)
 	{
 		for(int i = 0;i < daysMeds.size();i++){
-			int id = daysMeds.get(i).getMedId();
+			int id = daysMeds.get(i).getIndex();
 			
 			int found = 0;
 			int  totalUnits = 0;
@@ -85,7 +85,7 @@ public class MedFetcher {
 										
 				totalUnits = unitsTotal(daysMeds.get(i).getFrequency());
 				
-				futureMedDetails newMed = new futureMedDetails(id, daysMeds.get(i).getMedName(),daysMeds.get(i).getDisplayName(), totalUnits);
+				futureMedDetails newMed = new futureMedDetails(id, daysMeds.get(i).getName(),daysMeds.get(i).getDisplayName(), totalUnits);
 				futureMeds.add(newMed);
 			}
 		
@@ -110,7 +110,7 @@ public class MedFetcher {
 		
 		for(int i=0; i<allmeds.size(); i++){
 			Medication currentMed = allmeds.get(i);
-			if(currentMed.getMedId()==medId){
+			if(currentMed.getIndex()==medId){
 				Medication modMed = currentMed;
 				//TODO: No checking this results in a positive number currently
 				modMed.setRemaining(currentMed.getRemaining()-quantConsumed);

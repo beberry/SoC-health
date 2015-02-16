@@ -8,8 +8,8 @@ import android.os.Parcelable;
 //another class to handle item's id and name
 public class Medication implements Parcelable{
 
-	private int medId;
-	private String medName, displayName, description, type, time;
+	private int index;
+	private String name, displayName, description, type;
 	private long startTime, endTime;
 	private int remaining, repeatPeriod;
 	ArrayList<Frequency> frequency;
@@ -21,25 +21,25 @@ public class Medication implements Parcelable{
 
 	// constructor
 	public Medication(int itemId, String itemName, String itemDescription) {
-		this.medId = itemId;
-		this.medName = itemName;
+		this.index = itemId;
+		this.name = itemName;
 		this.description = itemDescription;		
 	}
 
-	public int getMedId() {
-		return medId;
+	public int getIndex() {
+		return index;
 	}
 
-	public void setMedId(int medId) {
-		this.medId = medId;
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
-	public String getMedName() {
-		return medName;
+	public String getName() {
+		return name;
 	}
 
-	public void setMedName(String medName) {
-		this.medName = medName;
+	public void setName(String newName) {
+		this.name = newName;
 	}
 
 	public String getDisplayName() {
@@ -48,14 +48,6 @@ public class Medication implements Parcelable{
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public void setTime(String newTime) {
-		this.time = newTime;
 	}
 
 	public String getDescription() {
@@ -121,13 +113,12 @@ public class Medication implements Parcelable{
 
 	public Medication (Parcel in)
 	{
-		medName = in.readString ();
+		name = in.readString ();
 		displayName = in.readString ();
 		description = in.readString ();
 		type = in.readString ();
-		time = in.readString ();
 
-		medId = in.readInt();
+		index = in.readInt();
 		remaining = in.readInt();
 		startTime = in.readLong();
 		endTime = in.readLong();
@@ -149,13 +140,12 @@ public class Medication implements Parcelable{
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(medName);
+		dest.writeString(name);
 		dest.writeString(displayName);
 		dest.writeString(description);
 		dest.writeString(type);
-		dest.writeString(time);
 
-		dest.writeInt(medId);
+		dest.writeInt(index);
 		dest.writeInt(remaining);
 		dest.writeLong(startTime);
 		dest.writeLong(endTime);	
