@@ -26,13 +26,15 @@
         android:textSize="15sp"
         android:textStyle="normal" />
 
-    <Button
+    <Switch
         android:id="@+id/pillTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:gravity="start"
         android:padding="10dp"
-        android:text="Pill Taken" />
+        android:checked="false"
+        android:textOff="0"
+        android:textOn="|" />
 
 </TableRow>
