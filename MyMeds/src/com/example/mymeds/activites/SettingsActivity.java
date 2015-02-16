@@ -66,22 +66,22 @@ public class SettingsActivity extends Activity{
 				if(init_done)
 				{
 					Spinner sound_select = (Spinner) findViewById(R.id.spinnerSoundsSelection);
-					if(sound_select.getSelectedItem().equals("Notification Sound"))
+					if(sound_select.getSelectedItem().equals("Sound 1"))
 					{
 						MediaPlayer player = MediaPlayer.create(getApplicationContext(),
 							    Settings.System.DEFAULT_NOTIFICATION_URI);
 							player.start();
 					}
-					else if(sound_select.getSelectedItem().equals("Ringtone Sound"))
+					else if(sound_select.getSelectedItem().equals("Sound 2"))
 					{
 						MediaPlayer player = MediaPlayer.create(getApplicationContext(),
-							    Settings.System.DEFAULT_RINGTONE_URI);
+							    Settings.System.DEFAULT_NOTIFICATION_URI);
 							player.start();
 					}
-					else if(sound_select.getSelectedItem().equals("Alarm Sound"))
+					else if(sound_select.getSelectedItem().equals("Sound 3"))
 					{
 						MediaPlayer player = MediaPlayer.create(getApplicationContext(),
-							    Settings.System.DEFAULT_ALARM_ALERT_URI);
+							    Settings.System.DEFAULT_NOTIFICATION_URI);
 							player.start();
 					}
 				}

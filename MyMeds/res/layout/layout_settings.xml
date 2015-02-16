@@ -44,12 +44,12 @@
             		android:layout_alignTop="@+id/textBanners"
             		android:layout_marginBottom="5dp"
             android:layout_marginLeft="200dp"
+            android:layout_toRightOf="@+id/textBanners"
             android:layout_below="@+id/textNotifications" />
         
         	<View
             	style="@style/Divider"
             	android:layout_alignParentLeft="true"
-
             	android:layout_below="@+id/switchBanners" />
         
 	<!-- Sounds -->
@@ -68,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             		android:layout_alignTop="@+id/textSounds"
-            android:layout_marginLeft="200dp"
+            android:layout_alignLeft="@+id/switchBanners"
             android:layout_below="@+id/textBanners" />
         
         	<View
@@ -94,7 +94,7 @@
         	android:layout_height="wrap_content"
         			android:layout_alignTop="@+id/textSoundsSelection"
         			android:layout_below="@id/textSounds"
-            		android:layout_marginLeft="200dp"
+            		android:layout_alignLeft="@+id/switchBanners"
         	android:drawSelectorOnTop="true"
         	android:entries="@array/SoundsSelectionArray"/>
         
@@ -120,7 +120,7 @@
         	android:layout_height="wrap_content"
         			android:layout_alignTop="@+id/textSnoozeTime"
         			android:layout_below="@id/textSoundsSelection"
-            		android:layout_marginLeft="200dp"
+            		android:layout_alignLeft="@+id/switchBanners"
         	android:drawSelectorOnTop="true"
         	android:entries="@array/SnoozeTimeArray"/>
         
@@ -147,7 +147,7 @@
         	android:layout_height="wrap_content"
         			android:layout_alignTop="@+id/textHowLongBefore"
         			android:layout_below="@id/textSnoozeTime"
-            		android:layout_marginLeft="200dp"
+            		android:layout_alignLeft="@+id/switchBanners"
         	android:drawSelectorOnTop="true"
         	android:entries="@array/HowLongArray"/>
         
@@ -191,7 +191,7 @@
         	android:layout_height="wrap_content"
         			android:layout_alignTop="@+id/textTextSize"
         			android:layout_below="@id/textText"
-            		android:layout_marginLeft="200dp"
+            		android:layout_alignLeft="@+id/switchBanners"
         	android:drawSelectorOnTop="true"
         	android:entries="@array/TextSizeArray"/>
         
@@ -224,8 +224,8 @@
         	android:minWidth="75dp"
         			android:layout_below="@id/textTextSize" 
         			android:layout_marginTop="50dp"
-        			android:layout_marginLeft="200dp"
         			android:layout_marginBottom="100dp"
+        			android:layout_alignLeft="@+id/switchBanners"
         	android:text="Cancel"
             android:textSize="25sp"
             android:onClick="cancelChanges"
