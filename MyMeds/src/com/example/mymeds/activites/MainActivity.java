@@ -43,7 +43,6 @@ import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
-import com.example.mymeds.util.NotificationsService;
 
 @SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
@@ -97,30 +96,15 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
-
-		if (!isMyServiceRunning()){
-			Log.v("NotificationsService", "Running");
-			Intent serviceIntent = new Intent("com.example.mymeds.util.NotificationsService");
-			getApplicationContext().startService(serviceIntent);
-		}
-
-		//Alarms alarm = new Alarms(getApplicationContext());
-		//alarm.setAlarms();
 	}
 
 	public void onResume(Bundle savedInstanceState){
 		super.onResume();
 
-	}
-
-	private boolean isMyServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (NotificationsService.class.getName().equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
+		Alarms alarm = new Alarms(getApplicationContext());
+		alarm.setAllAlarms();
+		//alarm.addAlarm(0);
+		//alarm.setNextAlarm(0, 02300, "2300");
 	}
 
 	/**
@@ -305,43 +289,60 @@ public class MainActivity extends TabActivity {
 					Medication med = new Medication();
 					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
 
-					JSONObject tempCheck = medIndex.getJSONObject(k);
-					int itemID = tempCheck.getInt("index");
-					String itemName = tempCheck.getString("name");
-					String displayName = tempCheck.getString("displayName");
-					String description = tempCheck.getString("description");
-					String type = tempCheck.getString("type");
-					long startTime = tempCheck.getLong("startTime");
-					long endTime = tempCheck.getLong("endTime");
-					int remaining = tempCheck.getInt("remaining");
-					int repeatPeriod = tempCheck.getInt("repeatPeriod");
+	public boolean loadValues(){
+		try {
+			// read file from assets
+			AssetManager assetManager = mContext.getAssets();
+			InputStream is = assetManager.open("meds.json");
+			int size = is.available();
+			byte[] buffer = new byte[size];
+			is.read(buffer);
+			is.close();
+			String bufferString = new String(buffer);	
 
-					JSONArray frequency = tempCheck.getJSONArray("frequency");
-					for(int i=0;i<frequency.length();i++){
-						JSONObject frequencyObject = frequency.getJSONObject(i);
-						int time = frequencyObject.getInt("time");
-						String dosage = frequencyObject.getString("dosage");
-						int units = frequencyObject.getInt("units");
-						Frequency frequency2 = new Frequency();
-						frequency2.setDosage(dosage);
-						frequency2.setUnits(units);
-						frequency2.setTime(time);
-						frequencyList.add(frequency2);
-					}
+			JSONObject jsonObject = new JSONObject(bufferString);
+			JSONArray medIndex = jsonObject.getJSONArray("medication");
 
-					if(allmeds.contains((Integer)med.getIndex())==false){
-						med.setIndex(itemID);
-						med.setName(itemName);
-						med.setDisplayName(displayName);
-						med.setDescription(description);
-						med.setType(type);
-						med.setStartTime(startTime);
-						med.setEndTime(endTime);
-						med.setRemaining(remaining);
-						med.setRepeatPeriod(repeatPeriod);
-						med.setFrequency(frequencyList);
-						allmeds.add(med);
-					}
+			for(int k=0;k<medIndex.length();k++){
+				Medication med = new Medication();
+				ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
+
+				JSONObject tempCheck = medIndex.getJSONObject(k);
+				int itemID = tempCheck.getInt("index");
+				String itemName = tempCheck.getString("name");
+				String displayName = tempCheck.getString("displayName");
+				String description = tempCheck.getString("description");
+				String type = tempCheck.getString("type");
+				long startTime = tempCheck.getLong("startTime");
+				long endTime = tempCheck.getLong("endTime");
+				int remaining = tempCheck.getInt("remaining");
+				//int repeatPeriod = tempCheck.getInt("repeatPeriod");
+
+				JSONArray frequency = tempCheck.getJSONArray("frequency");
+				for(int i=0;i<frequency.length();i++){
+					JSONObject frequencyObject = frequency.getJSONObject(i);
+					String time = frequencyObject.getString("time");
+					String dosage = frequencyObject.getString("dosage");
+					int units = frequencyObject.getInt("units");
+					Frequency frequency2 = new Frequency();
+					frequency2.setDosage(dosage);
+					frequency2.setUnits(units);
+					frequency2.setTime(time);
+					frequencyList.add(frequency2);
+				}
+
+				if(allmeds.contains((Integer)med.getIndex())==false){
+					med.setIndex(itemID);
+					med.setName(itemName);
+					med.setDisplayName(displayName);
+					med.setDescription(description);
+					med.setType(type);
+					med.setStartTime(startTime);
+					med.setEndTime(endTime);
+					med.setRemaining(remaining);
+					med.setRepeatPeriod(repeatPeriod);
+					med.setFrequency(frequencyList);
+					allmeds.add(med);
 				}
 			} catch (JSONException e) {
 				Log.e("JSONException","JSON exception");
