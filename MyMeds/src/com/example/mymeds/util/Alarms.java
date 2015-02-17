@@ -20,29 +20,10 @@ import android.util.Log;
 @SuppressLint("SimpleDateFormat")
 public class Alarms {
 	private Context context;
+	
 
 	public Alarms(Context context) {
 		this.context = context;
-	}
-
-	/**
-	 * Load JSON from Assets and return jsonString.
-	 * @return json
-	 */
-	public String loadJSON() {
-		String json = null;
-		try {
-			InputStream is = context.getAssets().open("meds.json");
-			int size = is.available();
-			byte[] buffer = new byte[size];
-			is.read(buffer);
-			is.close();
-			json = new String(buffer, "UTF-8");
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-		return json;
 	}
 
 	/**
@@ -52,97 +33,66 @@ public class Alarms {
 	 * @return
 	 */
 	public Medication getMedicationById(int actualIndex) {
-		Medication med = new Medication();
-		try {
-			JSONObject jsonObject = new JSONObject(loadJSON());
-			JSONArray medIndex = jsonObject.getJSONArray("medication");
-			JSONObject medObject;
-
-			for (int k = 0; k < medIndex.length(); k++) {
-				medObject = medIndex.getJSONObject(k);
-				int jsonIndex = medObject.getInt("index");
-
-				if (jsonIndex == actualIndex) {
-					med.setIndex(actualIndex);
-					med.setName(medObject.getString("name"));
-					med.setDisplayName(medObject.getString("displayName"));
-					med.setDescription(medObject.getString("description"));
-					med.setType(medObject.getString("type"));
-					med.setStartTime(medObject.getLong("startTime"));
-					med.setEndTime(medObject.getLong("endTime"));
-					med.setRemaining(medObject.getInt("remaining"));
-					med.setRepeatPeriod(medObject.getInt("repeatPeriod"));
-
-					JSONArray freqIndex = medObject.getJSONArray("frequency");
-					ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
-					for (int i = 0; i < freqIndex.length(); i++) {
-						JSONObject frequencyObject = freqIndex.getJSONObject(i);
-						Frequency freq = new Frequency();
-						freq.setDosage(frequencyObject.getString("dosage"));
-						freq.setUnits(frequencyObject.getInt("units"));
-						freq.setTime(frequencyObject.getString("time"));
-						frequencyList.add(freq);
-					}
-					med.setFrequency(frequencyList);
-				}
+		ArrayList<Medication> meds = JSONUtils.loadValues(context);
+		int index;
+		for (int i = 0; i < meds.size(); i++) {
+			index = meds.get(i).getIndex();
+			if(index == actualIndex) {
+				return meds.get(i);
 			}
-		} catch (JSONException e) {
-			Log.e("JSONException", "JSON exception");
-			e.printStackTrace();
-			return null;
 		}
-		return med;
+		return null;
 	}
 
 	/**
 	 * This sets alarms for all the Medication's in the JSON file.
 	 */
-	public void setAllAlarms() {
-		String dosage = null, units = null, name = null, time = null;
-		int id;
-
-		try {
-			JSONObject jsonObject = new JSONObject(loadJSON());
-			JSONArray medIndex = jsonObject.getJSONArray("medication");
-			JSONObject medObject;
-
-			for (int k = 0; k < medIndex.length(); k++) {
-				medObject = medIndex.getJSONObject(k);
-				name = medObject.getString("displayName");
-				id = medObject.getInt("index");
-				Calendar cal = getSpecifiedTime(medObject.getLong("startTime"));
-
-				JSONArray freqIndex = medObject.getJSONArray("frequency");
-				JSONObject freqObject;
-				for (int t = 0; t < freqIndex.length(); t++) {
-					freqObject = freqIndex.getJSONObject(t);
-					dosage = freqObject.getString("dosage");
-					units = freqObject.getString("units");
-					time = freqObject.getString("time");
-
-					cal = calculateTimeOfAlarm(time, cal);
-					long alarmTime = cal.getTimeInMillis();
-					printFormattedDate(alarmTime, name, "Set All Alarms");
-					Log.w("ALARM", "A: " + alarmTime + " - N: " + name);
-
-					Intent myIntent = new Intent(context, AlarmReceiver.class);
-					myIntent.putExtra("id", id);
-					myIntent.putExtra("time", time);
-					myIntent.putExtra("dosage", dosage);
-					myIntent.putExtra("units", units);
-					myIntent.putExtra("name", name);
-
-					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, time), myIntent, 0);
-					AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-					alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
-					Log.v("", "");
-				}
-			}
-		} catch (JSONException e) {
-			Log.e("JSONException", "JSON exception");
-			e.printStackTrace();
-		}
-	}
+//	public void setAllAlarms() {
+//		String dosage = null, units = null, name = null, time = null;
+//		int id;
+//
+//		try {
+//			JSONObject jsonObject = new JSONObject(loadJSON());
+//			JSONArray medIndex = jsonObject.getJSONArray("medication");
+//			JSONObject medObject;
+//
+//			for (int k = 0; k < medIndex.length(); k++) {
+//				medObject = medIndex.getJSONObject(k);
+//				name = medObject.getString("displayName");
+//				id = medObject.getInt("index");
+//				Calendar cal = getSpecifiedTime(medObject.getLong("startTime"));
+//
+//				JSONArray freqIndex = medObject.getJSONArray("frequency");
+//				JSONObject freqObject;
+//				for (int t = 0; t < freqIndex.length(); t++) {
+//					freqObject = freqIndex.getJSONObject(t);
+//					dosage = freqObject.getString("dosage");
+//					units = freqObject.getString("units");
+//					time = freqObject.getString("time");
+//
+//					cal = calculateTimeOfAlarm(time, cal);
+//					long alarmTime = cal.getTimeInMillis();
+//					printFormattedDate(alarmTime, name, "Set All Alarms");
+//					Log.w("ALARM", "A: " + alarmTime + " - N: " + name);
+//
+//					Intent myIntent = new Intent(context, AlarmReceiver.class);
+//					myIntent.putExtra("id", id);
+//					myIntent.putExtra("time", time);
+//					myIntent.putExtra("dosage", dosage);
+//					myIntent.putExtra("units", units);
+//					myIntent.putExtra("name", name);
+//
+//					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, time), myIntent, 0);
+//					AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//					alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
+//					Log.v("", "");
+//				}
+//			}
+//		} catch (JSONException e) {
+//			Log.e("JSONException", "JSON exception");
+//			e.printStackTrace();
+//		}
+//	}
 
 	/**
 	 * This adds an alarm for an Medication based on the MedID.
@@ -220,6 +170,7 @@ public class Alarms {
 			value = String.valueOf(alarmTime.charAt(i));
 			stack.push(value);
 		}
+		Log.v("SHIT", alarmTime);
 
 		int sMin = Integer.valueOf(stack.pop());
 		int fMin = Integer.valueOf(stack.pop());

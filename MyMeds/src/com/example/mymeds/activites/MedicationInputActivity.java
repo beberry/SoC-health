@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import com.example.mymeds.R;
 import com.example.mymeds.libs.PojoMapper;
+import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.JSONUtils;
 import com.example.mymeds.util.Medication;
@@ -373,6 +374,10 @@ public class MedicationInputActivity extends Activity{
 		Intent intent = new Intent();
 		intent.putParcelableArrayListExtra("meddata", meds);
 		setResult(100, intent);
+		
+//		Alarms alarm = new Alarms(getApplicationContext());
+//		alarm.addAlarm(size);
+		
 		finish();
 	}
 
