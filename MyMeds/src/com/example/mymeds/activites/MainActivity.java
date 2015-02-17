@@ -21,6 +21,7 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -64,6 +65,7 @@ public class MainActivity extends TabActivity {
 				.newTabSpec("Todays Medication")
 				.setIndicator("Todays Medication", null)
 				.setContent(intentToday);
+
 		
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
 		intentAll.putParcelableArrayListExtra("meds", allmeds);
@@ -124,12 +126,6 @@ public class MainActivity extends TabActivity {
 		switch(item.getItemId()){
 		case R.id.action_settings:
 			this.startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		case R.id.add_medication:
-			Intent intent = new Intent(this, MedicationInputActivity.class);
-			intent.putExtra("size", allmeds.size()+1);
-			intent.putParcelableArrayListExtra("meds", allmeds);
-			this.startActivityForResult(intent, 100);
 			return true;
 		}
 		return false;

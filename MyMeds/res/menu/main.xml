@@ -10,10 +10,5 @@
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         app:showAsAction="ifRoom"/>
-    
-        <item
-        android:id="@+id/add_medication"
-        android:title="Add Medication"
-        app:showAsAction="ifRoom"/>
 
 </menu>
