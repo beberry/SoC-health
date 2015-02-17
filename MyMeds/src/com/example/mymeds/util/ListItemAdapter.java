@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -105,6 +108,12 @@ public class ListItemAdapter extends BaseAdapter {
 					mMedFetcher.modifyQuantity(toAdd.getIndex(), toAdd.getFrequency().get(timesTaken).getUnits());
 					//Force refresh of data
 					data = JSONUtils.loadValues(mContext);
+					Log.d("sender", "Broadcasting message");
+					Intent intent = new Intent("custom-event-name");
+					  // You can also include some extra data.
+					  intent.putExtra("message", "This is my message!");
+					  intent.putParcelableArrayListExtra("meddata", data);
+					  LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
 				else{
 					

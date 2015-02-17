@@ -17,17 +17,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-@SuppressLint("SimpleDateFormat")
 public class Alarms {
 	private Context context;
 	
-
+	/**
+	 * Passing context to use with AlarmManager
+	 * @param context
+	 */
 	public Alarms(Context context) {
 		this.context = context;
 	}
 
 	/**
-	 * This will get a Medication based on a ID.
+	 * Get one Medication based on a ID.
 	 * 
 	 * @param actualIndex
 	 * @return
@@ -44,54 +46,49 @@ public class Alarms {
 		return null;
 	}
 
-	/**
-	 * This sets alarms for all the Medication's in the JSON file.
-	 */
+//	/**
+//	 * This sets alarms for all Medication's.
+//	 */
 //	public void setAllAlarms() {
-//		String dosage = null, units = null, name = null, time = null;
+//		ArrayList<Medication> meds = JSONUtils.loadValues(context);
+//		Medication med;
+//		String name;
 //		int id;
+//		
+//		for (int i = 0; i < meds.size(); i++) {
+//			med = meds.get(i);
+//			name = med.getName();
+//			id = med.getIndex();
+//			
+//			Calendar cal = getSpecifiedTime(med.getStartTime());
 //
-//		try {
-//			JSONObject jsonObject = new JSONObject(loadJSON());
-//			JSONArray medIndex = jsonObject.getJSONArray("medication");
-//			JSONObject medObject;
+//			JSONArray freqIndex = medObject.getJSONArray("frequency");
+//			JSONObject freqObject;
+//			for (int t = 0; t < freqIndex.length(); t++) {
+//				freqObject = freqIndex.getJSONObject(t);
+//				dosage = freqObject.getString("dosage");
+//				units = freqObject.getString("units");
+//				time = freqObject.getString("time");
 //
-//			for (int k = 0; k < medIndex.length(); k++) {
-//				medObject = medIndex.getJSONObject(k);
-//				name = medObject.getString("displayName");
-//				id = medObject.getInt("index");
-//				Calendar cal = getSpecifiedTime(medObject.getLong("startTime"));
+//				cal = calculateTimeOfAlarm(time, cal);
+//				long alarmTime = cal.getTimeInMillis();
+//				printFormattedDate(alarmTime, name, "Set All Alarms");
+//				Log.w("ALARM", "A: " + alarmTime + " - N: " + name);
 //
-//				JSONArray freqIndex = medObject.getJSONArray("frequency");
-//				JSONObject freqObject;
-//				for (int t = 0; t < freqIndex.length(); t++) {
-//					freqObject = freqIndex.getJSONObject(t);
-//					dosage = freqObject.getString("dosage");
-//					units = freqObject.getString("units");
-//					time = freqObject.getString("time");
+//				Intent myIntent = new Intent(context, AlarmReceiver.class);
+//				myIntent.putExtra("id", id);
+//				myIntent.putExtra("time", time);
+//				myIntent.putExtra("dosage", dosage);
+//				myIntent.putExtra("units", units);
+//				myIntent.putExtra("name", name);
 //
-//					cal = calculateTimeOfAlarm(time, cal);
-//					long alarmTime = cal.getTimeInMillis();
-//					printFormattedDate(alarmTime, name, "Set All Alarms");
-//					Log.w("ALARM", "A: " + alarmTime + " - N: " + name);
-//
-//					Intent myIntent = new Intent(context, AlarmReceiver.class);
-//					myIntent.putExtra("id", id);
-//					myIntent.putExtra("time", time);
-//					myIntent.putExtra("dosage", dosage);
-//					myIntent.putExtra("units", units);
-//					myIntent.putExtra("name", name);
-//
-//					PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, time), myIntent, 0);
-//					AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//					alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
-//					Log.v("", "");
-//				}
-//			}
-//		} catch (JSONException e) {
-//			Log.e("JSONException", "JSON exception");
-//			e.printStackTrace();
+//				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, time), myIntent, 0);
+//				AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//				alarmManager.set(AlarmManager.RTC, alarmTime, pendingIntent);
+//				Log.v("", "");
 //		}
+//		
+//		
 //	}
 
 	/**
@@ -170,7 +167,6 @@ public class Alarms {
 			value = String.valueOf(alarmTime.charAt(i));
 			stack.push(value);
 		}
-		Log.v("SHIT", alarmTime);
 
 		int sMin = Integer.valueOf(stack.pop());
 		int fMin = Integer.valueOf(stack.pop());
@@ -193,6 +189,11 @@ public class Alarms {
 		return cal;
 	}
 
+	/**
+	 * Get the current time
+	 * @param time
+	 * @return calendar instance
+	 */
 	public Calendar getSpecifiedTime(long time) {
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(time);
