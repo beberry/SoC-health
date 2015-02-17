@@ -18,6 +18,7 @@ import android.content.IntentFilter;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -129,8 +130,17 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+				//getMenuInflater().inflate(R.menu.main, menu);
+
+				MenuItem itemBlog = menu.add(Menu.NONE, // Group ID
+						R.id.action_settings, // Item ID
+						101, // Order
+						"Blog"); // Title
+				// To showAsAction attribute, use MenuItemCompat (set to always)
+				MenuItemCompat.setShowAsAction(itemBlog, MenuItem.SHOW_AS_ACTION_ALWAYS);
+				itemBlog.setIcon(R.drawable.ic_settings);
+				super.onCreateOptionsMenu(menu);
+				return true;
 	} 
 
 	/**
@@ -146,12 +156,12 @@ public class MainActivity extends TabActivity {
 		case R.id.action_settings:
 			this.startActivity(new Intent(this, SettingsActivity.class));
 			return true;
-		case R.id.add_medication:
-			Intent intent = new Intent(this, MedicationInputActivity.class);
-			intent.putExtra("size", allmeds.size()+1);
-			intent.putParcelableArrayListExtra("meds", allmeds);
-			this.startActivityForResult(intent, 100);
-			return true;
+//		case R.id.add_medication:
+//			Intent intent = new Intent(this, MedicationInputActivity.class);
+//			intent.putExtra("size", allmeds.size()+1);
+//			intent.putParcelableArrayListExtra("meds", allmeds);
+//			this.startActivityForResult(intent, 100);
+//			return true;
 		}
 		return false;
 	}
