@@ -23,7 +23,8 @@
             android:name="com.example.mymeds.util.NotificationService"
             android:enabled="true" />
 
-        <receiver android:name="com.example.mymeds.util.AlarmReceiver" />
+        <receiver android:name="com.example.mymeds.util.AlarmReceiver"/>
+        <receiver android:name="com.example.mymeds.util.SnoozeReceiver"/>
 
         <activity
             android:name=".activites.MainActivity"
