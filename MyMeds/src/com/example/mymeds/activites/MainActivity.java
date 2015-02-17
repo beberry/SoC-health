@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
@@ -57,6 +59,7 @@ public class MainActivity extends TabActivity {
 
 		tabHost = getTabHost(); 
 
+		
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		intentToday.putParcelableArrayListExtra("meds", allMeds);
 		TabSpec tabSpecToday = tabHost
@@ -79,19 +82,44 @@ public class MainActivity extends TabActivity {
 				.setIndicator("My Record", null)
 				.setContent(intentFuture);
 
-		tabHost.setBackgroundResource(R.drawable.ab_stacked_solid_health);;
-		
 		// add all tabs 
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
 		
+		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
+		tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+		tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));
+		
+		
+		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+			@Override
+			public void onTabChanged(String tabId) {
+			    if(tabId.equals("Today's Medication")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
+			    }
+			    if(tabId.equals("All Medication")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#71B238"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
+			    }
+			    if(tabId.equals("My Record")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#71B238"));	
+			    }
+			 
+			}});
+		
+		
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
-		alarm.addAlarm(0);
-		alarm.addAlarm(1);
-		alarm.addAlarm(2);
+		//alarm.addAlarm(0);
+		//alarm.addAlarm(1);
+		//alarm.addAlarm(2);
 		//alarm.setNextAlarm(0, 02300, "2300");
 		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
 			      new IntentFilter("Med-Taken"));
@@ -216,15 +244,21 @@ public class MainActivity extends TabActivity {
 		return super.onTouchEvent(event);
 	}
 
+	
+	
 	private void onLeftSwipe() {
 		if(tabHost.getCurrentTab()<3){
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#A6CB45"));		
 			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#71B238"));			
 		}
 	}
 
 	private void onRightSwipe() {
 		if(tabHost.getCurrentTab()>0){
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#A6CB45"));	
 			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#71B238"));					
 		}
 	}
 
