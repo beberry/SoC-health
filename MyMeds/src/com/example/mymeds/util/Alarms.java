@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -35,7 +37,7 @@ public class Alarms {
 	 * @return
 	 */
 	public Medication getMedicationById(int actualIndex) {
-		ArrayList<Medication> meds = JSONUtils.loadValues(context);
+		ArrayList<Medication> meds = JSONUtils.loadValues(JSONUtils.readFile(context), context);
 		int index;
 		for (int i = 0; i < meds.size(); i++) {
 			index = meds.get(i).getIndex();

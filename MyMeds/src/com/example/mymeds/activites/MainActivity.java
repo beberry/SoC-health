@@ -52,7 +52,7 @@ public class MainActivity extends TabActivity {
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
 		JSONUtils.writeStringToFile(readAssets(), this); // Forces overwrite of existing JSON.
-		allmeds = JSONUtils.loadValues(this.getApplicationContext());
+		allmeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext()), this.getApplicationContext());
 		calculateMeds();
 
 		tabHost = getTabHost(); 

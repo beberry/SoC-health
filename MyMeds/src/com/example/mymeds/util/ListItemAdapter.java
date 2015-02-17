@@ -107,7 +107,7 @@ public class ListItemAdapter extends BaseAdapter {
 					//Modify and update the numbers of pills remaining for this pill
 					mMedFetcher.modifyQuantity(toAdd.getIndex(), toAdd.getFrequency().get(timesTaken).getUnits());
 					//Force refresh of data
-					data = JSONUtils.loadValues(mContext);
+					data = JSONUtils.loadValues(JSONUtils.readFile(mContext), mContext);
 					Log.d("sender", "Broadcasting message");
 					Intent intent = new Intent("custom-event-name");
 					  // You can also include some extra data.
