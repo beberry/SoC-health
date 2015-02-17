@@ -337,8 +337,8 @@ public class MedicationInputActivity extends Activity{
 		setResult(100, intent);
 
 		//Attach alarm to new medication.
-		Alarms alarm = new Alarms(getApplicationContext());
-		alarm.addAlarm(size);
+		//Alarms alarm = new Alarms(getApplicationContext());
+		//alarm.addAlarm(size);
 
 		finish();
 	}

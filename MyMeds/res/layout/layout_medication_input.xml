@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#c7f1f3" >
     
 	<RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal" 
+        android:background="#c7f1f3" >
 
 <!-- Medication Name -->
     <TextView 
@@ -29,7 +31,7 @@
         android:inputType="text"
         android:singleLine="true"
         android:minWidth="200dp"
-        android:hint="Penicillin"
+        android:hint="Insert medicine name"
         	android:layout_alignBaseline="@+id/textMedicineName"
         	android:layout_toRightOf="@+id/textMedicineName"
         	android:layout_marginLeft="50dp"
@@ -40,7 +42,7 @@
         android:id="@+id/textDisplayName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Display Name"
+        android:text="Nickname for Medicine"
         android:textSize="25sp"
         	android:layout_marginTop="15sp"
         	android:layout_marginBottom="15sp"
@@ -83,7 +85,7 @@
         android:inputType="text"
         android:singleLine="true"
         android:minWidth="200dp"
-        android:hint="Large Pills"
+        android:hint="To control blood pressure"
         	android:layout_alignBaseline="@+id/textDescription"        	
         	android:layout_below="@id/textDisplayName"
         	android:layout_alignLeft="@+id/editMedicineName"
@@ -191,7 +193,7 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="# Pills/Application"
+        android:hint="# Pills on box"
         android:minWidth="200dp"
         	android:layout_alignBaseline="@+id/textRemaining"        	
         	android:layout_below="@id/textEndDate"
@@ -212,18 +214,45 @@
         	android:layout_below="@id/textRemaining"
         />
 	
+	<TextView 
+        android:id="@+id/textRepeatPeriodText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Every"
+        android:textSize="20sp"
+        android:layout_alignBaseline="@+id/textRepeatPeriod"
+        	android:layout_marginTop="15sp"
+        	android:layout_marginBottom="15sp"
+			android:layout_alignLeft="@+id/editMedicineName"      	
+        	android:layout_below="@id/textRemaining"
+        />
+	
 	<EditText 
 	    android:id="@+id/editRepeatPeriod"
 	    android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="Every 2 days"
-        android:minWidth="200dp"
-        	android:layout_alignBaseline="@+id/textRepeatPeriod"        	
+        android:hint="2"
+        android:minWidth="75dp"
+        android:gravity="center"
+        	android:layout_alignBaseline="@+id/textRepeatPeriodText1"        	
         	android:layout_below="@id/textRemaining"
-        	android:layout_alignLeft="@+id/editMedicineName"
+        	android:layout_toRightOf="@+id/textRepeatPeriodText1"
 	    />
+	
+	<TextView 
+        android:id="@+id/textRepeatPeriodText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Day(s)"
+        android:textSize="20sp"
+        android:layout_alignBaseline="@+id/textRepeatPeriod"
+        	android:layout_marginTop="15sp"
+        	android:layout_marginBottom="15sp"     	
+        	android:layout_below="@id/textRemaining"
+        	android:layout_toRightOf="@+id/editRepeatPeriod"
+        />
 
 <!-- Frequency -->
 	<TextView 
@@ -279,6 +308,7 @@
        	android:text="Add"
         android:textSize="25sp"
         android:onClick="addInput" 
+        android:background="#54abcb"
         	android:layout_marginTop="20sp"
         	android:layout_marginBottom="15sp"
 			android:layout_marginLeft="20sp"
@@ -291,10 +321,11 @@
         android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
       	android:layout_height="wrap_content"
-       	android:minWidth="75dp"
+       	android:minWidth="90dp"
         android:text="Cancel"
         android:textSize="25sp"
         android:onClick="cancelInput"
+        android:background="#54abcb"
         	android:layout_marginTop="20sp"
         	android:layout_marginBottom="15sp"
 			android:layout_marginLeft="20sp"
