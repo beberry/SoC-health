@@ -11,10 +11,14 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -41,6 +45,7 @@ public class MainActivity extends TabActivity {
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
 	Context mContext;
+	MainActivity self = this;
 	File file;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,13 +92,30 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
 		
-//		Alarms alarm = new Alarms(getApplicationContext());
-//		alarm.setAllAlarms();
-//		alarm.addAlarm(0);
-//		alarm.addAlarm(1);
-//		alarm.addAlarm(2);
-//		alarm.setNextAlarm(0, 02300, "2300");
+		Alarms alarm = new Alarms(getApplicationContext());
+		//alarm.setAllAlarms();
+		alarm.addAlarm(0);
+		alarm.addAlarm(1);
+		alarm.addAlarm(2);
+		//alarm.setNextAlarm(0, 02300, "2300");
+		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+			      new IntentFilter("custom-event-name"));
 	}
+	
+	// Our handler for received Intents. This will be called whenever an Intent
+	// with an action named "custom-event-name" is broadcasted.
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	  @Override
+	  public void onReceive(Context context, Intent intent) {
+	    // Get extra data included in the Intent
+	    String message = intent.getStringExtra("message");
+	    Log.d("receiver", "Got message: " + message);
+	    ArrayList<Medication> temp = new ArrayList<Medication>();
+		temp = intent.getParcelableArrayListExtra("meddata");
+		allmeds = temp;
+		self.recreate();
+	  }
+	};
 
 	public void onResume(Bundle savedInstanceState){
 		super.onResume();
@@ -108,8 +130,17 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+				//getMenuInflater().inflate(R.menu.main, menu);
+
+				MenuItem itemBlog = menu.add(Menu.NONE, // Group ID
+						R.id.action_settings, // Item ID
+						101, // Order
+						"Blog"); // Title
+				// To showAsAction attribute, use MenuItemCompat (set to always)
+				MenuItemCompat.setShowAsAction(itemBlog, MenuItem.SHOW_AS_ACTION_ALWAYS);
+				itemBlog.setIcon(R.drawable.ic_settings);
+				super.onCreateOptionsMenu(menu);
+				return true;
 	} 
 
 	/**
@@ -125,20 +156,21 @@ public class MainActivity extends TabActivity {
 		case R.id.action_settings:
 			this.startActivity(new Intent(this, SettingsActivity.class));
 			return true;
-		case R.id.add_medication:
-			Intent intent = new Intent(this, MedicationInputActivity.class);
-			intent.putExtra("size", allmeds.size()+1);
-			intent.putParcelableArrayListExtra("meds", allmeds);
-			this.startActivityForResult(intent, 100);
-			return true;
+//		case R.id.add_medication:
+//			Intent intent = new Intent(this, MedicationInputActivity.class);
+//			intent.putExtra("size", allmeds.size()+1);
+//			intent.putParcelableArrayListExtra("meds", allmeds);
+//			this.startActivityForResult(intent, 100);
+//			return true;
 		}
 		return false;
 	}
 
 	protected boolean createFile(){
+		
 		file = new File(getFilesDir(), "meddata.json" );
 
-		if(!file.exists()){
+		//if(!file.exists()){
 			try{
 				// read file from assets
 				AssetManager assetManager = getAssets();
@@ -158,10 +190,17 @@ public class MainActivity extends TabActivity {
 				e.printStackTrace();
 				return false;
 			}
-		}
+		//}
 		return true;
 	}
-
+	
+	public void calculateMeds(){
+		MedFetcher medFetcher = new MedFetcher();
+		medFetcher.loadAssets(mContext, allmeds);
+		Calendar c = new GregorianCalendar();
+		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
+	}
+	
 	/**
 	 * Disable Hardware Menu Button on phones. Force Menu drop down on Action Bar.
 	 * 
@@ -236,13 +275,6 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
-	}
-
-	public void calculateMeds(){
-		MedFetcher medFetcher = new MedFetcher();
-		medFetcher.loadAssets(mContext, allmeds);
-		Calendar c = new GregorianCalendar();
-		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
 
 	@Override
