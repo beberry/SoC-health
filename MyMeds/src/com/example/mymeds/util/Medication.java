@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//another class to handle item's id and name
+/**
+ * Represents medication in the app
+ * Implements parcelable so that it is able to be passed around in bundles
+ */
 public class Medication implements Parcelable{
 
 	private int index;
@@ -141,6 +144,10 @@ public class Medication implements Parcelable{
 		}
 	};
 
+	/*
+	 * Writse theobject to a parcel
+	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(name);
