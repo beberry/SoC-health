@@ -63,7 +63,26 @@ public class JSONUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@SuppressWarnings("resource")
+	static public void writeStringToFile(String meds, Context context)
+	{
+		try {
+			File filesDir = context.getFilesDir();
+			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
+			
+			FileOutputStream fos = new FileOutputStream(new File(context.getFilesDir()+"//"+FILE_PATH), true);
+			fos = context.openFileOutput(FILE_PATH, Context.MODE_PRIVATE);
 
+			fos.write(meds.getBytes());
+
+			fos.close();
+			input.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static String readFile(String filename, Context context) {
@@ -90,8 +109,7 @@ public class JSONUtils {
 
 		return json.toString();
 	}
-
-
+	
 	public static ArrayList<Medication> loadValues(Context context){
 		String JSONstring = readFile(FILE_PATH, context);
 		ArrayList<Medication> allmeds = new ArrayList<Medication>();

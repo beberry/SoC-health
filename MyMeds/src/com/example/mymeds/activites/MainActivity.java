@@ -1,10 +1,6 @@
 package com.example.mymeds.activites;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.InputStream;
-import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +21,6 @@ import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -47,20 +42,18 @@ public class MainActivity extends TabActivity {
 	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
 	Context mContext;
 	MainActivity self = this;
-	File file;
 
 	public void onCreate(Bundle savedInstanceState) {
-		System.out.println(getFilesDir());
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext=this;
-
-		createFile();
-		allmeds = JSONUtils.loadValues(this.getApplicationContext());
-		calculateMeds();
-
+		
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
+
+		JSONUtils.writeStringToFile(readAssets(), this); // Forces overwrite of existing JSON.
+		allmeds = JSONUtils.loadValues(this.getApplicationContext());
+		calculateMeds();
 
 		tabHost = getTabHost(); 
 
@@ -125,7 +118,6 @@ public class MainActivity extends TabActivity {
 
 	/**
 	 * Creates the Menu Bar.
-	 * 
 	 * (non-Javadoc)
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
@@ -162,34 +154,35 @@ public class MainActivity extends TabActivity {
 		return false;
 	}
 
-	protected boolean createFile(){
+	/**
+	 * Reads assets file into a string
+	 * @return Assets file as string
+	 */
+	protected String readAssets()
+	{	
+		String bufferString = null;
 		
-		file = new File(getFilesDir(), "meddata.json" );
-
-		//if(!file.exists()){
-			try{
-				// read file from assets
-				AssetManager assetManager = getAssets();
-				InputStream is = assetManager.open("meds.json");
-				int size = is.available();
-				byte[] buffer = new byte[size];
-				is.read(buffer);
-				is.close();
-				String bufferString = new String(buffer);	
-
-				Writer writer = new BufferedWriter(new FileWriter(file));
-				writer.write(bufferString);
-				writer.close();
-				is.close();
-			}
-			catch(Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		//}
-		return true;
+		try
+		{
+			AssetManager assetManager = getAssets();
+			InputStream is = assetManager.open("meds.json");
+			int size = is.available();
+			byte[] buffer = new byte[size];
+			is.read(buffer);
+			is.close();
+			bufferString = new String(buffer);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return bufferString;
 	}
 	
+	/**
+	 * Method to get today's date and then calculate medication required for today.
+	 */
 	public void calculateMeds(){
 		MedFetcher medFetcher = new MedFetcher();
 		medFetcher.loadAssets(mContext, allmeds);
