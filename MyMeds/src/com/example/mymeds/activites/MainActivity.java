@@ -121,6 +121,10 @@ public class MainActivity extends TabActivity {
 	        manager.destroyActivity("Today's Medication", true);
 	        manager.destroyActivity("All Medication", true);
 	        manager.destroyActivity("My Record", true);
+	        tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+				@Override
+				public void onTabChanged(String tabId){
+				}});
 	        tabHost.clearAllTabs();
 			populateTabs();
 		}
@@ -166,26 +170,26 @@ public class MainActivity extends TabActivity {
 		tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));
 		
 		
-//		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
-//			@Override
-//			public void onTabChanged(String tabId) {
-//			    if(tabId.equals("Today's Medication")) {					
-//					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
-//					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
-//					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
-//			    }
-//			    if(tabId.equals("All Medication")) {					
-//					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
-//					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#71B238"));	
-//					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
-//			    }
-//			    if(tabId.equals("My Record")) {					
-//					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
-//					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
-//					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#71B238"));	
-//			    }
-//			 
-//			}});
+		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+			@Override
+			public void onTabChanged(String tabId) {
+			    if(tabId.equals("Today's Medication")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
+			    }
+			    if(tabId.equals("All Medication")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#71B238"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
+			    }
+			    if(tabId.equals("My Record")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#71B238"));	
+			    }
+			 
+			}});
 		
 		
 		
@@ -253,17 +257,6 @@ public class MainActivity extends TabActivity {
 		}
 
 		return bufferString;
-	}
-
-	/**
-	 * Method to get today's date and then calculate medication required for today.
-	 */
-	public void calculateMeds(){
-		//TODO Is this needed?
-		MedFetcher medFetcher = new MedFetcher();
-		medFetcher.loadAssets(mContext, allMeds);
-		Calendar c = new GregorianCalendar();
-		todaysMeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
 
 	/**
