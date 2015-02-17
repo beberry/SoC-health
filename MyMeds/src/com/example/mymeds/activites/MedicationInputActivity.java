@@ -1,19 +1,11 @@
 package com.example.mymeds.activites;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Scanner;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -21,10 +13,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,7 +33,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mymeds.R;
-import com.example.mymeds.libs.PojoMapper;
 import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.JSONUtils;
@@ -63,8 +52,7 @@ public class MedicationInputActivity extends Activity{
 	private EditText editRemaining;
 	private EditText editRepeatPeriod;
 
-	PopupWindow datePicker;
-	PopupWindow timePicker;
+	PopupWindow datePicker, timePicker;
 
 	long startDate, def, sMilli, eMilli = 0;
 	long actualStartDate, actualEndDate;
@@ -80,7 +68,6 @@ public class MedicationInputActivity extends Activity{
 
 	final int DAY = 86400000;
 	static final int DATE_DIALOG_ID = 999;
-	static final int TIME_DIALOG_ID = 100;
 
 	@SuppressWarnings("unused")
 	@Override
@@ -105,7 +92,6 @@ public class MedicationInputActivity extends Activity{
 		editStartDate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("Problem Determination", "editStartDate clicked");
 				dateStartPressed = true;
 				onDateEntrySelected(dateStartPressed, System.currentTimeMillis());
 			}
@@ -140,6 +126,9 @@ public class MedicationInputActivity extends Activity{
 
 	} 
 
+	/**
+	 * Called when the date picker selects a date
+	 */
 	@SuppressWarnings("deprecation")
 	public void onDateEntrySelected(boolean startDate, long defaultDate) {
 		Calendar c = Calendar.getInstance();
@@ -151,6 +140,10 @@ public class MedicationInputActivity extends Activity{
 
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onCreateDialog(int)
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -161,41 +154,35 @@ public class MedicationInputActivity extends Activity{
 		return null;
 	}
 
+	//Add on date set listener to Date Picker Dialog.
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
 		// when dialog box is closed, below method will be called.
 		public void onDateSet(DatePicker view, int selectedYear,
 				int selectedMonth, int selectedDay) {
 
-			Log.d("Problem Determination", "onDateSet ENTRY");
-
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			//Log.d("Problem Determination", "selectedYear: " + selectedYear);
-			//Log.d("Problem Determination", "selectedMonth: " + selectedMonth);
-			//Log.d("Problem Determination", "selectedDay: " + selectedDay);
 
+			//Set format for date to be obtained in.
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 			Calendar c = new GregorianCalendar(year, month, day);
 
-
+			//Obtain date in text and milliseconds.
 			String date = formatter.format(c.getTime());
-			Log.d("test", "." + dateStartPressed);
 			if (dateStartPressed)
 			{
 				editStartDate.setText(date);
 				sMilli = c.getTimeInMillis();
 				actualStartDate = c.getTimeInMillis();
-				Log.d("Problem Determination", "editStartDate setText");
 			}
 			else
 			{
 				editEndDate.setText(date);
 				sMilli = c.getTimeInMillis();
 				actualEndDate = c.getTimeInMillis();
-				Log.d("Problem Determination", "editEndDate setText");
 			}
 		}
 	};	
@@ -238,11 +225,14 @@ public class MedicationInputActivity extends Activity{
 				TimePickerDialog tpd = new TimePickerDialog(MedicationInputActivity.this, //same Activity Context like before
 						new TimePickerDialog.OnTimeSetListener() {
 
+					//Fires the Time Picker Dialog.
 					@Override
 					public void onTimeSet(TimePicker view, int hour,
 							int minute) {
-
+					
 						String finalHour = String.valueOf(hour);
+						
+						//Check length of Hour is 2 chars.
 						if(finalHour.length() < 2)
 						{
 							finalHour = '0' + finalHour; //Prevent removal of 0's at start
@@ -282,13 +272,8 @@ public class MedicationInputActivity extends Activity{
 		String displayName = editDisplayName.getText().toString();
 		String description = editDescription.getText().toString();
 		String type = (String) spinnerMedicationType.getSelectedItem();
-		String startDate = editStartDate.getText().toString();
-		String endDate = editEndDate.getText().toString();
 		String remaining = editRemaining.getText().toString();
 		String repeatPeriod = editRepeatPeriod.getText().toString();
-		
-		Log.v("START DATE", startDate);
-		Log.v("END DATE", endDate);
 
 		List<Integer> listTime = new ArrayList<Integer>();
 		List<Integer> listDosage = new ArrayList<Integer>();
@@ -315,32 +300,8 @@ public class MedicationInputActivity extends Activity{
 			listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
 			listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
 
-			Log.d("Problem Determination", "Time: " + frequencyTime.getText().toString());
-			Log.d("Problem Determination", "Dosage: " + frequencyDosage.getText().toString());
-			Log.d("Problem Determination", "Unit: " + frequencyUnit.getText().toString());
-
-			Log.d("Problem Determination", "List Time: " + listTime.get(0));
-			Log.d("Problem Determination", "List Dosage: " + listDosage.get(0));
-			Log.d("Problem Determination", "List Unit: " + listUnit.get(0));
-
 		}
 
-		//Calculate StartTime and EndTime | Parse '/' out from Dates, append the Time.
-		//TODO
-//		long startTime = 0;
-//		long endTime = 0;
-//
-//		String parsedStartDate = startDate.replaceAll("/", "");
-//		String parsedEndDate = endDate.replaceAll("/", "");
-//
-//		Log.d("PD", "parsing StartDate");
-//		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
-//		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
-//		Log.d("PD", "long startTime: " + startTime);
-		
-		Log.d("PD", "long startTime: " + actualStartDate);
-		Log.d("PD", "long endTime: " + actualEndDate);
-		
 		//Store in MedicationStore
 		ArrayList<Frequency> freq = new ArrayList<Frequency>();
 		Medication med = new Medication();
@@ -366,68 +327,20 @@ public class MedicationInputActivity extends Activity{
 
 		med.setFrequency(freq);
 
-		Log.i("Add medication",med.toString());
-		String new_med_json = PojoMapper.toJson(med, true);
-		String med_json = getMedsJSON();
-		System.out.println("MED JSON "+med_json);
-		String first_part = med_json.substring(0, med_json.lastIndexOf("]"));
-		System.out.println("THE FIRST PART IS " +first_part);
-		first_part += ","+ new_med_json;
-		String json_end = med_json.substring(med_json.lastIndexOf(']'), med_json.length()); 
-		String final_json = first_part + json_end;
-		System.out.println("FINAL PART IS "+final_json);
 		meds.add(med);
 
 		JSONUtils.writeToFile(meds, this, true);
 
+
 		Intent intent = new Intent();
 		intent.putParcelableArrayListExtra("meddata", meds);
 		setResult(100, intent);
-		
+
+		//Attach alarm to new medication.
 		Alarms alarm = new Alarms(getApplicationContext());
 		alarm.addAlarm(size);
-		
+
 		finish();
-	}
-
-	@SuppressWarnings("unused")
-	private String getMedsNew()
-	{
-		String filename = "meddata.json";
-		String content = null;
-		File file = new File(filename); //for ex foo.txt
-		try {
-			FileReader reader = new FileReader(file);
-			char[] chars = new char[(int) file.length()];
-			reader.read(chars);
-			content = new String(chars);
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return content;
-	}
-
-	private String getMedsJSON()
-	{
-		String filename = "meddata.json";
-		StringBuffer json = new StringBuffer("");
-
-
-
-		try {
-			File filesDir = getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, filename));
-			while(input.hasNext()){
-				json.append(input.next());
-			}
-			input.close();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return json.toString();
 	}
 
 	/**
@@ -462,7 +375,6 @@ public class MedicationInputActivity extends Activity{
 
 		headerRow.addView(headerTitle);
 
-
 		//Dosage
 		TextView headerDosage = new TextView(this);
 
@@ -472,7 +384,6 @@ public class MedicationInputActivity extends Activity{
 		headerDosage.setGravity(Gravity.CENTER);
 
 		headerRow.addView(headerDosage);	
-
 
 		//Units
 		TextView headerUnits = new TextView(this);
@@ -487,31 +398,4 @@ public class MedicationInputActivity extends Activity{
 		frequencyTable.addView(headerRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
-	protected boolean createFisle(){
-		File directory = new File(Environment.getExternalStorageDirectory().getPath()+"//SudoShip//");
-		directory.mkdirs();
-		File file = new File(directory, "winConditions.json" );
-
-		if(!file.exists()){
-			try{
-				// read file from assets
-				AssetManager assetManager = getAssets();
-				InputStream is = assetManager.open("meds.json");
-				int size = is.available();
-				byte[] buffer = new byte[size];
-				is.read(buffer);
-				is.close();
-				String bufferString = new String(buffer);	
-
-				Writer writer = new BufferedWriter(new FileWriter(file));
-				writer.write(bufferString);
-				writer.close();
-			}
-			catch(Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return true;
-	}
 }

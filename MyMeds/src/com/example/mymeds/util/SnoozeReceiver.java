@@ -8,10 +8,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 public class SnoozeReceiver extends BroadcastReceiver {
-
+	private Bundle b;
+	private String time, dosage, units, name;
+	private int id;
+	
 	/**
 	 * When Snooze btn is pressed set alarm for a minute.
 	 * @param context
@@ -19,13 +21,12 @@ public class SnoozeReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Bundle b = intent.getExtras();
-		int id = b.getInt("id");
-	    String time = b.getString("time");
-	    String dosage = b.getString("dosage");
-	    String units = b.getString("units");
-	    String name = b.getString("name");
-	    int alarmID = b.getInt("alarmID");
+		b = intent.getExtras();
+		id = b.getInt("id");
+	    time = b.getString("time");
+	    dosage = b.getString("dosage");
+	    units = b.getString("units");
+	    name = b.getString("name");
 		
 		Intent myIntent = new Intent(context, AlarmReceiver.class);
 		myIntent.putExtra("id", id);
@@ -37,8 +38,9 @@ public class SnoozeReceiver extends BroadcastReceiver {
 		Calendar snoozeTime = Calendar.getInstance();
 		snoozeTime.add(Calendar.MINUTE, 5);
 		long snoozeValue = snoozeTime.getTimeInMillis();
+		AlarmUtils.printFormattedDate(snoozeValue, name, "Snooze");
 		
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmID, myIntent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, AlarmUtils.calculateAlarmId(id, time), myIntent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC, snoozeValue, pendingIntent);
 	}
