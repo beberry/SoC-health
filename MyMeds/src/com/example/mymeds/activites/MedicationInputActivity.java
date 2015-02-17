@@ -10,6 +10,7 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
@@ -66,6 +67,7 @@ public class MedicationInputActivity extends Activity{
 	PopupWindow timePicker;
 
 	long startDate, def, sMilli, eMilli = 0;
+	long actualStartDate, actualEndDate;
 	boolean dateStartPressed = false;
 	boolean timeStartPressed = false;
 	boolean is24Hour = true;
@@ -185,15 +187,16 @@ public class MedicationInputActivity extends Activity{
 			{
 				editStartDate.setText(date);
 				sMilli = c.getTimeInMillis();
+				actualStartDate = c.getTimeInMillis();
 				Log.d("Problem Determination", "editStartDate setText");
 			}
 			else
 			{
 				editEndDate.setText(date);
 				sMilli = c.getTimeInMillis();
+				actualEndDate = c.getTimeInMillis();
 				Log.d("Problem Determination", "editEndDate setText");
 			}
-
 		}
 	};	
 
@@ -283,6 +286,9 @@ public class MedicationInputActivity extends Activity{
 		String endDate = editEndDate.getText().toString();
 		String remaining = editRemaining.getText().toString();
 		String repeatPeriod = editRepeatPeriod.getText().toString();
+		
+		Log.v("START DATE", startDate);
+		Log.v("END DATE", endDate);
 
 		List<Integer> listTime = new ArrayList<Integer>();
 		List<Integer> listDosage = new ArrayList<Integer>();
@@ -321,17 +327,20 @@ public class MedicationInputActivity extends Activity{
 
 		//Calculate StartTime and EndTime | Parse '/' out from Dates, append the Time.
 		//TODO
-		long startTime = 0;
-		long endTime = 0;
-
-		String parsedStartDate = startDate.replaceAll("/", "");
-		String parsedEndDate = endDate.replaceAll("/", "");
-
-		Log.d("PD", "parsing StartDate");
-		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
-		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
-		Log.d("PD", "long startTime: " + startTime);
-
+//		long startTime = 0;
+//		long endTime = 0;
+//
+//		String parsedStartDate = startDate.replaceAll("/", "");
+//		String parsedEndDate = endDate.replaceAll("/", "");
+//
+//		Log.d("PD", "parsing StartDate");
+//		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
+//		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
+//		Log.d("PD", "long startTime: " + startTime);
+		
+		Log.d("PD", "long startTime: " + actualStartDate);
+		Log.d("PD", "long endTime: " + actualEndDate);
+		
 		//Store in MedicationStore
 		ArrayList<Frequency> freq = new ArrayList<Frequency>();
 		Medication med = new Medication();
@@ -339,8 +348,8 @@ public class MedicationInputActivity extends Activity{
 		med.setDisplayName(displayName);
 		med.setDescription(description);
 		med.setType(type);
-		med.setStartTime(startTime);
-		med.setEndTime(endTime);
+		med.setStartTime(actualStartDate);
+		med.setEndTime(actualEndDate);
 		med.setRemaining(Integer.valueOf(remaining));
 		med.setRepeatPeriod(Integer.valueOf(repeatPeriod));
 		med.setIndex(size);
@@ -375,8 +384,8 @@ public class MedicationInputActivity extends Activity{
 		intent.putParcelableArrayListExtra("meddata", meds);
 		setResult(100, intent);
 		
-//		Alarms alarm = new Alarms(getApplicationContext());
-//		alarm.addAlarm(size);
+		Alarms alarm = new Alarms(getApplicationContext());
+		alarm.addAlarm(size);
 		
 		finish();
 	}

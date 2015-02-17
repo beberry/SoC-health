@@ -87,12 +87,12 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
 		
-		Alarms alarm = new Alarms(getApplicationContext());
-		//alarm.setAllAlarms();
-		alarm.addAlarm(1);
-		alarm.addAlarm(2);
-		alarm.addAlarm(3);
-		//alarm.setNextAlarm(0, 02300, "2300");
+//		Alarms alarm = new Alarms(getApplicationContext());
+//		alarm.setAllAlarms();
+//		alarm.addAlarm(0);
+//		alarm.addAlarm(1);
+//		alarm.addAlarm(2);
+//		alarm.setNextAlarm(0, 02300, "2300");
 	}
 
 	public void onResume(Bundle savedInstanceState){

@@ -6,13 +6,13 @@
             "displayName": "Arthritis",
             "description": "easy",
             "type": "pill",
-            "startTime": 1423846006,
-            "endTime": 1421994054,
+            "startTime": 1423846006000,
+            "endTime": 1421994054000,
             "remaining": 56,
             "repeatPeriod": 2,
             "frequency":[
             	{
-            		"time": "2300",
+            		"time": "0900",
             		"dosage": "500mg",
             		"units": 2
             	}
@@ -42,7 +42,7 @@
             ]
         },
         {
-            "index": 3,
+            "index": 2,
             "name": "Paracetamol",
             "displayName": "Painkillers",
             "description": "easy",
