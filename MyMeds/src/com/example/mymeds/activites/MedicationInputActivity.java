@@ -10,7 +10,6 @@ import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Scanner;
@@ -324,19 +323,6 @@ public class MedicationInputActivity extends Activity{
 			Log.d("Problem Determination", "List Unit: " + listUnit.get(0));
 
 		}
-
-		//Calculate StartTime and EndTime | Parse '/' out from Dates, append the Time.
-		//TODO
-//		long startTime = 0;
-//		long endTime = 0;
-//
-//		String parsedStartDate = startDate.replaceAll("/", "");
-//		String parsedEndDate = endDate.replaceAll("/", "");
-//
-//		Log.d("PD", "parsing StartDate");
-//		startTime = Long.parseLong(parsedStartDate) + Long.parseLong(listTime.get(0).toString());
-//		endTime = Long.parseLong(parsedEndDate) + Long.parseLong(listTime.get(0).toString());
-//		Log.d("PD", "long startTime: " + startTime);
 		
 		Log.d("PD", "long startTime: " + actualStartDate);
 		Log.d("PD", "long endTime: " + actualEndDate);
@@ -390,30 +376,10 @@ public class MedicationInputActivity extends Activity{
 		finish();
 	}
 
-	@SuppressWarnings("unused")
-	private String getMedsNew()
-	{
-		String filename = "meddata.json";
-		String content = null;
-		File file = new File(filename); //for ex foo.txt
-		try {
-			FileReader reader = new FileReader(file);
-			char[] chars = new char[(int) file.length()];
-			reader.read(chars);
-			content = new String(chars);
-			reader.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return content;
-	}
-
 	private String getMedsJSON()
 	{
 		String filename = "meddata.json";
 		StringBuffer json = new StringBuffer("");
-
-
 
 		try {
 			File filesDir = getFilesDir();
@@ -487,31 +453,4 @@ public class MedicationInputActivity extends Activity{
 		frequencyTable.addView(headerRow, new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	}
 
-	protected boolean createFisle(){
-		File directory = new File(Environment.getExternalStorageDirectory().getPath()+"//SudoShip//");
-		directory.mkdirs();
-		File file = new File(directory, "winConditions.json" );
-
-		if(!file.exists()){
-			try{
-				// read file from assets
-				AssetManager assetManager = getAssets();
-				InputStream is = assetManager.open("meds.json");
-				int size = is.available();
-				byte[] buffer = new byte[size];
-				is.read(buffer);
-				is.close();
-				String bufferString = new String(buffer);	
-
-				Writer writer = new BufferedWriter(new FileWriter(file));
-				writer.write(bufferString);
-				writer.close();
-			}
-			catch(Exception e){
-				e.printStackTrace();
-				return false;
-			}
-		}
-		return true;
-	}
 }
