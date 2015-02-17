@@ -38,8 +38,8 @@ import com.example.mymeds.util.Medication;
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
-	ArrayList<Medication> allmeds = new ArrayList<Medication>();
-	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
+	ArrayList<Medication> allMeds = new ArrayList<Medication>();
+	ArrayList<Medication> todaysMeds = new ArrayList<Medication>();
 	Context mContext;
 	MainActivity self = this;
 
@@ -52,28 +52,28 @@ public class MainActivity extends TabActivity {
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
 		JSONUtils.writeStringToFile(readAssets(), this); // Forces overwrite of existing JSON.
-		allmeds = JSONUtils.loadValues(this.getApplicationContext());
+		allMeds = JSONUtils.loadValues(this.getApplicationContext());
 		calculateMeds();
 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putParcelableArrayListExtra("meds", allmeds);
+		intentToday.putParcelableArrayListExtra("meds", allMeds);
 		TabSpec tabSpecToday = tabHost
-				.newTabSpec("Todays Medication")
-				.setIndicator("Todays Medication", null)
+				.newTabSpec("Today's Medication")
+				.setIndicator("Today's Medication", null)
 				.setContent(intentToday);
 
 		
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
-		intentAll.putParcelableArrayListExtra("meds", allmeds);
+		intentAll.putParcelableArrayListExtra("meds", allMeds);
 		TabSpec tabSpecAll = tabHost
 				.newTabSpec("All Medication")
 				.setIndicator("All Medication", null)
 				.setContent(intentAll);
 
 		Intent intentFuture = new Intent().setClass(this, FutureMeds.class);
-		intentFuture.putParcelableArrayListExtra("meds", allmeds);
+		intentFuture.putParcelableArrayListExtra("meds", allMeds);
 		TabSpec tabSpecProfile = tabHost
 				.newTabSpec("My Record")
 				.setIndicator("My Record", null)
@@ -94,7 +94,7 @@ public class MainActivity extends TabActivity {
 		alarm.addAlarm(2);
 		//alarm.setNextAlarm(0, 02300, "2300");
 		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-			      new IntentFilter("custom-event-name"));
+			      new IntentFilter("Med-Taken"));
 	}
 	
 	// Our handler for received Intents. This will be called whenever an Intent
@@ -103,11 +103,9 @@ public class MainActivity extends TabActivity {
 	  @Override
 	  public void onReceive(Context context, Intent intent) {
 	    // Get extra data included in the Intent
-	    String message = intent.getStringExtra("message");
-	    Log.d("receiver", "Got message: " + message);
 	    ArrayList<Medication> temp = new ArrayList<Medication>();
-		temp = intent.getParcelableArrayListExtra("meddata");
-		allmeds = temp;
+		temp = intent.getParcelableArrayListExtra("medData");
+		allMeds = temp;
 		self.recreate();
 	  }
 	};
@@ -185,9 +183,9 @@ public class MainActivity extends TabActivity {
 	 */
 	public void calculateMeds(){
 		MedFetcher medFetcher = new MedFetcher();
-		medFetcher.loadAssets(mContext, allmeds);
+		medFetcher.loadAssets(mContext, allMeds);
 		Calendar c = new GregorianCalendar();
-		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
+		todaysMeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
 	
 	/**
@@ -271,7 +269,7 @@ public class MainActivity extends TabActivity {
 		if (resultCode == 100) {
 			ArrayList<Medication> temp = new ArrayList<Medication>();
 			temp = data.getParcelableArrayListExtra("meddata");
-			allmeds = temp;
+			allMeds = temp;
 			this.recreate();
 
 		}
