@@ -139,6 +139,9 @@ public class MedicationInputActivity extends Activity{
 
 	} 
 
+	/**
+	 * Called when the date picker selects a date
+	 */
 	@SuppressWarnings("deprecation")
 	public void onDateEntrySelected(boolean startDate, long defaultDate) {
 		Calendar c = Calendar.getInstance();
@@ -150,6 +153,10 @@ public class MedicationInputActivity extends Activity{
 
 	}
 
+	/**
+	 * (non-Javadoc)
+	 * @see android.app.Activity#onCreateDialog(int)
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -166,8 +173,6 @@ public class MedicationInputActivity extends Activity{
 		public void onDateSet(DatePicker view, int selectedYear,
 				int selectedMonth, int selectedDay) {
 
-			Log.d("Problem Determination", "onDateSet ENTRY");
-
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
@@ -178,7 +183,6 @@ public class MedicationInputActivity extends Activity{
 
 
 			String date = formatter.format(c.getTime());
-			Log.d("test", "." + dateStartPressed);
 			if (dateStartPressed)
 			{
 				editStartDate.setText(date);
@@ -333,12 +337,6 @@ public class MedicationInputActivity extends Activity{
 
 		med.setFrequency(freq);
 
-		String new_med_json = PojoMapper.toJson(med, true);
-		String med_json = getMedsJSON();
-		String first_part = med_json.substring(0, med_json.lastIndexOf("]"));
-		first_part += ","+ new_med_json;
-		String json_end = med_json.substring(med_json.lastIndexOf(']'), med_json.length()); 
-		String final_json = first_part + json_end;
 		meds.add(med);
 
 		JSONUtils.writeToFile(meds, this);
@@ -351,26 +349,6 @@ public class MedicationInputActivity extends Activity{
 		alarm.addAlarm(size);
 		
 		finish();
-	}
-
-	private String getMedsJSON()
-	{
-		String filename = "meddata.json";
-		StringBuffer json = new StringBuffer("");
-
-		try {
-			File filesDir = getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, filename));
-			while(input.hasNext()){
-				json.append(input.next());
-			}
-			input.close();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return json.toString();
 	}
 
 	/**
