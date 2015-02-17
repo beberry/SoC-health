@@ -18,13 +18,9 @@
     
     <!-- Settings Activity -->
     <string-array name="SoundsSelectionArray">
-		<item>Beep1</item>
-		<item>Beep2</item>
-		<item>Beep3</item>
-		<item>Ring1</item>
-		<item>Ring2</item>
-		<item>Ring3</item>
-		<item>Vibrate</item>
+		<item>Sound 1</item>
+		<item>Sound 2</item>
+		<item>Sound 3</item>
 	</string-array>
 	
     <string-array name="SnoozeTimeArray">
@@ -49,10 +45,19 @@
 	</string-array>
 	
     <string-array name="TextSizeArray">
-        <item>Small</item>
-		<item>Medium</item>
+		<item>Normal</item>
 		<item>Large</item>
-		<item>Extra Large</item>
+	</string-array>
+    
+    <!-- Medication Input Activity -->
+    <string name="activity_medication_input">Add Medication</string>
+    
+    <string-array name="MedicationTypeArray">
+        <item>Oral</item>
+		<item>Inhalation</item>
+		<item>Parenteral</item>
+		<item>Topical</item>
+		<item>Suppository</item>
 	</string-array>
     
     <!-- Notifications Service -->

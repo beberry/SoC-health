@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <EditText 
+	    android:id="@+id/timeTextBox"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:singleLine="true"
+        android:hint="24h Format"
+        android:minEms="8"	
+        android:focusable="false"
+        android:gravity="center_horizontal"
+	    />
+    
+    <EditText 
+	    android:id="@+id/dosageTextBox"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:singleLine="true"
+        android:hint="Mg/Ml"
+        android:minEms="8"
+        android:gravity="center_horizontal"
+        	android:layout_toRightOf="@+id/timeTextBox"
+        	
+	    />
+    
+     <EditText 
+	    android:id="@+id/unitsTextBox"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:singleLine="true"
+        android:hint="2 Pills. 1 Drop"
+        android:minEms="8"
+        android:gravity="center_horizontal"
+        	android:layout_toRightOf="@+id/dosageTextBox"
+        	
+	    />
+    
+     <!-- Remove Row -->
+	<Button
+	    android:id="@+id/buttonRemoveFrequency"
+	    android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="30dp" 
+        android:minHeight="15dp"
+       	android:text="-"
+        android:textSize="15sp"
+        android:layout_marginLeft="15sp"
+        android:layout_toRightOf="@+id/unitsTextBox"
+	    />
+    
+</TableRow>

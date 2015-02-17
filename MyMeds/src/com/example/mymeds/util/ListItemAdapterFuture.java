@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,24 @@ public class ListItemAdapterFuture extends BaseAdapter {
 
 		TextView t2 = (TextView) row.findViewById(R.id.realName);
 		t2.setText(data.get(position).getMedName());
-		
+
 		TextView t3 = (TextView) row.findViewById(R.id.amount);
 		t3.setText(Integer.toString(data.get(position).getAmountNeeded()));
+
+		SharedPreferences prefs = mContext.getSharedPreferences(
+				"com.example.mymeds", Context.MODE_PRIVATE);
+		if(prefs.getInt("textSize", -1) == 1)
+		{
+			t1.setTextAppearance(mContext, R.style.textLarge);
+			t2.setTextAppearance(mContext, R.style.textLarge);
+			t3.setTextAppearance(mContext, R.style.textLarge);
+		}
+		else
+		{
+			t1.setTextAppearance(mContext, R.style.textNormal);
+			t2.setTextAppearance(mContext, R.style.textNormal);
+			t3.setTextAppearance(mContext, R.style.textLarge);
+		}
 
 		row.setPadding(5, 20, 5, 20);
 		table.addView(row, new TableLayout.LayoutParams(
@@ -73,5 +89,5 @@ public class ListItemAdapterFuture extends BaseAdapter {
 		return null;
 	}
 
-	
+
 }

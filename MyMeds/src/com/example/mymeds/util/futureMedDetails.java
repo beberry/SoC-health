@@ -36,7 +36,7 @@ public class futureMedDetails {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
-	
+
 	public int getAmountNeeded() {
 		return amountNeeded;
 	}
@@ -44,7 +44,7 @@ public class futureMedDetails {
 	public void setAmountNeeded(int amountNeeded) {
 		this.amountNeeded = amountNeeded;
 	}
-	
+
 	public void increaseAmountNeeded(int amountNeeded) {
 		this.amountNeeded += amountNeeded;
 	}

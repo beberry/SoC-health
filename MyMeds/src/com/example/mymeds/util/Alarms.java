@@ -7,19 +7,17 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.util.Log;
 
+@SuppressLint("SimpleDateFormat")
 public class Alarms {
 	private Context context;
 
@@ -65,8 +63,8 @@ public class Alarms {
 				int jsonIndex = medObject.getInt("index");
 
 				if (jsonIndex == actualIndex) {
-					med.setMedId(actualIndex);
-					med.setMedName(medObject.getString("name"));
+					med.setIndex(actualIndex);
+					med.setName(medObject.getString("name"));
 					med.setDisplayName(medObject.getString("displayName"));
 					med.setDescription(medObject.getString("description"));
 					med.setType(medObject.getString("type"));
@@ -121,10 +119,11 @@ public class Alarms {
 					dosage = freqObject.getString("dosage");
 					units = freqObject.getString("units");
 					time = freqObject.getString("time");
-					
+
 					cal = calculateTimeOfAlarm(time, cal);
 					long alarmTime = cal.getTimeInMillis();
 					printFormattedDate(alarmTime, name, "Set All Alarms");
+					Log.w("ALARM", "A: " + alarmTime + " - N: " + name);
 
 					Intent myIntent = new Intent(context, AlarmReceiver.class);
 					myIntent.putExtra("id", id);
@@ -166,14 +165,14 @@ public class Alarms {
 		Calendar cal = getSpecifiedTime(med.getStartTime());
 		cal = calculateTimeOfAlarm(freqTime, cal);
 		long time = cal.getTimeInMillis();
-		printFormattedDate(time, med.getMedName(), "Added Alarm");
+		printFormattedDate(time, med.getName(), "Added Alarm");
 
 		Intent myIntent = new Intent(context, AlarmReceiver.class);
 		myIntent.putExtra("id", id);
 		myIntent.putExtra("time", freqTime);
 		myIntent.putExtra("dosage", dosage);
 		myIntent.putExtra("units", String.valueOf(units));
-		myIntent.putExtra("name", med.getMedName());
+		myIntent.putExtra("name", med.getName());
 
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(id, freqTime), myIntent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -194,18 +193,18 @@ public class Alarms {
 				freqTime = freqIndex.getTime();
 				units = freqIndex.getUnits();
 				dosage = freqIndex.getDosage();
-				
+
 				cal = calculateTimeOfAlarm(String.valueOf(freqTime), cal);
 				cal.add(Calendar.DAY_OF_MONTH, repeatPeriod);
 				long alarmTime = cal.getTimeInMillis();
-				printFormattedDate(alarmTime, med.getMedName(), "Next Alarm");
-				
+				printFormattedDate(alarmTime, med.getName(), "Next Alarm");
+
 				Intent myIntent = new Intent(context, AlarmReceiver.class);
 				myIntent.putExtra("id", medID);
 				myIntent.putExtra("time", freqTime);
 				myIntent.putExtra("dosage", dosage);
 				myIntent.putExtra("units", String.valueOf(units));
-				myIntent.putExtra("name", med.getMedName());
+				myIntent.putExtra("name", med.getName());
 
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, calcaluteAlarmId(medID, freqTime), myIntent, 0);
 				AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -221,7 +220,7 @@ public class Alarms {
 			value = String.valueOf(alarmTime.charAt(i));
 			stack.push(value);
 		}
-		
+
 		int sMin = Integer.valueOf(stack.pop());
 		int fMin = Integer.valueOf(stack.pop());
 		int sHour = Integer.valueOf(stack.pop());
@@ -244,7 +243,6 @@ public class Alarms {
 	}
 
 	public Calendar getSpecifiedTime(long time) {
-		time = time * 1000;
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(time);
 		return cal;
@@ -261,7 +259,7 @@ public class Alarms {
 		Log.v("Name", name);
 		Log.v(label, dateText);
 	}
-	
+
 	/**
 	 * Calculates AlarmId based on a medID and an alarmTime.
 	 * @param medID

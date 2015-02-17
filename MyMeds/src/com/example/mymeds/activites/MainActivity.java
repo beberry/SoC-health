@@ -1,30 +1,19 @@
 package com.example.mymeds.activites;
 
-import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.Writer;
 import java.lang.reflect.Field;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.annotation.SuppressLint;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -37,71 +26,76 @@ import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
-import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.FutureMeds;
-
-import com.example.mymeds.util.AlarmReceiver;
+import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.Alarms;
-import com.example.mymeds.util.Frequency;
+import com.example.mymeds.util.JSONUtils;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
 
+@SuppressWarnings("deprecation")
 public class MainActivity extends TabActivity {
 	private GestureDetector gestureDetector;
 	TabHost tabHost;
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
 	Context mContext;
+	File file;
 
 	public void onCreate(Bundle savedInstanceState) {
+		System.out.println(getFilesDir());
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext=this;
 
-		if(allmeds.size()==0){
-			loadValues();
-			calculateMeds();
-		}
+		createFile();
+		allmeds = JSONUtils.loadValues(this.getApplicationContext());
+		calculateMeds();
 
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
 
-		Resources ressources = getResources(); 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		intentToday.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecToday = tabHost
-				.newTabSpec("Todays Meds")
+				.newTabSpec("Todays Medication")
 				.setIndicator("Todays Meds", null)
 				.setContent(intentToday);
-
+		
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
 		intentAll.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecAll = tabHost
-				.newTabSpec("All Meds")
+				.newTabSpec("All Medication")
 				.setIndicator("All Meds", null)
 				.setContent(intentAll);
 
-		Intent intentProfile = new Intent().setClass(this, FutureMeds.class);
+		Intent intentFuture = new Intent().setClass(this, FutureMeds.class);
+		intentFuture.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecProfile = tabHost
-				.newTabSpec("Profile")
-				.setIndicator("Profile", null)
-				.setContent(intentProfile);
+				.newTabSpec("My Record")
+				.setIndicator("Future", null)
+				.setContent(intentFuture);
 
+		tabHost.setBackgroundResource(R.drawable.ab_stacked_solid_health);;
+		
 		// add all tabs 
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
-		
+	}
+
+	public void onResume(Bundle savedInstanceState){
+		super.onResume();
+
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
 		alarm.addAlarm(1);
 		//alarm.setNextAlarm(0, 02300, "2300");
 	}
-
 
 	/**
 	 * Creates the Menu Bar.
@@ -125,13 +119,45 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{		
-		Log.d("Problem Determination", "action_settings id: " + R.id.action_settings);
-		//Log.d("Problem Determination", "action_exit id: " + R.id.action_exit);
+		switch(item.getItemId()){
+		case R.id.action_settings:
+			this.startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		case R.id.add_medication:
+			Intent intent = new Intent(this, MedicationInputActivity.class);
+			intent.putExtra("size", allmeds.size()+1);
+			intent.putParcelableArrayListExtra("meds", allmeds);
+			this.startActivityForResult(intent, 100);
+			return true;
+		}
+		return false;
+	}
 
-		//if(id == R.id.action_settings - 10){ //ID of action_settings is 10 higher than viewPager.getID() for some reason.
-		this.startActivity(new Intent(this, SettingsActivity.class));
+	protected boolean createFile(){
+		file = new File(getFilesDir(), "meddata.json" );
+
+		if(!file.exists()){
+			try{
+				// read file from assets
+				AssetManager assetManager = getAssets();
+				InputStream is = assetManager.open("meds.json");
+				int size = is.available();
+				byte[] buffer = new byte[size];
+				is.read(buffer);
+				is.close();
+				String bufferString = new String(buffer);	
+
+				Writer writer = new BufferedWriter(new FileWriter(file));
+				writer.write(bufferString);
+				writer.close();
+				is.close();
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+		}
 		return true;
-
 	}
 
 	/**
@@ -167,7 +193,7 @@ public class MainActivity extends TabActivity {
 			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
 		}
 	}
-	
+
 	private void onRightSwipe() {
 		if(tabHost.getCurrentTab()>0){
 			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
@@ -208,79 +234,24 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
-
 	}
 
 	public void calculateMeds(){
 		MedFetcher medFetcher = new MedFetcher();
+		medFetcher.loadAssets(mContext, allmeds);
 		Calendar c = new GregorianCalendar();
 		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
 
-	public boolean loadValues(){
-		try {
-			// read file from assets
-			AssetManager assetManager = mContext.getAssets();
-			InputStream is = assetManager.open("meds.json");
-			int size = is.available();
-			byte[] buffer = new byte[size];
-			is.read(buffer);
-			is.close();
-			String bufferString = new String(buffer);	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == 100) {
+			ArrayList<Medication> temp = new ArrayList<Medication>();
+			temp = data.getParcelableArrayListExtra("meddata");
+			allmeds = temp;
+			this.recreate();
 
-			JSONObject jsonObject = new JSONObject(bufferString);
-			JSONArray medIndex = jsonObject.getJSONArray("medication");
-
-			for(int k=0;k<medIndex.length();k++){
-				Medication med = new Medication();
-				ArrayList<Frequency> frequencyList = new ArrayList<Frequency>();
-
-				JSONObject tempCheck = medIndex.getJSONObject(k);
-				int itemID = tempCheck.getInt("index");
-				String itemName = tempCheck.getString("name");
-				String displayName = tempCheck.getString("displayName");
-				String description = tempCheck.getString("description");
-				String type = tempCheck.getString("type");
-				long startTime = tempCheck.getLong("startTime");
-				long endTime = tempCheck.getLong("endTime");
-				int remaining = tempCheck.getInt("remaining");
-				//int repeatPeriod = tempCheck.getInt("repeatPeriod");
-
-				JSONArray frequency = tempCheck.getJSONArray("frequency");
-				for(int i=0;i<frequency.length();i++){
-					JSONObject frequencyObject = frequency.getJSONObject(i);
-					String time = frequencyObject.getString("time");
-					String dosage = frequencyObject.getString("dosage");
-					int units = frequencyObject.getInt("units");
-					Frequency frequency2 = new Frequency();
-					frequency2.setDosage(dosage);
-					frequency2.setUnits(units);
-					frequency2.setTime(time);
-					frequencyList.add(frequency2);
-				}
-
-				if(allmeds.contains((Integer)med.getMedId())==false){
-					med.setMedId(itemID);
-					med.setMedName(itemName);
-					med.setDisplayName(displayName);
-					med.setDescription(description);
-					med.setType(type);
-					med.setStartTime(startTime);
-					med.setEndTime(endTime);
-					med.setRemaining(remaining);
-					//med.setRepeatPeriod(repeatPeriod);
-					med.setFrequency(frequencyList);
-					allmeds.add(med);
-				}
-			}
-		} catch (IOException e) {
-			Log.e("IOException","Error loading file");
-			return false;
-		} catch (JSONException e) {
-			Log.e("JSONException","JSON exception");
-			e.printStackTrace();			
-			return false;
 		}
-		return true;
+
 	}
 }

@@ -24,8 +24,8 @@
             "displayName": "Opium",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 143003824,
+            "startTime": 1423483966000,
+            "endTime": 1455019966000,
             "remaining": 20,
             "repeatPeriod": 2,
             "frequency":[
@@ -47,8 +47,8 @@
             "displayName": "Painkillers",
             "description": "easy",
             "type": "pill",
-            "startTime": 140003824,
-            "endTime": 143003824,
+            "startTime":  1391947966000,
+            "endTime": 1486642366000,
             "remaining": 84,
             "repeatPeriod": 2,
             "frequency":[

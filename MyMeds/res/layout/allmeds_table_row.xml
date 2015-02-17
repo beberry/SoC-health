@@ -18,20 +18,9 @@
         android:gravity="center"
         android:padding="10dp"
         android:textSize="15sp"
-        android:textStyle="bold" />
+        android:textColor="#000000" />
 
-    <!-- The dosage. -->
-
-    <TextView
-        android:id="@+id/dosage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="start|center"
-        android:padding="10dp"
-        android:textSize="15sp"
-        android:textStyle="normal" />
-
+    
     <!-- Display the tablets left. -->
 
     <TextView
@@ -42,7 +31,8 @@
         android:gravity="start"
         android:padding="10dp"
         android:textSize="15sp"
-        android:textStyle="normal" />
+        android:textStyle="bold"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/status"
