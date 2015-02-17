@@ -109,11 +109,9 @@ public class ListItemAdapter extends BaseAdapter {
 					//Force refresh of data
 					data = JSONUtils.loadValues(JSONUtils.readFile(mContext), mContext);
 					Log.d("sender", "Broadcasting message");
-					Intent intent = new Intent("custom-event-name");
-					  // You can also include some extra data.
-					  intent.putExtra("message", "This is my message!");
-					  intent.putParcelableArrayListExtra("meddata", data);
-					  LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+					Intent intent = new Intent("Med-Taken");
+					intent.putParcelableArrayListExtra("medData", data);
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
 				else{
 					
