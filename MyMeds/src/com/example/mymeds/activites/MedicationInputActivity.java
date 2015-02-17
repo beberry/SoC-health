@@ -171,9 +171,6 @@ public class MedicationInputActivity extends Activity{
 			year = selectedYear;
 			month = selectedMonth;
 			day = selectedDay;
-			//Log.d("Problem Determination", "selectedYear: " + selectedYear);
-			//Log.d("Problem Determination", "selectedMonth: " + selectedMonth);
-			//Log.d("Problem Determination", "selectedDay: " + selectedDay);
 
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -187,14 +184,12 @@ public class MedicationInputActivity extends Activity{
 				editStartDate.setText(date);
 				sMilli = c.getTimeInMillis();
 				actualStartDate = c.getTimeInMillis();
-				Log.d("Problem Determination", "editStartDate setText");
 			}
 			else
 			{
 				editEndDate.setText(date);
 				sMilli = c.getTimeInMillis();
 				actualEndDate = c.getTimeInMillis();
-				Log.d("Problem Determination", "editEndDate setText");
 			}
 		}
 	};	
@@ -285,9 +280,6 @@ public class MedicationInputActivity extends Activity{
 		String endDate = editEndDate.getText().toString();
 		String remaining = editRemaining.getText().toString();
 		String repeatPeriod = editRepeatPeriod.getText().toString();
-		
-		Log.v("START DATE", startDate);
-		Log.v("END DATE", endDate);
 
 		List<Integer> listTime = new ArrayList<Integer>();
 		List<Integer> listDosage = new ArrayList<Integer>();
@@ -314,18 +306,7 @@ public class MedicationInputActivity extends Activity{
 			listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
 			listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
 
-			Log.d("Problem Determination", "Time: " + frequencyTime.getText().toString());
-			Log.d("Problem Determination", "Dosage: " + frequencyDosage.getText().toString());
-			Log.d("Problem Determination", "Unit: " + frequencyUnit.getText().toString());
-
-			Log.d("Problem Determination", "List Time: " + listTime.get(0));
-			Log.d("Problem Determination", "List Dosage: " + listDosage.get(0));
-			Log.d("Problem Determination", "List Unit: " + listUnit.get(0));
-
 		}
-		
-		Log.d("PD", "long startTime: " + actualStartDate);
-		Log.d("PD", "long endTime: " + actualEndDate);
 		
 		//Store in MedicationStore
 		ArrayList<Frequency> freq = new ArrayList<Frequency>();
@@ -352,16 +333,12 @@ public class MedicationInputActivity extends Activity{
 
 		med.setFrequency(freq);
 
-		Log.i("Add medication",med.toString());
 		String new_med_json = PojoMapper.toJson(med, true);
 		String med_json = getMedsJSON();
-		System.out.println("MED JSON "+med_json);
 		String first_part = med_json.substring(0, med_json.lastIndexOf("]"));
-		System.out.println("THE FIRST PART IS " +first_part);
 		first_part += ","+ new_med_json;
 		String json_end = med_json.substring(med_json.lastIndexOf(']'), med_json.length()); 
 		String final_json = first_part + json_end;
-		System.out.println("FINAL PART IS "+final_json);
 		meds.add(med);
 
 		JSONUtils.writeToFile(meds, this);
