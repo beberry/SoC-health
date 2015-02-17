@@ -44,7 +44,7 @@ public class Alarms {
 	 * This sets alarms for all Medication's.
 	 */
 	public void setAllAlarms() {
-		ArrayList<Medication> medicationList = JSONUtils.loadValues(JSONUtils.readFile(context), context);
+		ArrayList<Medication> medicationList = JSONUtils.loadValues(JSONUtils.readFile(context, false), context);
 		ArrayList<Frequency> frequencyList;
 		Medication med;
 		Frequency freq;
