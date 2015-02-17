@@ -48,17 +48,28 @@ public class MainActivity extends TabActivity {
 		setContentView(R.layout.activity_main);
 		mContext=this;
 		
+		final Calendar c = Calendar.getInstance();
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
+		MedFetcher mMedFetcher = new MedFetcher();
+		long today = MedFetcher.milliDate(year, month, day);
 
-		JSONUtils.writeStringToFile(readAssets(), this); // Forces overwrite of existing JSON.
-		allmeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext()), this.getApplicationContext());
-		calculateMeds();
+		JSONUtils.writeStringToFile(readAssets(), this, true); // Forces overwrite of existing JSON.
+		allMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), true), this.getApplicationContext());
+		
+		//Load all meds into mMedFetcher, get only today's, write to the today's meds file
+		mMedFetcher.loadAssets(this, allMeds);
+		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false); // Forces overwrite of existing JSON.
+		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 
 		tabHost = getTabHost(); 
 
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
-		intentToday.putParcelableArrayListExtra("meds", allMeds);
+		intentToday.putParcelableArrayListExtra("meds", todaysMeds);
 		TabSpec tabSpecToday = tabHost
 				.newTabSpec("Today's Medication")
 				.setIndicator("Today's Medication", null)
@@ -182,6 +193,7 @@ public class MainActivity extends TabActivity {
 	 * Method to get today's date and then calculate medication required for today.
 	 */
 	public void calculateMeds(){
+		//TODO Is this needed?
 		MedFetcher medFetcher = new MedFetcher();
 		medFetcher.loadAssets(mContext, allMeds);
 		Calendar c = new GregorianCalendar();

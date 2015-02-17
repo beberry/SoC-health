@@ -69,7 +69,7 @@ public class FutureMeds extends FragmentActivity {
 		SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 		
 		//Get todays date in milliseconds
-		sMilli = milliDate(year, month, day);
+		sMilli = MedFetcher.milliDate(year, month, day);
 		
 		//Get date for 7 days into the future
 		eMilli = sMilli + 7*DAY;
@@ -169,7 +169,7 @@ public class FutureMeds extends FragmentActivity {
 			//format date for display
 			String date = formatDate(year, month, day);
 			//convert to milliseconds
-			Long milliTime = milliDate(year, month, day);
+			Long milliTime = MedFetcher.milliDate(year, month, day);
 			
 			//if flag is true
 			if (startPressed)
@@ -228,12 +228,7 @@ public class FutureMeds extends FragmentActivity {
 		listViewItems.requestLayout();
 	};
 
-	//Convert year, month, day into milliseconds
-	private long milliDate(int year, int month, int day)
-	{
-		Calendar cal = new GregorianCalendar(year, month, day);
-		return cal.getTimeInMillis();
-	}
+	
 	
 	//Convert year, month, day into date formated string
 	private String formatDate(int year, int month, int day)

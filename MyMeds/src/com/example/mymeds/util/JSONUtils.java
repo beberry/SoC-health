@@ -20,35 +20,41 @@ import android.util.Log;
 
 public class JSONUtils {
 	
-	private final static String FILE_PATH = "meddata.json";
+	private final static String ALL_FILE_PATH = "meddata.json";
+	private final static String TODAYS_FILE_PATH = "todaydata.json";
 	
 	/**
-	 * Method to write a specified ArrayList to a file
+	 * Method to write a specified ArrayList to a file, set all to true if all meds, otherwise assumes today's med's
 	 * @param meds
 	 * @param context
 	 */
-	static public void writeToFile(ArrayList<Medication> meds, Context context)
+	static public void writeToFile(ArrayList<Medication> meds, Context context, boolean all)
 	{
 		FileOutputStream fos;
+		String fileName = ALL_FILE_PATH;
+		if(!all){
+			fileName = TODAYS_FILE_PATH;
+		}
+			
 		
 		try
 		{
 			String med = PojoMapper.toJson(meds, true);
 			StringBuffer json = new StringBuffer("");
 			File filesDir = context.getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
+			Scanner input = new Scanner(new File(filesDir, fileName));
 			
 			while(input.hasNext()){
 				json.append(input.next());
 			}
 
-			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+FILE_PATH), true);
+			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+fileName), true);
 
 			System.out.println(med);
 			String temp = "{ \"medication\": ";
 			String temp2 = "}";
 			med = temp+med+temp2;
-			fos = context.openFileOutput(FILE_PATH, Context.MODE_PRIVATE);
+			fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
 			fos.write(med.getBytes());
 
@@ -66,17 +72,21 @@ public class JSONUtils {
 	 * @param meds
 	 * @param context
 	 */
-	static public void writeStringToFile(String meds, Context context)
+	static public void writeStringToFile(String meds, Context context, boolean all)
 	{
 		FileOutputStream fos;
+		String fileName = ALL_FILE_PATH;
+		if(!all){
+			fileName = TODAYS_FILE_PATH;
+		}
 		
 		try
 		{
 			File filesDir = context.getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
+			Scanner input = new Scanner(new File(filesDir, fileName));
 			
-			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+FILE_PATH), true);
-			fos = context.openFileOutput(FILE_PATH, Context.MODE_PRIVATE);
+			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+fileName), true);
+			fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
 
 			fos.write(meds.getBytes());
 
@@ -95,13 +105,17 @@ public class JSONUtils {
 	 * @param context
 	 * @return
 	 */
-	public static String readFile(Context context) {
+	public static String readFile(Context context, boolean all) {
 		StringBuffer json = new StringBuffer("");
+		String fileName = ALL_FILE_PATH;
+		if(!all){
+			fileName = TODAYS_FILE_PATH;
+		}
 		
 		try
 		{
 			File filesDir = context.getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
+			Scanner input = new Scanner(new File(filesDir, fileName));
 			while(input.hasNext()){
 				json.append(input.next());
 			}

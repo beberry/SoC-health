@@ -378,7 +378,7 @@ public class MedicationInputActivity extends Activity{
 		System.out.println("FINAL PART IS "+final_json);
 		meds.add(med);
 
-		JSONUtils.writeToFile(meds, this);
+		JSONUtils.writeToFile(meds, this, true);
 
 		Intent intent = new Intent();
 		intent.putParcelableArrayListExtra("meddata", meds);

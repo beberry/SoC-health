@@ -37,7 +37,7 @@ public class Alarms {
 	 * @return
 	 */
 	public Medication getMedicationById(int actualIndex) {
-		ArrayList<Medication> meds = JSONUtils.loadValues(JSONUtils.readFile(context), context);
+		ArrayList<Medication> meds = JSONUtils.loadValues(JSONUtils.readFile(context, true), context);
 		int index;
 		for (int i = 0; i < meds.size(); i++) {
 			index = meds.get(i).getIndex();
