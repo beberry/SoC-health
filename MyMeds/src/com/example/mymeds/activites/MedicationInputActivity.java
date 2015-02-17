@@ -266,7 +266,10 @@ public class MedicationInputActivity extends Activity{
 	 * @param view
 	 */
 	public void addInput(View view) throws IOException
-	{		
+	{	
+		// To be sure that there are no errors in the input data.
+		boolean dataValid = true;
+		
 		//Extract data from UI components.
 		String medicineName = editMedicineName.getText().toString();
 		String displayName = editDisplayName.getText().toString();
@@ -304,7 +307,7 @@ public class MedicationInputActivity extends Activity{
 			}
 			catch(Exception e)
 			{
-				finish();
+				dataValid = false;
 			}
 		}
 
@@ -337,25 +340,34 @@ public class MedicationInputActivity extends Activity{
 		catch(Exception e)
 		{
 			// In case of a number format or any other exception, don't add this record.
-			finish();
+			dataValid = false;
 		}
 
+		
 		med.setFrequency(freq);
-
-		meds.add(med);
-
-		JSONUtils.writeToFile(meds, this, true);
-
-
-		Intent intent = new Intent();
-		intent.putParcelableArrayListExtra("meddata", meds);
-		setResult(100, intent);
+		
+		if(dataValid)
+		{
+			// There were no problems with integer input data, save data.
+			meds.add(med);
+			
+			JSONUtils.writeToFile(meds, this, true);
+			
+			Intent intent = new Intent();
+			intent.putParcelableArrayListExtra("meddata", meds);
+			setResult(100, intent);
+			
+			finish();
+		}
+		else
+		{
+			// The data was not saved, warn the user.
+			Toast.makeText(getApplicationContext(), "The input is not valid!", Toast.LENGTH_LONG).show();
+		}
 
 		//Attach alarm to new medication.
 		//Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.addAlarm(size);
-
-		finish();
 	}
 
 	/**
