@@ -50,8 +50,7 @@
         <activity
             android:name="com.example.mymeds.activites.MedicationInputActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:label="@string/activity_medication_input"
-            android:windowSoftInputMode="stateHidden" >
+            android:label="@string/activity_medication_input" >
         </activity>
         <activity
             android:name="com.example.mymeds.tabs.AllMeds"
