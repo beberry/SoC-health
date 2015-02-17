@@ -157,6 +157,7 @@ public class MainActivity extends TabActivity {
 	}
 
 	protected boolean createFile(){
+		
 		file = new File(getFilesDir(), "meddata.json" );
 
 		//if(!file.exists()){
@@ -182,7 +183,14 @@ public class MainActivity extends TabActivity {
 		//}
 		return true;
 	}
-
+	
+	public void calculateMeds(){
+		MedFetcher medFetcher = new MedFetcher();
+		medFetcher.loadAssets(mContext, allmeds);
+		Calendar c = new GregorianCalendar();
+		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
+	}
+	
 	/**
 	 * Disable Hardware Menu Button on phones. Force Menu drop down on Action Bar.
 	 * 
@@ -257,13 +265,6 @@ public class MainActivity extends TabActivity {
 			}
 			return false;
 		}
-	}
-
-	public void calculateMeds(){
-		MedFetcher medFetcher = new MedFetcher();
-		medFetcher.loadAssets(mContext, allmeds);
-		Calendar c = new GregorianCalendar();
-		todaysmeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
 
 	@Override
