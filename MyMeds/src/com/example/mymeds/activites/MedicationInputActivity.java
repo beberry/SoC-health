@@ -295,11 +295,17 @@ public class MedicationInputActivity extends Activity{
 			frequencyDosage = (EditText) tableRow.getChildAt(1); //Dosage
 			frequencyUnit = (EditText) tableRow.getChildAt(2); //Unit
 
-			//Add cell data to Lists (parse to int)
-			listTime.add(Integer.valueOf(frequencyTime.getText().toString()));
-			listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
-			listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
-
+			// Make sure that the app does not crash on empty / invalid input for int fields.
+			try{
+				//Add cell data to Lists (parse to int)
+				listTime.add(Integer.valueOf(frequencyTime.getText().toString()));
+				listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
+				listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
+			}
+			catch(Exception e)
+			{
+				finish();
+			}
 		}
 
 		//Store in MedicationStore
@@ -311,18 +317,27 @@ public class MedicationInputActivity extends Activity{
 		med.setType(type);
 		med.setStartTime(actualStartDate);
 		med.setEndTime(actualEndDate);
-		med.setRemaining(Integer.valueOf(remaining));
-		med.setRepeatPeriod(Integer.valueOf(repeatPeriod));
-		med.setIndex(size);
+		
+		// Make sure that the app does not crash on empty / invalid input for int fields.
+		try {
+			med.setRemaining(Integer.valueOf(remaining));
+			med.setRepeatPeriod(Integer.valueOf(repeatPeriod));
+			med.setIndex(size);
 
-		for(int i =0;i<listTime.size();i++){
-			Frequency freq2 = new Frequency();
-
-			freq2.setTime(String.valueOf(listTime.get(i)));
-			freq2.setDosage(String.valueOf(listDosage.get(i)));
-			freq2.setUnits(listUnit.get(i));
-
-			freq.add(freq2);
+			for(int i =0;i<listTime.size();i++){
+				Frequency freq2 = new Frequency();
+	
+				freq2.setTime(String.valueOf(listTime.get(i)));
+				freq2.setDosage(String.valueOf(listDosage.get(i)));
+				freq2.setUnits(listUnit.get(i));
+	
+				freq.add(freq2);
+			}
+		}
+		catch(Exception e)
+		{
+			// In case of a number format or any other exception, don't add this record.
+			finish();
 		}
 
 		med.setFrequency(freq);

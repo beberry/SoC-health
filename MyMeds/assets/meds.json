@@ -9,7 +9,7 @@
             "startTime": 1423846006000,
             "endTime": 1421994054000,
             "remaining": 56,
-            "repeatPeriod": 2,
+            "repeatPeriod": 1,
             "frequency":[
             	{
             		"time": "0900",
@@ -27,7 +27,7 @@
             "startTime": 1423483966000,
             "endTime": 1455019966000,
             "remaining": 20,
-            "repeatPeriod": 2,
+            "repeatPeriod": 1,
             "frequency":[
                 {
                     "time": "1000",
@@ -50,7 +50,7 @@
             "startTime":  1391947966000,
             "endTime": 1486642366000,
             "remaining": 84,
-            "repeatPeriod": 2,
+            "repeatPeriod": 1,
             "frequency":[
                 {
                     "time": "1000",

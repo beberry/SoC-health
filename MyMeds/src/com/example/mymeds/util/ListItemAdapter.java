@@ -44,7 +44,6 @@ public class ListItemAdapter extends BaseAdapter {
 		//get context, the data t be displayed and load the assets of medFetcher
 		this.mContext = mContext;
 		this.data = medData;
-		mMedFetcher.loadAssets(mContext, medData);
 	}
 
 
@@ -125,21 +124,13 @@ public class ListItemAdapter extends BaseAdapter {
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 					
-					//Update the locally held todays meds, knock out the first frequency
-					data.get(position).getFrequency().remove(0);
-					JSONUtils.writeToFile(data, mContext, false);					
-					//Modify and update the numbers of pills remaining for this pill
-					mMedFetcher.modifyQuantity(toAdd.getIndex(), toAdd.getFrequency().get(timesTaken).getUnits());
-					//Force refresh of data
-					ArrayList<Medication> newData = JSONUtils.loadValues(JSONUtils.readFile(mContext, true), mContext);
-					Log.d("sender", "Broadcasting message");
-					Intent intent = new Intent("Med-Taken");
-					intent.putParcelableArrayListExtra("medData", newData);
-					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
 				else{
 					
 				}
+				Intent intent = new Intent("Med-Taken");
+				intent.putExtra("position", position);
+				LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				
 			}
 		});

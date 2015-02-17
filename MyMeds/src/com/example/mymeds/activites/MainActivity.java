@@ -1,5 +1,6 @@
 package com.example.mymeds.activites;
 
+import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -7,22 +8,29 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.app.TabActivity;
+import android.app.ActionBar.LayoutParams;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TabHost.TabSpec;
 
 import com.example.mymeds.R;
@@ -42,33 +50,40 @@ public class MainActivity extends TabActivity {
 	ArrayList<Medication> todaysMeds = new ArrayList<Medication>();
 	Context mContext;
 	MainActivity self = this;
+	MedFetcher mMedFetcher = new MedFetcher();
 
 	public void onCreate(Bundle savedInstanceState) {
+		File file = new File(this.getFilesDir()+"//"+"meddata.json");
+		if(!file.exists()){
 		JSONUtils.writeStringToFile(readAssets(), this.getApplicationContext(), true); // Forces overwrite of existing JSON.
+		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext=this;
-		
+
 		final Calendar c = Calendar.getInstance();
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
-		
+
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
-		MedFetcher mMedFetcher = new MedFetcher();
 		long today = MedFetcher.milliDate(year, month, day);
 
-		
+
 		allMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), true), this.getApplicationContext());
-		
+
 		//Load all meds into mMedFetcher, get only today's, write to the today's meds file
 		mMedFetcher.loadAssets(this, allMeds);
+		File file2 = new File(this.getFilesDir()+"//"+"todaydata.json");
+		if(!file.exists()){
 		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false); // Forces overwrite of existing JSON.
+		}
 		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 
 		tabHost = getTabHost(); 
 
+		
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		intentToday.putParcelableArrayListExtra("meds", todaysMeds);
 		TabSpec tabSpecToday = tabHost
@@ -76,7 +91,7 @@ public class MainActivity extends TabActivity {
 				.setIndicator("Today's Medication", null)
 				.setContent(intentToday);
 
-		
+
 		Intent intentAll = new Intent().setClass(this, AllMeds.class);
 		intentAll.putParcelableArrayListExtra("meds", allMeds);
 		TabSpec tabSpecAll = tabHost
@@ -92,12 +107,38 @@ public class MainActivity extends TabActivity {
 				.setContent(intentFuture);
 
 		tabHost.setBackgroundResource(R.drawable.ab_stacked_solid_health);;
-		
+
 		// add all tabs 
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(0);
+		
+		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
+		tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+		tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));
+		
+		
+		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+			@Override
+			public void onTabChanged(String tabId) {
+			    if(tabId.equals("Today's Medication")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
+			    }
+			    if(tabId.equals("All Medication")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#71B238"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
+			    }
+			    if(tabId.equals("My Record")) {					
+					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
+					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#71B238"));	
+			    }
+			 
+			}});
 		
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
@@ -106,20 +147,33 @@ public class MainActivity extends TabActivity {
 		//alarm.addAlarm(2);
 		//alarm.setNextAlarm(0, 02300, "2300");
 		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
-			      new IntentFilter("Med-Taken"));
+				new IntentFilter("Med-Taken"));
 	}
-	
+
 	// Our handler for received Intents. This will be called whenever an Intent
 	// with an action named "custom-event-name" is broadcasted.
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-	  @Override
-	  public void onReceive(Context context, Intent intent) {
-	    // Get extra data included in the Intent
-	    ArrayList<Medication> temp = new ArrayList<Medication>();
-		temp = intent.getParcelableArrayListExtra("medData");
-		allMeds = temp;
-		self.recreate();
-	  }
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// Get extra data included in the Intent
+			//Update the locally held todays meds, knock out the first frequency
+			int position = intent.getIntExtra("position", 0);
+
+			//Modify and update the numbers of pills remaining for this pill
+			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits());
+			//allMeds.get(todaysMeds.get(position).getIndex()).setRemaining(allMeds.get(todaysMeds.get(position).getIndex()).getRemaining()-todaysMeds.get(position).getFrequency().get(0).getUnits());
+			JSONUtils.writeToFile(todaysMeds, mContext, true);
+			if(todaysMeds.get(position).getFrequency().size()==1){
+				todaysMeds.remove(position);
+			}
+			else{
+				todaysMeds.get(position).getFrequency().remove(0);
+			}
+			
+			JSONUtils.writeToFile(todaysMeds, mContext, false);
+			//Force refresh of data
+			self.recreate();
+		}
 	};
 
 	public void onResume(Bundle savedInstanceState){
@@ -134,17 +188,17 @@ public class MainActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-				//getMenuInflater().inflate(R.menu.main, menu);
+		//getMenuInflater().inflate(R.menu.main, menu);
 
-				MenuItem itemBlog = menu.add(Menu.NONE, // Group ID
-						R.id.action_settings, // Item ID
-						101, // Order
-						"Blog"); // Title
-				// To showAsAction attribute, use MenuItemCompat (set to always)
-				MenuItemCompat.setShowAsAction(itemBlog, MenuItem.SHOW_AS_ACTION_ALWAYS);
-				itemBlog.setIcon(R.drawable.ic_settings);
-				super.onCreateOptionsMenu(menu);
-				return true;
+		MenuItem itemBlog = menu.add(Menu.NONE, // Group ID
+				R.id.action_settings, // Item ID
+				101, // Order
+				"Blog"); // Title
+		// To showAsAction attribute, use MenuItemCompat (set to always)
+		MenuItemCompat.setShowAsAction(itemBlog, MenuItem.SHOW_AS_ACTION_ALWAYS);
+		itemBlog.setIcon(R.drawable.ic_settings);
+		super.onCreateOptionsMenu(menu);
+		return true;
 	} 
 
 	/**
@@ -171,7 +225,7 @@ public class MainActivity extends TabActivity {
 	protected String readAssets()
 	{	
 		String bufferString = null;
-		
+
 		try
 		{
 			AssetManager assetManager = getAssets();
@@ -186,10 +240,10 @@ public class MainActivity extends TabActivity {
 		{
 			e.printStackTrace();
 		}
-		
+
 		return bufferString;
 	}
-	
+
 	/**
 	 * Method to get today's date and then calculate medication required for today.
 	 */
@@ -200,7 +254,7 @@ public class MainActivity extends TabActivity {
 		Calendar c = new GregorianCalendar();
 		todaysMeds = medFetcher.daysMedication(c.getTime().getTime());
 	}
-	
+
 	/**
 	 * Disable Hardware Menu Button on phones. Force Menu drop down on Action Bar.
 	 * 
@@ -229,15 +283,21 @@ public class MainActivity extends TabActivity {
 		return super.onTouchEvent(event);
 	}
 
+	
+	
 	private void onLeftSwipe() {
 		if(tabHost.getCurrentTab()<3){
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#A6CB45"));		
 			tabHost.setCurrentTab(tabHost.getCurrentTab()+1);
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#71B238"));			
 		}
 	}
 
 	private void onRightSwipe() {
 		if(tabHost.getCurrentTab()>0){
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#A6CB45"));	
 			tabHost.setCurrentTab(tabHost.getCurrentTab()-1);
+			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#71B238"));					
 		}
 	}
 

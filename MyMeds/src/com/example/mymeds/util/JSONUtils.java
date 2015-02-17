@@ -3,12 +3,9 @@ package com.example.mymeds.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,8 +37,6 @@ public class JSONUtils {
 		try
 		{
 			String med = PojoMapper.toJson(meds, true);
-			StringBuffer json = new StringBuffer("");
-			File filesDir = context.getFilesDir();
 
 			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+fileName), true);
 
@@ -76,7 +71,6 @@ public class JSONUtils {
 		
 		try
 		{
-			File filesDir = context.getFilesDir();
 			
 			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+fileName), true);
 			fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
