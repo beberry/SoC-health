@@ -25,7 +25,7 @@ public class ListItemAdapter extends BaseAdapter {
 	ArrayList<Medication> data = null;
 	int count=0;
 	TableLayout tempTable;
-	int timesTaken=0;
+	int timesTaken;
 	MedFetcher mMedFetcher = new MedFetcher();
 
 	public ListItemAdapter(Context mContext,int layoutID, ArrayList<Medication> medData) {
@@ -83,7 +83,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(mContext, toAdd.getDisplayName()+ " taken" , Toast.LENGTH_SHORT).show();
+				Toast.makeText(mContext, toAdd.getDisplayName()+timesTaken  , Toast.LENGTH_SHORT).show();
 				tempTable.removeView(row);
 				if(toAdd.getFrequency().size()>1){
 					timesTaken = timesTaken++;
@@ -100,12 +100,16 @@ public class ListItemAdapter extends BaseAdapter {
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 					
+					
 					//Modify and update the numbers of pills remaining for this pill
 					mMedFetcher.modifyQuantity(toAdd.getIndex(), toAdd.getFrequency().get(timesTaken).getUnits());
 					//Force refresh of data
 					data = JSONUtils.loadValues(mContext);
 				}
-
+				else{
+					
+				}
+				
 			}
 		});
 		row.setPadding(5, 20, 5, 20);
