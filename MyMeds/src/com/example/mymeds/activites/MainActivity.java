@@ -44,6 +44,7 @@ public class MainActivity extends TabActivity {
 	MainActivity self = this;
 
 	public void onCreate(Bundle savedInstanceState) {
+		JSONUtils.writeStringToFile(readAssets(), this.getApplicationContext(), true); // Forces overwrite of existing JSON.
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		mContext=this;
@@ -58,7 +59,7 @@ public class MainActivity extends TabActivity {
 		MedFetcher mMedFetcher = new MedFetcher();
 		long today = MedFetcher.milliDate(year, month, day);
 
-		JSONUtils.writeStringToFile(readAssets(), this, true); // Forces overwrite of existing JSON.
+		
 		allMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), true), this.getApplicationContext());
 		
 		//Load all meds into mMedFetcher, get only today's, write to the today's meds file
@@ -100,9 +101,9 @@ public class MainActivity extends TabActivity {
 		
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
-		alarm.addAlarm(0);
-		alarm.addAlarm(1);
-		alarm.addAlarm(2);
+		//alarm.addAlarm(0);
+		//alarm.addAlarm(1);
+		//alarm.addAlarm(2);
 		//alarm.setNextAlarm(0, 02300, "2300");
 		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
 			      new IntentFilter("Med-Taken"));

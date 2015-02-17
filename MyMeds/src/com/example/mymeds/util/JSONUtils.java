@@ -42,11 +42,6 @@ public class JSONUtils {
 			String med = PojoMapper.toJson(meds, true);
 			StringBuffer json = new StringBuffer("");
 			File filesDir = context.getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, fileName));
-			
-			while(input.hasNext()){
-				json.append(input.next());
-			}
 
 			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+fileName), true);
 
@@ -59,7 +54,6 @@ public class JSONUtils {
 			fos.write(med.getBytes());
 
 			fos.close();
-			input.close();
 		}
 		catch (Exception e)
 		{
@@ -83,7 +77,6 @@ public class JSONUtils {
 		try
 		{
 			File filesDir = context.getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, fileName));
 			
 			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+fileName), true);
 			fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -91,7 +84,6 @@ public class JSONUtils {
 			fos.write(meds.getBytes());
 
 			fos.close();
-			input.close();
 		}
 		catch (Exception e)
 		{
