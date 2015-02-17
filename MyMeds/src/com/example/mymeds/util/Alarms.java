@@ -3,6 +3,9 @@ package com.example.mymeds.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -26,7 +29,7 @@ public class Alarms {
 	 * @return
 	 */
 	public Medication getMedicationById(int actualIndex) {
-		ArrayList<Medication> meds = JSONUtils.loadValues(context);
+		ArrayList<Medication> meds = JSONUtils.loadValues(JSONUtils.readFile(context), context);
 		int index;
 		for (int i = 0; i < meds.size(); i++) {
 			index = meds.get(i).getIndex();
@@ -41,7 +44,7 @@ public class Alarms {
 	 * This sets alarms for all Medication's.
 	 */
 	public void setAllAlarms() {
-		ArrayList<Medication> medicationList = JSONUtils.loadValues(context);
+		ArrayList<Medication> medicationList = JSONUtils.loadValues(JSONUtils.readFile(context), context);
 		ArrayList<Frequency> frequencyList;
 		Medication med;
 		Frequency freq;

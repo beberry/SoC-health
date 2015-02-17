@@ -22,24 +22,19 @@ public class JSONUtils {
 	
 	private final static String FILE_PATH = "meddata.json";
 	
-	@SuppressWarnings("resource")
+	/**
+	 * Method to write a specified ArrayList to a file
+	 * @param meds
+	 * @param context
+	 */
 	static public void writeToFile(ArrayList<Medication> meds, Context context)
 	{
-		String med = "";
-		try {
-			med = PojoMapper.toJson(meds, true);
-		} catch (JsonMappingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (JsonGenerationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		StringBuffer json = new StringBuffer("");
-		try {
+		FileOutputStream fos;
+		
+		try
+		{
+			String med = PojoMapper.toJson(meds, true);
+			StringBuffer json = new StringBuffer("");
 			File filesDir = context.getFilesDir();
 			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
 			
@@ -47,7 +42,7 @@ public class JSONUtils {
 				json.append(input.next());
 			}
 
-			FileOutputStream fos = new FileOutputStream(new File(context.getFilesDir()+"//"+FILE_PATH), true);
+			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+FILE_PATH), true);
 
 			System.out.println(med);
 			String temp = "{ \"medication\": ";
@@ -59,41 +54,75 @@ public class JSONUtils {
 
 			fos.close();
 			input.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
-
 	}
 	
-	public static String readFile(String filename, Context context) {
-		Log.i("json values", "reading file");
-
-		StringBuffer json = new StringBuffer("");
-
-		try {
+	/**
+	 * Method to write a specified String to a file.
+	 * @param meds
+	 * @param context
+	 */
+	static public void writeStringToFile(String meds, Context context)
+	{
+		FileOutputStream fos;
+		
+		try
+		{
 			File filesDir = context.getFilesDir();
-			Scanner input = new Scanner(new File(filesDir, filename));
+			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
+			
+			fos = new FileOutputStream(new File(context.getFilesDir()+"//"+FILE_PATH), true);
+			fos = context.openFileOutput(FILE_PATH, Context.MODE_PRIVATE);
+
+			fos.write(meds.getBytes());
+
+			fos.close();
+			input.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Method to read file into a string
+	 * @param filename
+	 * @param context
+	 * @return
+	 */
+	public static String readFile(Context context) {
+		StringBuffer json = new StringBuffer("");
+		
+		try
+		{
+			File filesDir = context.getFilesDir();
+			Scanner input = new Scanner(new File(filesDir, FILE_PATH));
 			while(input.hasNext()){
 				json.append(input.next());
 			}
-			Log.i("Completed", "Medication read in from external file");
+			Log.i("JSONUtils", "Medication read in from external file");
 			input.close();
 		}
 		catch (FileNotFoundException fnfe)
 		{
-			Log.w("FileNotFound", "File could not be located, will create");
+			Log.w("JSONUtils", "File could not be located, will create");
 		}
-		catch (@SuppressWarnings("hiding") IOException ioe) {
-			Log.e("JSONRead", "An IO Exception occured when reading file");
-		}
-
+		
 		return json.toString();
 	}
-
-
-	public static ArrayList<Medication> loadValues(Context context){
-		String JSONstring = readFile(FILE_PATH, context);
+	
+	/**
+	 * Method to load JSON string into a specified object, then contain within ArrayList
+	 * @param context
+	 * @return
+	 */
+	public static ArrayList<Medication> loadValues(String JSONstring, Context context){
+		
 		ArrayList<Medication> allmeds = new ArrayList<Medication>();
 		if (JSONstring != "") {
 			try {
