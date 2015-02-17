@@ -107,7 +107,7 @@ public class MainActivity extends TabActivity {
 			//Modify and update the numbers of pills remaining for this pill
 			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits());
 			//allMeds.get(todaysMeds.get(position).getIndex()).setRemaining(allMeds.get(todaysMeds.get(position).getIndex()).getRemaining()-todaysMeds.get(position).getFrequency().get(0).getUnits());
-			JSONUtils.writeToFile(todaysMeds, mContext, true);
+			JSONUtils.writeToFile(todaysMeds, mContext, false);
 			if(todaysMeds.get(position).getFrequency().size()==1){
 				todaysMeds.remove(position);
 			}
