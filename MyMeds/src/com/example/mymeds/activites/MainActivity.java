@@ -93,9 +93,9 @@ public class MainActivity extends TabActivity {
 		
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
-		//alarm.addAlarm(1);
-		//alarm.addAlarm(2);
-		//alarm.addAlarm(3);
+		alarm.addAlarm(0);
+		alarm.addAlarm(1);
+		alarm.addAlarm(2);
 		//alarm.setNextAlarm(0, 02300, "2300");
 		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
 			      new IntentFilter("custom-event-name"));
@@ -159,7 +159,7 @@ public class MainActivity extends TabActivity {
 	protected boolean createFile(){
 		file = new File(getFilesDir(), "meddata.json" );
 
-		if(!file.exists()){
+		//if(!file.exists()){
 			try{
 				// read file from assets
 				AssetManager assetManager = getAssets();
@@ -179,7 +179,7 @@ public class MainActivity extends TabActivity {
 				e.printStackTrace();
 				return false;
 			}
-		}
+		//}
 		return true;
 	}
 
