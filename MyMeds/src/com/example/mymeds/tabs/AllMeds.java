@@ -53,22 +53,23 @@ public class AllMeds extends Activity {
 		SharedPreferences prefs = mContext.getSharedPreferences(
 				"com.example.mymeds", Context.MODE_PRIVATE);
 		TextView t1 = (TextView)findViewById(R.id.headerName);
+		TextView t3 = (TextView)findViewById(R.id.headerRName);
 		TextView t2 = (TextView)findViewById(R.id.headerTaken);
 		//TextView t3 = (TextView)findViewById(R.id.headerTime);
-		TextView t4 = (TextView)findViewById(R.id.headerStatus);
+		//TextView t4 = (TextView)findViewById(R.id.headerStatus);
 		if(prefs.getInt("textSize", -1) == 1)
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);
 			t2.setTextAppearance(mContext, R.style.textLarge);
-			//t3.setTextAppearance(mContext, R.style.textLarge);
-			t4.setTextAppearance(mContext, R.style.textLarge);
+			t3.setTextAppearance(mContext, R.style.textLarge);
+			//t4.setTextAppearance(mContext, R.style.textLarge);
 		}
 		else
 		{
 			t1.setTextAppearance(mContext, R.style.textNormal);
 			t2.setTextAppearance(mContext, R.style.textNormal);
-			//t3.setTextAppearance(mContext, R.style.textNormal);
-			t4.setTextAppearance(mContext, R.style.textNormal);
+			t3.setTextAppearance(mContext, R.style.textNormal);
+			//t4.setTextAppearance(mContext, R.style.textNormal);
 		}
 		listViewItems.requestLayout();
 

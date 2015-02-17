@@ -29,10 +29,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Medicine"
+            android:text="For"
             android:textSize="20sp"
             android:textStyle="bold" />
-
+       
+        <TextView
+            android:id="@+id/headerRName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Medication"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        
+        
         <TextView
             android:id="@+id/headerTaken"
             android:layout_width="fill_parent"
@@ -43,15 +54,7 @@
             android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/headerStatus"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Status"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+
     </TableRow>
 
     <ScrollView
