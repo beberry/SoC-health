@@ -3,7 +3,10 @@ package com.example.mymeds.util;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//another class to handle item's id and name
+/*
+ * Represents the frequency of when medication is taken.
+ * Implements parcelable so that it is able to be passed around in bundles
+ */
 public class Frequency implements Parcelable{
 
 	String dosage, time;

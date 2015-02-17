@@ -1,5 +1,8 @@
 package com.example.mymeds.stores;
-//test
+
+/*
+ * Used to represent settings in the app
+ */
 public class SettingsStore {
 
 	public Boolean getBanners() {

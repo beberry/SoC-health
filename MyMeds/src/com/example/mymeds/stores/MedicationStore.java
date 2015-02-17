@@ -3,6 +3,9 @@ package com.example.mymeds.stores;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Used to represent each medication in the app
+ */
 public class MedicationStore {
 
 	String medicineName;
