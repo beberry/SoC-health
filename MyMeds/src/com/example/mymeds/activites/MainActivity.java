@@ -11,10 +11,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
@@ -41,6 +44,7 @@ public class MainActivity extends TabActivity {
 	ArrayList<Medication> allmeds = new ArrayList<Medication>();
 	ArrayList<Medication> todaysmeds = new ArrayList<Medication>();
 	Context mContext;
+	MainActivity self = this;
 	File file;
 
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,11 +93,28 @@ public class MainActivity extends TabActivity {
 		
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
-		alarm.addAlarm(1);
-		alarm.addAlarm(2);
-		alarm.addAlarm(3);
+		//alarm.addAlarm(1);
+		//alarm.addAlarm(2);
+		//alarm.addAlarm(3);
 		//alarm.setNextAlarm(0, 02300, "2300");
+		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+			      new IntentFilter("custom-event-name"));
 	}
+	
+	// Our handler for received Intents. This will be called whenever an Intent
+	// with an action named "custom-event-name" is broadcasted.
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	  @Override
+	  public void onReceive(Context context, Intent intent) {
+	    // Get extra data included in the Intent
+	    String message = intent.getStringExtra("message");
+	    Log.d("receiver", "Got message: " + message);
+	    ArrayList<Medication> temp = new ArrayList<Medication>();
+		temp = intent.getParcelableArrayListExtra("meddata");
+		allmeds = temp;
+		self.recreate();
+	  }
+	};
 
 	public void onResume(Bundle savedInstanceState){
 		super.onResume();
