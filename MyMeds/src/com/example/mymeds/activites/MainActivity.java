@@ -75,7 +75,10 @@ public class MainActivity extends TabActivity {
 
 		//Load all meds into mMedFetcher, get only today's, write to the today's meds file
 		mMedFetcher.loadAssets(this, allMeds);
+		File file2 = new File(this.getFilesDir()+"//"+"todaydata.json");
+		if(!file.exists()){
 		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false); // Forces overwrite of existing JSON.
+		}
 		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 
 		tabHost = getTabHost(); 
@@ -157,7 +160,9 @@ public class MainActivity extends TabActivity {
 			int position = intent.getIntExtra("position", 0);
 
 			//Modify and update the numbers of pills remaining for this pill
-			allMeds.get(todaysMeds.get(position).getIndex()).setRemaining(allMeds.get(todaysMeds.get(position).getIndex()).getRemaining()-todaysMeds.get(position).getFrequency().get(0).getUnits());
+			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits());
+			//allMeds.get(todaysMeds.get(position).getIndex()).setRemaining(allMeds.get(todaysMeds.get(position).getIndex()).getRemaining()-todaysMeds.get(position).getFrequency().get(0).getUnits());
+			JSONUtils.writeToFile(todaysMeds, mContext, true);
 			if(todaysMeds.get(position).getFrequency().size()==1){
 				todaysMeds.remove(position);
 			}
