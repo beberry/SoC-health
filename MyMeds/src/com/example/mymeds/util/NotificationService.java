@@ -3,14 +3,11 @@ package com.example.mymeds.util;
 import java.util.Calendar;
 
 import com.example.mymeds.R;
-import com.example.mymeds.activites.MainActivity;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -21,7 +18,7 @@ public class NotificationService extends Service {
 	private NotificationManager notificationManager;
 
 	/**
-	 * Returning null, as the service will not be communication with any other
+	 * Returning null, as the service will not be communicating with any other
 	 * components.
 	 */
 	@Override
@@ -60,8 +57,6 @@ public class NotificationService extends Service {
 		// Initialise notificationManager
 		notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
-		Log.v("ID", String.valueOf(getID(id, time)));
-		
 		Intent snoozeIntent = new Intent(this, SnoozeReceiver.class);
 		Bundle bundle = new Bundle();
 		bundle.putInt("id", id);
@@ -69,12 +64,10 @@ public class NotificationService extends Service {
 		bundle.putString("dosage", dosage);
 		bundle.putString("units", units);
 		bundle.putString("name", name);
-		bundle.putInt("alarmID", getID(id, time));
-		Log.v("alarmID ns", String.valueOf(getID(id, time)));
 		snoozeIntent.putExtras(bundle);
 		
-		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this, getID(id, time), snoozeIntent, 0);
-		
+		int alarmID = AlarmUtils.calculateAlarmId(id, time);
+		PendingIntent snoozePendingIntent = PendingIntent.getBroadcast(this, alarmID, snoozeIntent, 0);
 		NotificationCompat.Builder builder =
 		        new NotificationCompat.Builder(this)
 		        .setSmallIcon(R.drawable.ic_launcher)
@@ -85,20 +78,14 @@ public class NotificationService extends Service {
 		        .addAction (R.drawable.ic_launcher, "Snooze", snoozePendingIntent);
 
 		// Send the notification.
-		notificationManager.notify(getID(id, time), builder.build());
+		notificationManager.notify(alarmID, builder.build());
+		
+		Calendar cal = Calendar.getInstance();
+		long alarmTime = cal.getTimeInMillis();
+		AlarmUtils.printFormattedDate(alarmTime, name, "Notification");
 		
 		Alarms alarm = new Alarms(this);
-		alarm.setNextAlarm(id, getID(id, time), time);	
-	}
-
-	/**
-	 * Get the id based on the id & time of a medication
-	 */
-	public int getID(int id, String time) {
-		StringBuilder idValue = new StringBuilder();
-		idValue.append(id);
-		idValue.append(time);
-		return Integer.valueOf(idValue.toString());
+		alarm.setNextAlarm(id, alarmID, time);	
 	}
 
 	/**
