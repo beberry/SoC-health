@@ -26,6 +26,12 @@ import com.example.mymeds.R;
 import com.example.mymeds.libs.PojoMapper;
 import com.example.mymeds.stores.SettingsStore;
 
+/**
+ * Handles the Activity for the Settings in the application.
+ * Banners, Sounds, Notification Alert and Snooze not implemented for prototype.
+ * Sounds are not global to the application, only in this Activity.
+ * TextSize is global to the application.
+ */
 public class SettingsActivity extends Activity{
 
 	Button buttonSave;
@@ -36,6 +42,7 @@ public class SettingsActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.layout_settings);
 
+		//Locate UI components
 		buttonSave = (Button) findViewById(R.id.buttonSave);
 		buttonCancel = (Button) findViewById(R.id.buttonCancel);
 
@@ -47,9 +54,14 @@ public class SettingsActivity extends Activity{
 		Spinner spinnerHowLongBefore = (Spinner) findViewById(R.id.spinnerHowLongBefore);
 		Spinner spinnerTextSize = (Spinner) findViewById(R.id.spinnerTextSize);
 
+		//Onclick Event Handler for Sounds Spinner.
 		spinnerSoundsSelection.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
+			//Disable sounds played on startup.
 			Boolean init_done = false;
+			
+			//Plays default notification sound on item selected.
+			//All selections currently play the same sound.
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -89,19 +101,15 @@ public class SettingsActivity extends Activity{
 
 		SettingsStore store = null;
 
+		//Read in SharedPreferences and store them locally.
 		try {
 			store = (SettingsStore)PojoMapper.fromJson(readFromSettings(), SettingsStore.class);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		try {
-			Log.w("Hello", PojoMapper.toJson(store, true));
-		} 
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		//Store SharedPreferences locally.
 		if(store != null)
 		{
 			switchBanners.setChecked(store.getBanners());
@@ -138,12 +146,12 @@ public class SettingsActivity extends Activity{
 		int howLongBefore = (int) spinnerHowLongBefore.getSelectedItemPosition();
 		int textSize = (int) spinnerTextSize.getSelectedItemPosition();
 
-		Log.d("Problem Determination", "banner: " + banner +
-				"\nsounds: " + sounds + 
-				"\nsoundsSelection: " + soundsSelection +
-				"\nsnoozeTime: " + snoozeTime + 
-				"\nhowLongBefore: " + howLongBefore +
-				"\ntextSize: " + textSize);
+//		Log.d("Problem Determination", "banner: " + banner +
+//				"\nsounds: " + sounds + 
+//				"\nsoundsSelection: " + soundsSelection +
+//				"\nsnoozeTime: " + snoozeTime + 
+//				"\nhowLongBefore: " + howLongBefore +
+//				"\ntextSize: " + textSize);
 
 		//Export to JSON
 		SettingsStore store = new SettingsStore();
@@ -167,7 +175,6 @@ public class SettingsActivity extends Activity{
 		editor.apply();
 
 		try {
-			Log.w("osfn", PojoMapper.toJson(store, true));
 			writeToSettings(PojoMapper.toJson(store, true));
 			Toast.makeText(getApplicationContext(), "Settings Saved", Toast.LENGTH_LONG).show();
 		} catch (IOException e) {
@@ -179,23 +186,32 @@ public class SettingsActivity extends Activity{
 		finish();
 	}
 
+	/**
+	 * Reads in Settings from previous time.
+	 * @return
+	 */
 	private String readFromSettings()
 	{
 		String ret = "";
 
 		try {
+			//Open desired file
 			InputStream inputStream = openFileInput("settings.txt");
 
+			//Check for null
 			if ( inputStream != null ) {
 				InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
 				BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+				
 				String receiveString = "";
 				StringBuilder stringBuilder = new StringBuilder();
 
+				//While still to read, append next line onto stringbuilder
 				while ( (receiveString = bufferedReader.readLine()) != null ) {
 					stringBuilder.append(receiveString);
 				}
 
+				//Close the file reader
 				inputStream.close();
 				ret = stringBuilder.toString();
 			}
@@ -209,12 +225,16 @@ public class SettingsActivity extends Activity{
 		return ret;
 	}
 
-
+	/**
+	 * Write to Settings file.
+	 * @param json
+	 */
 	private void writeToSettings(String json)
 	{
 		String filename = "settings.txt";
 		FileOutputStream outputStream;
 
+		//Write to application's directory
 		try {
 			outputStream = openFileOutput(filename, Context.MODE_PRIVATE);
 			outputStream.write(json.getBytes());
