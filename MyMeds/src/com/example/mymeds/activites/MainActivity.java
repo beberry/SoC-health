@@ -2,20 +2,13 @@ package com.example.mymeds.activites;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Scanner;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.TabActivity;
 import android.content.Context;
@@ -37,7 +30,6 @@ import com.example.mymeds.tabs.AllMeds;
 import com.example.mymeds.tabs.FutureMeds;
 import com.example.mymeds.tabs.TodaysMeds;
 import com.example.mymeds.util.Alarms;
-import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.JSONUtils;
 import com.example.mymeds.util.MedFetcher;
 import com.example.mymeds.util.Medication;
