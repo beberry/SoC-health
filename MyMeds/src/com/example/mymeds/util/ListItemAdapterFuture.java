@@ -23,17 +23,15 @@ public class ListItemAdapterFuture extends BaseAdapter {
 	
 	//ArrayList to store all medication found between the two dates
 	ArrayList<futureMedDetails> data = null;
-	
-	
-	int count=0;
-
+		
+	//Constructor
 	public ListItemAdapterFuture(Context mContext,int layoutID, ArrayList<futureMedDetails> medData) {
 
 		super();
 
 		this.mContext = mContext;
+		//Store information to be displayed
 		this.data = medData;
-		this.count=medData.size();
 	}
 
 
