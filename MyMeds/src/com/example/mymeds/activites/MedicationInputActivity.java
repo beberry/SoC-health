@@ -329,16 +329,16 @@ public class MedicationInputActivity extends Activity{
 
 		meds.add(med);
 
-		//Write JSON to the local file on device.
-		JSONUtils.writeToFile(meds, this);
+		JSONUtils.writeToFile(meds, this, true);
+
 
 		Intent intent = new Intent();
 		intent.putParcelableArrayListExtra("meddata", meds);
 		setResult(100, intent);
 
 		//Attach alarm to new medication.
-		Alarms alarm = new Alarms(getApplicationContext());
-		alarm.addAlarm(size);
+		//Alarms alarm = new Alarms(getApplicationContext());
+		//alarm.addAlarm(size);
 
 		finish();
 	}

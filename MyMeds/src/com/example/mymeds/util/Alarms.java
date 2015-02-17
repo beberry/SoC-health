@@ -29,7 +29,7 @@ public class Alarms {
 	 * @return
 	 */
 	public Medication getMedicationById(int actualIndex) {
-		ArrayList<Medication> meds = JSONUtils.loadValues(JSONUtils.readFile(context), context);
+		ArrayList<Medication> meds = JSONUtils.loadValues(JSONUtils.readFile(context, false), context);
 		int index;
 		for (int i = 0; i < meds.size(); i++) {
 			index = meds.get(i).getIndex();
@@ -44,7 +44,7 @@ public class Alarms {
 	 * This sets alarms for all Medication's.
 	 */
 	public void setAllAlarms() {
-		ArrayList<Medication> medicationList = JSONUtils.loadValues(JSONUtils.readFile(context), context);
+		ArrayList<Medication> medicationList = JSONUtils.loadValues(JSONUtils.readFile(context, false), context);
 		ArrayList<Frequency> frequencyList;
 		Medication med;
 		Frequency freq;

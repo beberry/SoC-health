@@ -1,6 +1,8 @@
 package com.example.mymeds.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import android.content.Context;
 
@@ -152,7 +154,14 @@ public class MedFetcher {
 			}
 		}
 		
-		JSONUtils.writeToFile(allmeds, mContext);
+		JSONUtils.writeToFile(allmeds, mContext, true);
 	}
+	
+	//Convert year, month, day into milliseconds
+		public static long milliDate(int year, int month, int day)
+		{
+			Calendar cal = new GregorianCalendar(year, month, day);
+			return cal.getTimeInMillis();
+		}
 
 }

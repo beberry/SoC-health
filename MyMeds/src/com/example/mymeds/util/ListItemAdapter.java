@@ -125,14 +125,16 @@ public class ListItemAdapter extends BaseAdapter {
 							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 					
-					
+					//Update the locally held todays meds, knock out the first frequency
+					data.get(position).getFrequency().remove(0);
+					JSONUtils.writeToFile(data, mContext, false);					
 					//Modify and update the numbers of pills remaining for this pill
 					mMedFetcher.modifyQuantity(toAdd.getIndex(), toAdd.getFrequency().get(timesTaken).getUnits());
 					//Force refresh of data
-					data = JSONUtils.loadValues(JSONUtils.readFile(mContext), mContext);
+					ArrayList<Medication> newData = JSONUtils.loadValues(JSONUtils.readFile(mContext, true), mContext);
 					Log.d("sender", "Broadcasting message");
 					Intent intent = new Intent("Med-Taken");
-					intent.putParcelableArrayListExtra("medData", data);
+					intent.putParcelableArrayListExtra("medData", newData);
 					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
 				else{
