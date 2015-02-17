@@ -2,8 +2,8 @@
     "medication": [
         {
             "index": 0,
-            "name": "Hydrocortisone",
-            "displayName": "Steroid Cream",
+            "name": "Diclofenac",
+            "displayName": "Arthritis",
             "description": "easy",
             "type": "pill",
             "startTime": 1423846006,
@@ -20,8 +20,8 @@
         },
         {
             "index": 1,
-            "name": "Oxycodone",
-            "displayName": "Opium",
+            "name": "Ramipril",
+            "displayName": "Heart Problems",
             "description": "easy",
             "type": "pill",
             "startTime": 1423483966000,

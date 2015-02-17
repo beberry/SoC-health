@@ -76,7 +76,7 @@ public class MainActivity extends TabActivity {
 		intentFuture.putParcelableArrayListExtra("meds", allmeds);
 		TabSpec tabSpecProfile = tabHost
 				.newTabSpec("My Record")
-				.setIndicator("Future", null)
+				.setIndicator("My Record", null)
 				.setContent(intentFuture);
 
 		tabHost.setBackgroundResource(R.drawable.ab_stacked_solid_health);;
