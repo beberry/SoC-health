@@ -1,18 +1,11 @@
 package com.example.mymeds.activites;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Scanner;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -20,10 +13,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -42,7 +33,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mymeds.R;
-import com.example.mymeds.libs.PojoMapper;
 import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.JSONUtils;
@@ -62,8 +52,7 @@ public class MedicationInputActivity extends Activity{
 	private EditText editRemaining;
 	private EditText editRepeatPeriod;
 
-	PopupWindow datePicker;
-	PopupWindow timePicker;
+	PopupWindow datePicker, timePicker;
 
 	long startDate, def, sMilli, eMilli = 0;
 	long actualStartDate, actualEndDate;
@@ -79,7 +68,6 @@ public class MedicationInputActivity extends Activity{
 
 	final int DAY = 86400000;
 	static final int DATE_DIALOG_ID = 999;
-	static final int TIME_DIALOG_ID = 100;
 
 	@SuppressWarnings("unused")
 	@Override
@@ -104,7 +92,6 @@ public class MedicationInputActivity extends Activity{
 		editStartDate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Log.d("Problem Determination", "editStartDate clicked");
 				dateStartPressed = true;
 				onDateEntrySelected(dateStartPressed, System.currentTimeMillis());
 			}
@@ -167,6 +154,7 @@ public class MedicationInputActivity extends Activity{
 		return null;
 	}
 
+	//Add on date set listener to Date Picker Dialog.
 	private DatePickerDialog.OnDateSetListener datePickerListener = new DatePickerDialog.OnDateSetListener() {
 
 		// when dialog box is closed, below method will be called.
@@ -177,11 +165,12 @@ public class MedicationInputActivity extends Activity{
 			month = selectedMonth;
 			day = selectedDay;
 
+			//Set format for date to be obtained in.
 			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
 			Calendar c = new GregorianCalendar(year, month, day);
 
-
+			//Obtain date in text and milliseconds.
 			String date = formatter.format(c.getTime());
 			if (dateStartPressed)
 			{
@@ -236,11 +225,14 @@ public class MedicationInputActivity extends Activity{
 				TimePickerDialog tpd = new TimePickerDialog(MedicationInputActivity.this, //same Activity Context like before
 						new TimePickerDialog.OnTimeSetListener() {
 
+					//Fires the Time Picker Dialog.
 					@Override
 					public void onTimeSet(TimePicker view, int hour,
 							int minute) {
-
+					
 						String finalHour = String.valueOf(hour);
+						
+						//Check length of Hour is 2 chars.
 						if(finalHour.length() < 2)
 						{
 							finalHour = '0' + finalHour; //Prevent removal of 0's at start
@@ -280,8 +272,6 @@ public class MedicationInputActivity extends Activity{
 		String displayName = editDisplayName.getText().toString();
 		String description = editDescription.getText().toString();
 		String type = (String) spinnerMedicationType.getSelectedItem();
-		String startDate = editStartDate.getText().toString();
-		String endDate = editEndDate.getText().toString();
 		String remaining = editRemaining.getText().toString();
 		String repeatPeriod = editRepeatPeriod.getText().toString();
 
@@ -311,7 +301,7 @@ public class MedicationInputActivity extends Activity{
 			listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
 
 		}
-		
+
 		//Store in MedicationStore
 		ArrayList<Frequency> freq = new ArrayList<Frequency>();
 		Medication med = new Medication();
@@ -339,15 +329,17 @@ public class MedicationInputActivity extends Activity{
 
 		meds.add(med);
 
+		//Write JSON to the local file on device.
 		JSONUtils.writeToFile(meds, this);
 
 		Intent intent = new Intent();
 		intent.putParcelableArrayListExtra("meddata", meds);
 		setResult(100, intent);
-		
+
+		//Attach alarm to new medication.
 		Alarms alarm = new Alarms(getApplicationContext());
 		alarm.addAlarm(size);
-		
+
 		finish();
 	}
 
@@ -383,7 +375,6 @@ public class MedicationInputActivity extends Activity{
 
 		headerRow.addView(headerTitle);
 
-
 		//Dosage
 		TextView headerDosage = new TextView(this);
 
@@ -393,7 +384,6 @@ public class MedicationInputActivity extends Activity{
 		headerDosage.setGravity(Gravity.CENTER);
 
 		headerRow.addView(headerDosage);	
-
 
 		//Units
 		TextView headerUnits = new TextView(this);
