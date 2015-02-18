@@ -66,11 +66,11 @@ public class MainActivity extends TabActivity {
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
-
+		long today = MedFetcher.milliDate(year, month, day);
+		
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
-		long today = MedFetcher.milliDate(year, month, day);
-
+		
 
 		allMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), true), this.getApplicationContext());
 
@@ -95,6 +95,8 @@ public class MainActivity extends TabActivity {
 				new IntentFilter("Med-Taken"));
 		LocalBroadcastManager.getInstance(this).registerReceiver(mEditedMessageReceiver,
 				new IntentFilter("Med-Edited"));
+		LocalBroadcastManager.getInstance(this).registerReceiver(mEditedMessageReceiver,
+				new IntentFilter("Med-Added"));
 	}
 
 	// Our handler for received Intents. This will be called whenever a pill taken button is pressed
@@ -130,7 +132,16 @@ public class MainActivity extends TabActivity {
 	
 	private void updateDataAndActivities(int tabToShow){
 		JSONUtils.writeToFile(allMeds, mContext, true);
-		JSONUtils.writeToFile(todaysMeds, mContext, false);
+		
+		final Calendar c = Calendar.getInstance();
+		int year = c.get(Calendar.YEAR);
+		int month = c.get(Calendar.MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		long today = MedFetcher.milliDate(year, month, day);
+		
+		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false);
+		
+		//JSONUtils.writeToFile(todaysMeds, mContext, false);
 		//Force refresh of data
 		LocalActivityManager manager = getLocalActivityManager();
         manager.destroyActivity("Today's Medication", true);

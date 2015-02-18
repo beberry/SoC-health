@@ -15,6 +15,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -366,6 +367,11 @@ public class MedicationInputActivity extends Activity{
 			Toast.makeText(getApplicationContext(), "The input is not valid!", Toast.LENGTH_LONG).show();
 		}
 
+		
+		Intent intent = new Intent("Med-Added");
+		intent.putParcelableArrayListExtra("allMeds", meds);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+		
 		//Attach alarm to new medication.
 		//Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.addAlarm(size);
