@@ -2,16 +2,17 @@ package com.example.mymeds.util;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 
+import java.util.Calendar;
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,6 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MedicationEditActivity;
 
@@ -30,7 +30,8 @@ import com.example.mymeds.activites.MedicationEditActivity;
 public class ListItemAdapter extends BaseAdapter {
 
 	Context mContext;
-
+	boolean isPillTaken = false;
+	
 	//stores returned medication
 	ArrayList<Medication> data = null;
 
@@ -57,14 +58,12 @@ public class ListItemAdapter extends BaseAdapter {
 
 		tempTable = table;
 
-
 		for( int t = 0;t < data.get(position).getFrequency().size(); t++)
 		{				
-
 			if(MedFetcher.toBeTakenToday(data.get(position).getFrequency().get(t).getTaken()))
 			{
 				//create new row for table
-				final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+				final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.todaysmeds_table_row, null);
 
 				//get the medication needing added
 				final Medication toAdd = data.get(position);
@@ -76,6 +75,7 @@ public class ListItemAdapter extends BaseAdapter {
 
 				//populate the second textView with the time the medication need to be taken	
 				final TextView t2 = (TextView) row.findViewById(R.id.time);
+	
 
 				//populate the third tab with a button to say the medication has been taken
 				String takeTime = String.valueOf(data.get(position).getFrequency().get(t).getTime());
@@ -84,8 +84,8 @@ public class ListItemAdapter extends BaseAdapter {
 				String h = takeTime.substring( 0,2);
 				String m = takeTime.substring( 2,takeTime.length());
 
-				t2.setText( h+ ":" + m);			
-
+				t2.setText( h+ ":" + m);		
+				
 				//set text size dependent on user settings
 				SharedPreferences prefs = mContext.getSharedPreferences(
 						"com.example.mymeds", Context.MODE_PRIVATE);
@@ -100,62 +100,66 @@ public class ListItemAdapter extends BaseAdapter {
 					t2.setTextAppearance(mContext, R.style.textNormal);
 				}
 
-				//populate the third column with a button to indicate if pill has been taken
-				final Button taken = (Button) row.findViewById(R.id.pillTaken);	
+		
+	
+		final int index = t;	
+				
+		//populate the third column with a button to indicate if pill has been taken
+		final Button taken = (Button) row.findViewById(R.id.pillTaken);	
+		
+		//on click listenter for when button is pressed
+		taken.setOnClickListener(new OnClickListener() {
+					
+			@Override
+			public void onClick(View v) {
+				
+				//Get user confirmation
+				showDialog();
+				
+				if(isPillTaken == true)
+				{
+					//remove the row the nutton belong to from the table
+					tempTable.removeView(row);
 
-				final int index = t;	
+					//if there are more instances of the medication being taken that day
+					if(toAdd.getFrequency().size()>1){
 
-				//on click listenter for when button is pressed
-				taken.setOnClickListener(new OnClickListener() {
+						//incremnet to access the details of the next time drug is to be taken
+						timesTaken = timesTaken++;
 
+						//get time to take, split up add colon and display
+						String takeTime = (String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
 
-					@Override
-					public void onClick(View v) {
+						String h = takeTime.substring( 0,2);
+						String m = takeTime.substring( 2,takeTime.length());
 
-						Toast.makeText(mContext, toAdd.getDisplayName()+" "+timesTaken  , Toast.LENGTH_SHORT).show();
+						t2.setText( h + ":" + m);
 
-						//remove the row the nutton belong to from the table
-						tempTable.removeView(row);
+						row.setPadding(5, 20, 5, 20);
 
-
-						int thisTaken = index;
-						//int thisTaken = timesTaken;
-
-						//				//if there are more instances of the medication being taken that day
-						//				if(toAdd.getFrequency().size()>1){
-						//					
-						//					//incremnet to access the details of the next time drug is to be taken
-						//					timesTaken = timesTaken++;
-						//					
-						//					//get time to take, split up add colon and display
-						//					String takeTime = (String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
-						//
-						//					String h = takeTime.substring( 0,2);
-						//					String m = takeTime.substring( 2,takeTime.length());
-						//
-						//					t2.setText( h+ ":" + m);
-						//					
-						//					row.setPadding(5, 20, 5, 20);
-						//					
-						//					//replace the old row with the new one
-						//					tempTable.addView(row, new TableLayout.LayoutParams(
-						//							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-//toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
-						//					
-						//				}
-
-						Intent intent = new Intent("Med-Taken");
-						intent.putExtra("position", position);
-						intent.putExtra("timesTaken", thisTaken);
-						LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+						//replace the old row with the new one
+						tempTable.addView(row, new TableLayout.LayoutParams(
+								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+						toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
 
 					}
-				});
-				row.setPadding(5, 20, 5, 20);
+					
+					Intent intent = new Intent("Med-Taken");
+					intent.putExtra("position", position);
 
-				//add row to table
-				tempTable.addView(row, new TableLayout.LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+					intent.putExtra("timesTaken", index);
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+				}
+				
+			}
+		});
+		row.setPadding(5, 20, 5, 20);
+		
+		//add row to table
+		tempTable.addView(row, new TableLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		
+				
 			}
 		}
 		return root;
@@ -251,5 +255,34 @@ public class ListItemAdapter extends BaseAdapter {
 		return null;
 	}
 
+	/**
+	 * Dialog to confirm if a Pill is taken or not.
+	 * Changes global var: isPillTaken, if true
+	 */
+	private void showDialog()
+	{
+		//Reset isPillTaken value
+		isPillTaken = false;
+		
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        switch (which){
+		        case DialogInterface.BUTTON_POSITIVE:
+		            //Yes button clicked
+		        	isPillTaken = true;
+		            break;
 
+		        case DialogInterface.BUTTON_NEGATIVE:
+		            //No button clicked
+		        	isPillTaken = false;
+		            break;
+		        }
+		    }
+		};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		builder.setMessage("Are you sure medication has been taken?").setPositiveButton("Yes", dialogClickListener)
+		    .setNegativeButton("No", dialogClickListener).show();
+	}	
 }

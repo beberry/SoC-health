@@ -19,6 +19,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="Medicine"
             android:textSize="20sp"
@@ -29,6 +30,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="Time"
             android:textSize="20sp"
@@ -39,15 +41,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:gravity="center"
             android:text="Pill Taken"
             android:textSize="20sp"
             android:textStyle="bold" />
     </TableRow>
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+
 
         <TableLayout
             android:id="@+id/listview"
@@ -55,6 +56,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="70dp"
-            android:stretchColumns="1" />
-    </ScrollView>
+            android:layout_centerHorizontal="true"
+            android:stretchColumns="0,1,2" />
+
 </RelativeLayout>
