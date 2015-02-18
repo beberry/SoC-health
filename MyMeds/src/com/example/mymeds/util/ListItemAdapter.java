@@ -176,35 +176,40 @@ public class ListItemAdapter extends BaseAdapter {
 		final Medication toAdd = data.get(position);
 
 		//populate the first column with the name of the medication
-		TextView t1 = (TextView) row.findViewById(R.id.name);
+		TextView t1 = (TextView) row.findViewById(R.id.realName);
 		t1.setText(data.get(position).getDisplayName());
 
 		//display the amount of medicaiton
-		TextView t2 = (TextView) row.findViewById(R.id.ammountLeft);
-		t2.setText(String.valueOf(data.get(position).getRemaining()));
+		TextView t2 = (TextView) row.findViewById(R.id.name);
+		t2.setText(data.get(position).getName());
 
+		TextView t3 = (TextView) row.findViewById(R.id.ammountLeft);
+		t3.setText(String.valueOf(data.get(position).getRemaining()));
+		
+		boolean refill = calcRefill(data.get(position).getFrequency(), data.get(position).getRepeatPeriod(), data.get(position).getRemaining());
+		
+		if(refill){
+				t3.setTextColor(Color.RED);
+			}		
+		else{
+				t3.setTextColor(Color.GREEN);
+			}
+				
+		
+		
 		SharedPreferences prefs = mContext.getSharedPreferences(
 				"com.example.mymeds", Context.MODE_PRIVATE);
 		if(prefs.getInt("textSize", -1) == 1)
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);
 			t2.setTextAppearance(mContext, R.style.textLarge);
+			t3.setTextAppearance(mContext, R.style.textLarge);
 		}
 		else
 		{
 			t1.setTextAppearance(mContext, R.style.textNormal);
 			t2.setTextAppearance(mContext, R.style.textNormal);
-		}
-
-
-		//display status colour of stock level
-		TextView t4 = (TextView) row.findViewById(R.id.status);
-
-		//if more than 25 units green colour, if less red
-		if(data.get(position).getRemaining()>=25){
-			t4.setBackgroundColor(Color.GREEN);
-		}else{
-			t4.setBackgroundColor(Color.RED);
+			t3.setTextAppearance(mContext, R.style.textLarge);
 		}
 
 		row.setPadding(5, 20, 5, 20);
@@ -233,6 +238,27 @@ public class ListItemAdapter extends BaseAdapter {
 		return root;
 	}
 
+	private boolean calcRefill(ArrayList<Frequency> frequency, int repeat, int amountLeft)
+		{
+			
+			int needOneDay = 0;
+			
+			for( int i = 0; i < frequency.size(); i++){
+			
+				needOneDay += frequency.get(i).getUnits();
+			}
+			
+			int daysLeft = (amountLeft / needOneDay) * repeat;
+			
+			if(daysLeft < 14){			
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	
+	
 	@Override
 	public int getCount() {
 		return 0;

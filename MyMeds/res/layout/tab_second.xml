@@ -17,21 +17,34 @@
         android:textStyle="bold"
         android:textSize="30sp" />
 
-    <TableRow
+   	<TableRow
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:showDividers="middle" >
 
+   	            <TextView
+            android:id="@+id/headerRName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Medication"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+   	    
+   	    
         <TextView
             android:id="@+id/headerName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Medicine"
+            android:text="For"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+
 
         <TextView
             android:id="@+id/headerTaken"
@@ -40,16 +53,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="Remaining"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/headerStatus"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Status"
             android:textSize="20sp"
             android:textStyle="bold" />
     </TableRow>
