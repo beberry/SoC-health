@@ -51,7 +51,7 @@ public class TodaysMeds extends Activity {
 			t3.setTextAppearance(mContext, R.style.textNormal);
 		}
 
-		for(int i=0;i<meds.size();i++){
+		for(int i=0;i<meds.size();i++){						
 			adapter.setFirstView(i, this.findViewById(R.layout.tab_first), listViewItems);
 		}
 		listViewItems.requestLayout();

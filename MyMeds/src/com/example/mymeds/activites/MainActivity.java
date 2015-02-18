@@ -106,16 +106,22 @@ public class MainActivity extends TabActivity {
 			// Get extra data included in the Intent
 			//Update the locally held todays meds, knock out the first frequency
 			int position = intent.getIntExtra("position", 0);
-
+			int timesTaken = intent.getIntExtra("timesTaken", 0);
+			
+			todaysMeds.get(position).getFrequency().get(timesTaken).setTaken(System.currentTimeMillis());		
+			
 			//Modify and update the numbers of pills remaining for this pill
-			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits());			
+			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits(), System.currentTimeMillis(), timesTaken);			
+
+			updateData();
+			
 			if(todaysMeds.get(position).getFrequency().size()==1){
 				todaysMeds.remove(position);
 			}
 			else{
-				todaysMeds.get(position).getFrequency().remove(0);
+				todaysMeds.get(position).getFrequency().remove(timesTaken);
 			}
-			updateDataAndActivities(0);
+			updateActivities(0);
 		}
 	};
 	
@@ -126,11 +132,14 @@ public class MainActivity extends TabActivity {
 				// Get extra data included in the Intent
 				//Update the locally held allMeds
 				allMeds = intent.getParcelableArrayListExtra("allMeds");
-				updateDataAndActivities(1);
+				updateData();
+				updateActivities(1);
 			}
 		};
-	
-	private void updateDataAndActivities(int tabToShow){
+
+		
+	private void updateData()
+	{
 		JSONUtils.writeToFile(allMeds, mContext, true);
 		
 		
@@ -143,9 +152,13 @@ public class MainActivity extends TabActivity {
 		long today = MedFetcher.milliDate(year, month, day);
 		
 		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false);
-		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
+//		JSONUtils.writeToFile(todaysMeds, mContext, false);
+///		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 
-		//JSONUtils.writeToFile(todaysMeds, mContext, false);
+	}
+		
+	private void updateActivities(int tabToShow){
+
 		//Force refresh of data
 		LocalActivityManager manager = getLocalActivityManager();
         manager.destroyActivity("Today's Medication", true);

@@ -2,6 +2,7 @@ package com.example.mymeds.util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import android.content.Context;
@@ -147,7 +148,7 @@ public class MedFetcher {
 	 * @param medId Medication to have it's quantity adjusted
 	 * @param quantConsumed Quantity of medication that has been consumed
 	 */
-	public void modifyQuantity(int medId, int quantConsumed)
+	public void modifyQuantity(int medId, int quantConsumed, long timeTaken, int freqNum)
 	{
 		for(int i=0; i<allmeds.size(); i++){
 			Medication currentMed = allmeds.get(i);
@@ -157,6 +158,9 @@ public class MedFetcher {
 				int remaining = currentMed.getRemaining()-quantConsumed;
 				modMed.setRemaining(remaining>0 ? remaining : 0);
 				allmeds.set(i, modMed);
+				
+				currentMed.getFrequency().get(freqNum).setTaken(timeTaken);
+			
 				break;
 			}
 		}
@@ -169,6 +173,22 @@ public class MedFetcher {
 		{
 			Calendar cal = new GregorianCalendar(year, month, day);
 			return cal.getTimeInMillis();
+		}
+		
+		public static boolean toBeTakenToday(long lastTaken){
+			
+			Date td = new Date();
+			long diff = td.getTime() - lastTaken;
+			
+			
+			if(diff > SECONDS_IN_DAY)
+			{
+				return true;
+			}
+			else
+			{
+				return false;   	     
+			}
 		}
 
 }

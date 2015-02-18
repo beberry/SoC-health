@@ -14,7 +14,8 @@
             	{
             		"time": "0900",
             		"dosage": "500mg",
-            		"units": 2
+            		"units": 2,
+            		"taken": 0000000000000
             	}
             ]
         },
@@ -32,12 +33,15 @@
                 {
                     "time": "1000",
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 2,
+            		"taken": 0000000000000
+                    
                 },
                 {
                     "time": "1200",
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 2,
+            		"taken": 0000000000000
                 }
             ]
         },
@@ -55,22 +59,26 @@
                 {
                     "time": "1000",
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 2,
+            		"taken": 0000000000000
                 },
                 {
                     "time": "1300",
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 2,
+            		"taken": 0000000000000
                 },
                 {
                     "time": "1700",
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 2,
+            		"taken": 0000000000000
                 },
                 {
                     "time": "2100",
                     "dosage": "500mg",
-                    "units": 2
+                    "units": 2,
+            		"taken": 0000000000000
                 }
             ]
         }

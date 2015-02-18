@@ -51,7 +51,10 @@ public class JSONUtils {
 
 			fos.write(med.getBytes());
 
+			fos.flush();
 			fos.close();
+			
+			Log.w("Finished Write","Finished Write");
 		}
 		catch (Exception e)
 		{
@@ -116,6 +119,7 @@ public class JSONUtils {
 			Log.w("JSONUtils", "File could not be located, will create");
 		}
 		
+		Log.w("In JSON", json.toString());
 		return json.toString();
 	}
 	
@@ -153,10 +157,12 @@ public class JSONUtils {
 						String time = frequencyObject.getString("time");
 						String dosage = frequencyObject.getString("dosage");
 						int units = frequencyObject.getInt("units");
+						long taken = frequencyObject.getLong("taken");
 						Frequency frequency2 = new Frequency();
 						frequency2.setDosage(dosage);
 						frequency2.setUnits(units);
 						frequency2.setTime(time);
+						frequency2.setTaken(taken);
 						frequencyList.add(frequency2);
 					}
 

@@ -11,7 +11,8 @@ public class Frequency implements Parcelable{
 
 	String dosage, time;
 	int units;
-
+	long taken;
+	
 	// constructor
 	public Frequency(){
 
@@ -41,13 +42,22 @@ public class Frequency implements Parcelable{
 		this.units = units;
 	}
 
+	
+	public long getTaken() {
+		return taken;
+	}
+
+	public void setTaken(long taken) {
+		this.taken = taken;
+	}
+
 
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(dosage);
 		dest.writeString(time);
 		dest.writeInt(units);
-
+		dest.writeLong(taken);
 	}
 
 	public static final Parcelable.Creator<Frequency> CREATOR
@@ -70,6 +80,7 @@ public class Frequency implements Parcelable{
 
 		time = in.readString();
 		units = in.readInt();
+		taken = in.readLong();
 	}
 
 	@Override
