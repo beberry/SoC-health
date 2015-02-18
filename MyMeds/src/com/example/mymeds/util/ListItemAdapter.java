@@ -58,8 +58,10 @@ public class ListItemAdapter extends BaseAdapter {
 
 		tempTable = table;
 
+		//for every time the medication needs to be taken
 		for( int t = 0;t < data.get(position).getFrequency().size(); t++)
-		{				
+		{	
+			//if the medicaiton has already been taken at that time for the day
 			if(MedFetcher.toBeTakenToday(data.get(position).getFrequency().get(t).getTaken()))
 			{
 				//create new row for table
@@ -101,7 +103,7 @@ public class ListItemAdapter extends BaseAdapter {
 				}
 
 		
-	
+		//stores the indes of the frequency object
 		final int index = t;	
 				
 		//populate the third column with a button to indicate if pill has been taken
@@ -112,11 +114,10 @@ public class ListItemAdapter extends BaseAdapter {
 					
 			@Override
 			public void onClick(View v) {
-				
+			
 				//Get user confirmation
 				showDialog(position, index);
-				
-		
+			
 			}
 		});
 		row.setPadding(5, 20, 5, 20);
@@ -150,12 +151,21 @@ public class ListItemAdapter extends BaseAdapter {
 		TextView t2 = (TextView) row.findViewById(R.id.name);
 		t2.setText(data.get(position).getDisplayName());
 		
-
+		//display the number of units left
 		TextView t3 = (TextView) row.findViewById(R.id.ammountLeft);
 		t3.setText(String.valueOf(data.get(position).getRemaining()));
 		
-		boolean refill = calcRefill(data.get(position).getFrequency(), data.get(position).getRepeatPeriod(), data.get(position).getRemaining());
+		//flag to tell what colour the text should be
+		boolean refill = true;
 		
+		//if there are more than 0 pills
+		if(data.get(position).getRemaining() != 0)
+		{
+			//caculate if a refill is needed
+			refill = calcRefill(data.get(position).getFrequency(), data.get(position).getRepeatPeriod(), data.get(position).getRemaining());	
+		}
+		
+		//if refill is needed disply amount left in red, if not green
 		if(refill){
 				t3.setTextColor(Color.RED);
 			}		
@@ -206,18 +216,28 @@ public class ListItemAdapter extends BaseAdapter {
 		return root;
 	}
 
+	/**
+	 * Method to convert date in separate integers into milliseconds
+	 * @param frequenct The details of each time the medication is taken
+	 * @param repeat The number of days between taking the medication 
+	 * @param amountLeft How many units are left
+	 * @return boolean Indicates if the user will require a refill soon
+	 */
 	private boolean calcRefill(ArrayList<Frequency> frequency, int repeat, int amountLeft)
 		{
-			
+			//stores how many units needed in a day
 			int needOneDay = 0;
 			
+			//add up all the units needed for a day
 			for( int i = 0; i < frequency.size(); i++){
 			
 				needOneDay += frequency.get(i).getUnits();
 			}
 			
+			//caculate how many days left the user has of the medication
 			int daysLeft = (amountLeft / needOneDay) * repeat;
 			
+			//if less than 2 weeks then indicate refill needed
 			if(daysLeft < 14){			
 				return true;
 			}
@@ -266,13 +286,12 @@ public class ListItemAdapter extends BaseAdapter {
 		    public void onClick(DialogInterface dialog, int which) {
 		        switch (which){
 		        case DialogInterface.BUTTON_POSITIVE:
-		            //Yes button clicked
+		            //Yes button clicked broadcast medication has been taken
 					Intent intent = new Intent("Med-Taken");
+					//pass medication and frequency indexs
 					intent.putExtra("position", p);
-
 					intent.putExtra("timesTaken", ind);
-					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-		
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);		
 		            break;
 
 		        case DialogInterface.BUTTON_NEGATIVE:
@@ -283,6 +302,7 @@ public class ListItemAdapter extends BaseAdapter {
 		    }
 		};
 
+		//options for dialogue box
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 		builder.setMessage("Are you sure medication has been taken?").setPositiveButton("Yes", dialogClickListener)
 		    .setNegativeButton("No", dialogClickListener).show();

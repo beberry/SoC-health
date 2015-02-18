@@ -108,19 +108,26 @@ public class MainActivity extends TabActivity {
 			int position = intent.getIntExtra("position", 0);
 			int timesTaken = intent.getIntExtra("timesTaken", 0);
 			
+			//set the frequenceys object last time taken to the current time in milliseconds
 			todaysMeds.get(position).getFrequency().get(timesTaken).setTaken(System.currentTimeMillis());		
 			
 			//Modify and update the numbers of pills remaining for this pill
 			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits(), System.currentTimeMillis(), timesTaken);			
 
+			//update the JSON files with changes
 			updateData();
 			
+			//remove the taken medication from the current list of todays medication
+			//if it was the last time today, remove the medication from the list
 			if(todaysMeds.get(position).getFrequency().size()==1){
 				todaysMeds.remove(position);
 			}
+			//if the medication is to be taken more times remove the current one
 			else{
 				todaysMeds.get(position).getFrequency().remove(timesTaken);
 			}
+			
+			//update the activities with the changes
 			updateActivities(0);
 		}
 	};
@@ -132,34 +139,39 @@ public class MainActivity extends TabActivity {
 				// Get extra data included in the Intent
 				//Update the locally held allMeds
 				allMeds = intent.getParcelableArrayListExtra("allMeds");
+				//update the JSON with the edit
 				updateData();
+				//update the informatin on the activites
 				updateActivities(1);
 			}
 		};
 
-		
+	//update the data stored on the JSON files
 	private void updateData()
 	{
+		//write an changes for the all medication JSON
 		JSONUtils.writeToFile(allMeds, mContext, true);
 		
-		
+		//update the ArrayList in medFetcher
 		mMedFetcher.resetMeds(allMeds);
 		
+		//Get todays date
 		final Calendar c = Calendar.getInstance();
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
 		long today = MedFetcher.milliDate(year, month, day);
 		
+		//recalculate and write all of todays medication again (incase new ones have been added for the day)
 		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false);
-//		JSONUtils.writeToFile(todaysMeds, mContext, false);
-///		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
-
+		//reload the medicatio for the day
+		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 	}
-		
+	
+	//update the activites with the new information
 	private void updateActivities(int tabToShow){
 
-		//Force refresh of data
+		//Destroy all the old activies 
 		LocalActivityManager manager = getLocalActivityManager();
         manager.destroyActivity("Today's Medication", true);
         manager.destroyActivity("All Medication", true);
@@ -169,6 +181,8 @@ public class MainActivity extends TabActivity {
 			public void onTabChanged(String tabId){
 			}});
         tabHost.clearAllTabs();
+        
+        //create the new activites
 		populateTabs(tabToShow);
 	}
 
@@ -176,6 +190,7 @@ public class MainActivity extends TabActivity {
 		super.onResume();
 	}
 	
+	//Create the tab activites
 	private void populateTabs(int tabToGoTo){
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		intentToday.putParcelableArrayListExtra("meds", todaysMeds);
@@ -207,12 +222,14 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(tabToGoTo);
 		
+		//set the tab background colours, highlighting the currently selected one
 		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
 		tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
 		tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));
 		
 		tabHost.getTabWidget().getChildAt(tabToGoTo).setBackgroundColor(Color.parseColor("#71B238"));
 		
+		//when new tab is selcted change its colour to high light it is selected
 		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
 			@Override
 			public void onTabChanged(String tabId) {
