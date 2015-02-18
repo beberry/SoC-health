@@ -169,6 +169,9 @@ public class MedicationEditActivity extends Activity{
 				String endDateFormatted   = new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date (editMed.getEndTime()));
 				this.editStartDate.setText(startDateFormatted);
 				this.editEndDate.setText(endDateFormatted);
+				
+				this.actualStartDate = editMed.getStartTime();
+				this.actualEndDate = editMed.getEndTime();
 			}
 			catch(Exception e)
 			{
@@ -330,7 +333,7 @@ public class MedicationEditActivity extends Activity{
 		// Set the existing values.
 		((EditText)inputRow.findViewById(R.id.timeTextBox)).setText(freq.getTime());
 		((EditText)inputRow.findViewById(R.id.dosageTextBox)).setText(freq.getDosage());
-		((EditText)inputRow.findViewById(R.id.unitsTextBox)).setText("Cream"+freq.getUnits());
+		((EditText)inputRow.findViewById(R.id.unitsTextBox)).setText(""+freq.getUnits());
 		
 		//Button to remove the row.
 		Button removeButton = (Button)inputRow.findViewById(R.id.buttonRemoveFrequency);
@@ -415,7 +418,7 @@ public class MedicationEditActivity extends Activity{
 		String repeatPeriod = editRepeatPeriod.getText().toString();
 
 		List<Integer> listTime = new ArrayList<Integer>();
-		List<Integer> listDosage = new ArrayList<Integer>();
+		List<String> listDosage = new ArrayList<String>();
 		List<Integer> listUnit = new ArrayList<Integer>();
 
 		TableRow tableRow;
@@ -433,12 +436,13 @@ public class MedicationEditActivity extends Activity{
 			frequencyTime = (EditText) tableRow.getChildAt(0); //Time
 			frequencyDosage = (EditText) tableRow.getChildAt(1); //Dosage
 			frequencyUnit = (EditText) tableRow.getChildAt(2); //Unit
-
+			
+			listDosage.add(frequencyDosage.getText().toString());
+			
 			// Make sure that the app does not crash on empty / invalid input for int fields.
 			try{
 				//Add cell data to Lists (parse to int)
 				listTime.add(Integer.valueOf(frequencyTime.getText().toString()));
-				listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
 				listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
 			}
 			catch(Exception e)
@@ -456,7 +460,7 @@ public class MedicationEditActivity extends Activity{
 		med.setType(type);
 		med.setStartTime(actualStartDate);
 		med.setEndTime(actualEndDate);
-		
+
 		// Make sure that the app does not crash on empty / invalid input for int fields.
 		try {
 			med.setRemaining(Integer.valueOf(remaining));
@@ -484,7 +488,9 @@ public class MedicationEditActivity extends Activity{
 		
 		if(dataValid)
 		{
-			// There were no problems with integer input data, save data.
+			// There were no problems with integer input data, remove the old element and save data.
+			this.meds.remove(this.editIndex);
+			
 			meds.add(med);
 			
 			JSONUtils.writeToFile(meds, this, true);
