@@ -9,10 +9,11 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:singleLine="true"
-        android:hint="24h Format"
-        android:minEms="8"	
+        android:hint="Time for medication"
+        android:minEms="8"
+        android:minHeight="50dp"	
         android:focusable="false"
-        android:gravity="center_horizontal"
+        android:gravity="center_vertical|center_horizontal"
 	    />
     
     <EditText 
@@ -23,7 +24,8 @@
         android:singleLine="true"
         android:hint="20 Mg/Ml"
         android:minEms="8"
-        android:gravity="center_horizontal"
+        android:minHeight="50dp"
+        android:gravity="center_vertical|center_horizontal"
         	android:layout_toRightOf="@+id/timeTextBox"
         	
 	    />
@@ -36,7 +38,8 @@
         android:singleLine="true"
         android:hint="2 Pills. 1 Drop"
         android:minEms="8"
-        android:gravity="center_horizontal"
+        android:minHeight="50dp"
+        android:gravity="center_vertical|center_horizontal"
         	android:layout_toRightOf="@+id/dosageTextBox"
         	
 	    />

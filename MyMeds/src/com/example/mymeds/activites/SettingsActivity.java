@@ -70,18 +70,21 @@ public class SettingsActivity extends Activity{
 					Spinner sound_select = (Spinner) findViewById(R.id.spinnerSoundsSelection);
 					if(sound_select.getSelectedItem().equals("Sound 1"))
 					{
+						//Play default notification sound
 						MediaPlayer player = MediaPlayer.create(getApplicationContext(),
 								Settings.System.DEFAULT_NOTIFICATION_URI);
 						player.start();
 					}
 					else if(sound_select.getSelectedItem().equals("Sound 2"))
 					{
+						//Play default notification sound
 						MediaPlayer player = MediaPlayer.create(getApplicationContext(),
 								Settings.System.DEFAULT_NOTIFICATION_URI);
 						player.start();
 					}
 					else if(sound_select.getSelectedItem().equals("Sound 3"))
 					{
+						//Play default notification sound
 						MediaPlayer player = MediaPlayer.create(getApplicationContext(),
 								Settings.System.DEFAULT_NOTIFICATION_URI);
 						player.start();
@@ -145,13 +148,6 @@ public class SettingsActivity extends Activity{
 		int snoozeTime = (int)spinnerSnoozeTime.getSelectedItemPosition();
 		int howLongBefore = (int) spinnerHowLongBefore.getSelectedItemPosition();
 		int textSize = (int) spinnerTextSize.getSelectedItemPosition();
-
-//		Log.d("Problem Determination", "banner: " + banner +
-//				"\nsounds: " + sounds + 
-//				"\nsoundsSelection: " + soundsSelection +
-//				"\nsnoozeTime: " + snoozeTime + 
-//				"\nhowLongBefore: " + howLongBefore +
-//				"\ntextSize: " + textSize);
 
 		//Export to JSON
 		SettingsStore store = new SettingsStore();

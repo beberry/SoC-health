@@ -1,5 +1,9 @@
 package com.example.mymeds.util;
 
+/**
+ * Used to store details of future medication
+ *
+ */
 public class futureMedDetails {
 	private int medId;
 	private String medName, displayName;
