@@ -10,13 +10,12 @@
 
     <Button
         android:id="@+id/add_medication"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="Add medication"
         android:textStyle="bold"
-        android:textSize="30sp"
-        android:layout_gravity="center" />
+        android:textSize="30sp" />
 
     <TableRow
         android:layout_width="fill_parent"
@@ -65,7 +64,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="30dp"
-            android:stretchColumns="1" />
+            android:layout_centerHorizontal="true"
+            android:stretchColumns="0,1,2" />
     </ScrollView>
 
 </LinearLayout>
