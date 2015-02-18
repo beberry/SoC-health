@@ -102,7 +102,9 @@ public class ListItemAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				
+				//Get user confirmation
 				showDialog();
+				
 				if(isPillTaken == true)
 				{
 					//remove the row the nutton belong to from the table
@@ -120,7 +122,7 @@ public class ListItemAdapter extends BaseAdapter {
 						String h = takeTime.substring( 0,2);
 						String m = takeTime.substring( 2,takeTime.length());
 
-						t2.setText( h+ ":" + m);
+						t2.setText( h + ":" + m);
 
 						row.setPadding(5, 20, 5, 20);
 
@@ -264,7 +266,7 @@ public class ListItemAdapter extends BaseAdapter {
 		};
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-		builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+		builder.setMessage("Are you sure medication has been taken?").setPositiveButton("Yes", dialogClickListener)
 		    .setNegativeButton("No", dialogClickListener).show();
 	}
 	
