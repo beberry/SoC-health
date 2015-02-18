@@ -52,6 +52,13 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/activity_medication_input" >
         </activity>
+        <!-- MedicationEdit Activity -->
+        <activity
+            android:name="com.example.mymeds.activites.MedicationEditActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:label="@string/activity_medication_edit" >
+
+        </activity>
         <activity
             android:name="com.example.mymeds.tabs.AllMeds"
             android:configChanges="orientation|screenSize" />

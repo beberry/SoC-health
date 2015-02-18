@@ -305,7 +305,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="75dp" 
-       	android:text="Add"
+       	android:text="Save"
         android:textSize="25sp"
         android:onClick="addInput" 
         android:background="#54abcb"

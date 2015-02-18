@@ -20,6 +20,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.mymeds.R;
+import com.example.mymeds.activites.MedicationEditActivity;
 
 @SuppressLint("InflateParams")
 public class ListItemAdapter extends BaseAdapter {
@@ -186,6 +187,23 @@ public class ListItemAdapter extends BaseAdapter {
 		}
 
 		row.setPadding(5, 20, 5, 20);
+		
+		// Add a listener for the Edit functionality.
+		final int editIndex = position;
+		
+		row.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(v.getContext(), MedicationEditActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				
+				intent.putExtra("size", data.size()+1);
+
+				intent.putExtra("editIndex", editIndex);
+				intent.putParcelableArrayListExtra("meds", data);
+				mContext.startActivity(intent);
+				}
+			});
 		
 		//add row to table
 		table.addView(row, new TableLayout.LayoutParams(

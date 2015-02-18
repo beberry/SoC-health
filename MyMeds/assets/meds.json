@@ -6,8 +6,8 @@
             "displayName": "Arthritis",
             "description": "easy",
             "type": "pill",
-            "startTime": 1423846006000,
-            "endTime": 1421994054000,
+            "startTime": 1421994054000,
+            "endTime": 1423846006000,
             "remaining": 56,
             "repeatPeriod": 1,
             "frequency":[

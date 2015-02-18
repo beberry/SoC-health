@@ -52,6 +52,9 @@
     <!-- Medication Input Activity -->
     <string name="activity_medication_input">Add Medication</string>
     
+     <!-- Medication Edit Activity -->
+    <string name="activity_medication_edit">Edit Medication</string>
+    
     <string-array name="MedicationTypeArray">
         <item>Oral</item>
 		<item>Inhalation</item>

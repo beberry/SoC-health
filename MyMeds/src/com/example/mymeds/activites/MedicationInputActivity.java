@@ -279,7 +279,7 @@ public class MedicationInputActivity extends Activity{
 		String repeatPeriod = editRepeatPeriod.getText().toString();
 
 		List<Integer> listTime = new ArrayList<Integer>();
-		List<Integer> listDosage = new ArrayList<Integer>();
+		List<String> listDosage = new ArrayList<String>();
 		List<Integer> listUnit = new ArrayList<Integer>();
 
 		TableRow tableRow;
@@ -298,11 +298,12 @@ public class MedicationInputActivity extends Activity{
 			frequencyDosage = (EditText) tableRow.getChildAt(1); //Dosage
 			frequencyUnit = (EditText) tableRow.getChildAt(2); //Unit
 
+			listDosage.add(frequencyDosage.getText().toString());
+			
 			// Make sure that the app does not crash on empty / invalid input for int fields.
 			try{
 				//Add cell data to Lists (parse to int)
 				listTime.add(Integer.valueOf(frequencyTime.getText().toString()));
-				listDosage.add(Integer.valueOf(frequencyDosage.getText().toString()));
 				listUnit.add(Integer.valueOf(frequencyUnit.getText().toString()));
 			}
 			catch(Exception e)
