@@ -1,14 +1,16 @@
 package com.example.mymeds.util;
 
 import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +20,7 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MedicationEditActivity;
 
@@ -26,6 +28,7 @@ import com.example.mymeds.activites.MedicationEditActivity;
 public class ListItemAdapter extends BaseAdapter {
 
 	Context mContext;
+	boolean isPillTaken = false;
 	
 	//stores returned medication
 	ArrayList<Medication> data = null;
@@ -99,39 +102,39 @@ public class ListItemAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				
-				Toast.makeText(mContext, toAdd.getDisplayName()+" "+timesTaken  , Toast.LENGTH_SHORT).show();
-				
-				//remove the row the nutton belong to from the table
-				tempTable.removeView(row);
-				
-				//if there are more instances of the medication being taken that day
-				if(toAdd.getFrequency().size()>1){
-					
-					//incremnet to access the details of the next time drug is to be taken
-					timesTaken = timesTaken++;
-					
-					//get time to take, split up add colon and display
-					String takeTime = (String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
+				showDialog();
+				if(isPillTaken == true)
+				{
+					//remove the row the nutton belong to from the table
+					tempTable.removeView(row);
 
-					String h = takeTime.substring( 0,2);
-					String m = takeTime.substring( 2,takeTime.length());
+					//if there are more instances of the medication being taken that day
+					if(toAdd.getFrequency().size()>1){
 
-					t2.setText( h+ ":" + m);
+						//incremnet to access the details of the next time drug is to be taken
+						timesTaken = timesTaken++;
+
+						//get time to take, split up add colon and display
+						String takeTime = (String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
+
+						String h = takeTime.substring( 0,2);
+						String m = takeTime.substring( 2,takeTime.length());
+
+						t2.setText( h+ ":" + m);
+
+						row.setPadding(5, 20, 5, 20);
+
+						//replace the old row with the new one
+						tempTable.addView(row, new TableLayout.LayoutParams(
+								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+						toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
+
+					}
 					
-					row.setPadding(5, 20, 5, 20);
-					
-					//replace the old row with the new one
-					tempTable.addView(row, new TableLayout.LayoutParams(
-							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-					toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
-					
+					Intent intent = new Intent("Med-Taken");
+					intent.putExtra("position", position);
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				}
-				else{
-					
-				}
-				Intent intent = new Intent("Med-Taken");
-				intent.putExtra("position", position);
-				LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
 				
 			}
 		});
@@ -234,4 +237,35 @@ public class ListItemAdapter extends BaseAdapter {
 		return null;
 	}
 
+	/**
+	 * Dialog to confirm if a Pill is taken or not.
+	 * Changes global var: isPillTaken, if true
+	 */
+	private void showDialog()
+	{
+		//Reset isPillTaken value
+		isPillTaken = false;
+		
+		DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        switch (which){
+		        case DialogInterface.BUTTON_POSITIVE:
+		            //Yes button clicked
+		        	isPillTaken = true;
+		            break;
+
+		        case DialogInterface.BUTTON_NEGATIVE:
+		            //No button clicked
+		        	isPillTaken = false;
+		            break;
+		        }
+		    }
+		};
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+		builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+		    .setNegativeButton("No", dialogClickListener).show();
+	}
+	
 }
