@@ -57,7 +57,7 @@ public class ListItemAdapter extends BaseAdapter {
 		tempTable = table;
 		
 		//create new row for table
-		final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.table_row, null);
+		final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.todaysmeds_table_row, null);
 
 		//get the medication needing added
 		final Medication toAdd = data.get(position);
