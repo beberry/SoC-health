@@ -83,7 +83,7 @@ public class MainActivity extends TabActivity {
 		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 
 		tabHost = getTabHost();
-		populateTabs();
+		populateTabs(0);
 		
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
@@ -91,13 +91,14 @@ public class MainActivity extends TabActivity {
 		//alarm.addAlarm(1);
 		//alarm.addAlarm(2);
 		//alarm.setNextAlarm(0, 02300, "2300");
-		LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+		LocalBroadcastManager.getInstance(this).registerReceiver(mTakenMessageReceiver,
 				new IntentFilter("Med-Taken"));
+		LocalBroadcastManager.getInstance(this).registerReceiver(mEditedMessageReceiver,
+				new IntentFilter("Med-Edited"));
 	}
 
-	// Our handler for received Intents. This will be called whenever an Intent
-	// with an action named "custom-event-name" is broadcasted.
-	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	// Our handler for received Intents. This will be called whenever a pill taken button is pressed
+	private BroadcastReceiver mTakenMessageReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			// Get extra data included in the Intent
@@ -105,36 +106,49 @@ public class MainActivity extends TabActivity {
 			int position = intent.getIntExtra("position", 0);
 
 			//Modify and update the numbers of pills remaining for this pill
-			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits());
-			//allMeds.get(todaysMeds.get(position).getIndex()).setRemaining(allMeds.get(todaysMeds.get(position).getIndex()).getRemaining()-todaysMeds.get(position).getFrequency().get(0).getUnits());
-			JSONUtils.writeToFile(todaysMeds, mContext, false);
+			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits());			
 			if(todaysMeds.get(position).getFrequency().size()==1){
 				todaysMeds.remove(position);
 			}
 			else{
 				todaysMeds.get(position).getFrequency().remove(0);
 			}
-			
-			JSONUtils.writeToFile(todaysMeds, mContext, false);
-			//Force refresh of data
-			LocalActivityManager manager = getLocalActivityManager();
-	        manager.destroyActivity("Today's Medication", true);
-	        manager.destroyActivity("All Medication", true);
-	        manager.destroyActivity("My Record", true);
-	        tabHost.setOnTabChangedListener(new OnTabChangeListener(){
-				@Override
-				public void onTabChanged(String tabId){
-				}});
-	        tabHost.clearAllTabs();
-			populateTabs();
+			updateDataAndActivities(0);
 		}
 	};
+	
+	// Our handler for received Intents. This will be called whenever a pill taken button is pressed
+		private BroadcastReceiver mEditedMessageReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				// Get extra data included in the Intent
+				//Update the locally held allMeds
+				allMeds = intent.getParcelableArrayListExtra("allMeds");
+				updateDataAndActivities(1);
+			}
+		};
+	
+	private void updateDataAndActivities(int tabToShow){
+		JSONUtils.writeToFile(allMeds, mContext, true);
+		JSONUtils.writeToFile(todaysMeds, mContext, false);
+		//Force refresh of data
+		LocalActivityManager manager = getLocalActivityManager();
+        manager.destroyActivity("Today's Medication", true);
+        manager.destroyActivity("All Medication", true);
+        manager.destroyActivity("My Record", true);
+        tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+			@Override
+			public void onTabChanged(String tabId){
+			}});
+        tabHost.clearAllTabs();
+		populateTabs(tabToShow);
+	}
 
 	public void onResume(Bundle savedInstanceState){
 		super.onResume();
 	}
 	
-	private void populateTabs(){
+	private void populateTabs(int tabToGoTo){
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
 		intentToday.putParcelableArrayListExtra("meds", todaysMeds);
 		TabSpec tabSpecToday = tabHost
@@ -163,7 +177,7 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecToday);
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
-		tabHost.setCurrentTab(0);
+		tabHost.setCurrentTab(tabToGoTo);
 		
 		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
 		tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	

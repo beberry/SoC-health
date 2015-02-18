@@ -15,6 +15,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -492,11 +493,11 @@ public class MedicationEditActivity extends Activity{
 			this.meds.remove(this.editIndex);
 			
 			meds.add(med);
+			Intent intent = new Intent("Med-Edited");
+			intent.putParcelableArrayListExtra("allMeds", meds);
+			LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 			
-			JSONUtils.writeToFile(meds, this, true);
-			
-			Intent intent = new Intent();
-			intent.putParcelableArrayListExtra("meddata", meds);
+			//TODO check this still works
 			setResult(100, intent);
 			
 			finish();
