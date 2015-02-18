@@ -2,17 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background= "#c7f1f3"
+    android:background="#c7f1f3"
+    android:minWidth="500dp"
     android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingTop="30dp" >
-
     
  <RelativeLayout
      android:id="@+id/input"
      android:layout_width="fill_parent"
         android:layout_height="wrap_content" >   
+
     <Button
         android:id="@+id/end"
         android:layout_width="wrap_content"
@@ -21,9 +22,10 @@
         android:layout_alignBottom="@+id/start"
         android:layout_alignParentRight="true"
         android:layout_marginRight="28dp"
+        android:background="#54ABCB"
+        android:minWidth="300dip"
         android:onClick="showDatePickerDialog"
-        android:text="End Date"
-        android:background="#54ABCB" />
+        android:text="End Date" />
 
     <Button
         android:id="@+id/start"
@@ -33,9 +35,10 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="30dp"
+        android:background="#54ABCB"
+        android:minWidth="300dip"
         android:onClick="showDatePickerDialog"
-        android:text="Start Date" 
-         android:background="#54ABCB"/>
+        android:text="Start Date" />
 
     <TextView
         android:id="@+id/endDate"
@@ -45,7 +48,9 @@
         android:layout_alignRight="@+id/end"
         android:layout_below="@+id/end"
         android:ems="10"
-        android:inputType="date" />
+        android:inputType="date"
+        android:gravity="center"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/startDate"
@@ -55,7 +60,10 @@
         android:layout_alignRight="@+id/start"
         android:layout_below="@+id/start"
         android:ems="10"
-        android:inputType="date" />
+        android:inputType="date"
+        android:gravity="center"
+        android:textSize= "20sp" />
+
 </RelativeLayout>
 
     <ScrollView
