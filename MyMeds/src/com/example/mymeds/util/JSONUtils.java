@@ -15,6 +15,9 @@ import com.example.mymeds.libs.PojoMapper;
 import android.content.Context;
 import android.util.Log;
 
+/*
+ * Utility class for JSON reading and writing
+ */
 public class JSONUtils {
 	
 	private final static String ALL_FILE_PATH = "meddata.json";
