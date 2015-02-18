@@ -114,43 +114,9 @@ public class ListItemAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				
 				//Get user confirmation
-				showDialog();
+				showDialog(position, index);
 				
-				if(isPillTaken == true)
-				{
-					//remove the row the nutton belong to from the table
-					tempTable.removeView(row);
-
-					//if there are more instances of the medication being taken that day
-					if(toAdd.getFrequency().size()>1){
-
-						//incremnet to access the details of the next time drug is to be taken
-						timesTaken = timesTaken++;
-
-						//get time to take, split up add colon and display
-						String takeTime = (String.valueOf(data.get(position).getFrequency().get(timesTaken).getTime()));
-
-						String h = takeTime.substring( 0,2);
-						String m = takeTime.substring( 2,takeTime.length());
-
-						t2.setText( h + ":" + m);
-
-						row.setPadding(5, 20, 5, 20);
-
-						//replace the old row with the new one
-						tempTable.addView(row, new TableLayout.LayoutParams(
-								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-						toAdd.getFrequency().remove((Frequency) data.get(position).getFrequency().get(timesTaken));
-
-					}
-					
-					Intent intent = new Intent("Med-Taken");
-					intent.putExtra("position", position);
-
-					intent.putExtra("timesTaken", index);
-					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
-				}
-				
+		
 			}
 		});
 		row.setPadding(5, 20, 5, 20);
@@ -285,8 +251,11 @@ public class ListItemAdapter extends BaseAdapter {
 	 * Dialog to confirm if a Pill is taken or not.
 	 * Changes global var: isPillTaken, if true
 	 */
-	private void showDialog()
+	private void showDialog(int position, int index)
 	{
+		final int p = position;
+		final int ind = index;
+		
 		//Reset isPillTaken value
 		isPillTaken = false;
 		
@@ -296,7 +265,12 @@ public class ListItemAdapter extends BaseAdapter {
 		        switch (which){
 		        case DialogInterface.BUTTON_POSITIVE:
 		            //Yes button clicked
-		        	isPillTaken = true;
+					Intent intent = new Intent("Med-Taken");
+					intent.putExtra("position", p);
+
+					intent.putExtra("timesTaken", ind);
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+		
 		            break;
 
 		        case DialogInterface.BUTTON_NEGATIVE:
