@@ -14,7 +14,7 @@
         android:minHeight="50dp"	
         android:focusable="false"
         android:gravity="center_vertical|center_horizontal"
-        android:textColorHint="#ffffff"
+        android:textColorHint="#D2D2D2"
         android:textColor="#ffffff"
 	    />
     
@@ -28,7 +28,7 @@
         android:minEms="8"
         android:minHeight="50dp"
         android:gravity="center_vertical|center_horizontal"
-        android:textColorHint="#ffffff"
+        android:textColorHint="#D2D2D2"
         android:textColor="#ffffff"
         	android:layout_toRightOf="@+id/timeTextBox"
         	
@@ -44,7 +44,7 @@
         android:minEms="8"
         android:minHeight="50dp"
         android:gravity="center_vertical|center_horizontal"
-        android:textColorHint="#ffffff"
+        android:textColorHint="#D2D2D2"
         android:textColor="#ffffff"
         	android:layout_toRightOf="@+id/dosageTextBox"
         	
