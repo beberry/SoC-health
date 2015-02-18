@@ -3,16 +3,15 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/cell_shape"
-    android:padding="20dp" >
+ >
     <!-- Remove cell_shape drawable background to remove white background from the table -->
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:gravity="start|center"
-        android:padding="10dp"
+        android:layout_gravity="center"
+            android:gravity="center"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -21,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:gravity="center|center"
-        android:padding="10dp"
+            android:gravity="center"
+
         android:textSize="15sp"
         android:textStyle="normal" />
 
@@ -30,9 +29,9 @@
         android:id="@+id/pillTaken"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:gravity="start"
-        android:padding="10dp"
+        android:layout_gravity="center"
+        	android:gravity="center"
+
         android:text = "Pill Taken" />
 
 </TableRow>
