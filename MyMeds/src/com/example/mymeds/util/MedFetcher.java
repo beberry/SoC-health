@@ -26,6 +26,13 @@ public class MedFetcher {
 		allmeds = arrayList;
 	}
 
+	
+	
+	public void resetMeds (ArrayList<Medication> allmeds)
+	{
+		this.allmeds = allmeds;
+	}
+	
 	/**
 	 * This method is used to calculate the medication for a specified day
 	 * @param day The day being specified

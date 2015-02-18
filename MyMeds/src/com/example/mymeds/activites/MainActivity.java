@@ -133,6 +133,9 @@ public class MainActivity extends TabActivity {
 	private void updateDataAndActivities(int tabToShow){
 		JSONUtils.writeToFile(allMeds, mContext, true);
 		
+		
+		mMedFetcher.resetMeds(allMeds);
+		
 		final Calendar c = Calendar.getInstance();
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
@@ -140,7 +143,8 @@ public class MainActivity extends TabActivity {
 		long today = MedFetcher.milliDate(year, month, day);
 		
 		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false);
-		
+		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
+
 		//JSONUtils.writeToFile(todaysMeds, mContext, false);
 		//Force refresh of data
 		LocalActivityManager manager = getLocalActivityManager();
@@ -190,10 +194,11 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(tabToGoTo);
 		
-		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
+		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
 		tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
 		tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));
 		
+		tabHost.getTabWidget().getChildAt(tabToGoTo).setBackgroundColor(Color.parseColor("#71B238"));
 		
 		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
 			@Override
