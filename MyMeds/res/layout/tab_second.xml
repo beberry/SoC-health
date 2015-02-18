@@ -18,6 +18,7 @@
         android:textSize="30sp" />
 
    	<TableRow
+   	    android:paddingTop ="20dp"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="For"
+            android:text="To Treat"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -68,7 +69,7 @@
             android:gravity="center"
             android:paddingTop="30dp"
             android:layout_centerHorizontal="true"
-            android:stretchColumns="0,1,2" />
+            android:stretchColumns="0,1,2"  />
     </ScrollView>
 
 </LinearLayout>

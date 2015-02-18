@@ -1,88 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+      android:layout_width="fill_parent"
     android:layout_height="match_parent"
-    android:background="#c7f1f3"
-    android:minWidth="500dp"
+    android:background= "#c7f1f3"
     android:orientation="vertical"
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:paddingTop="30dp" >
-    
- <RelativeLayout
-     android:id="@+id/input"
-     android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >   
 
-    <Button
-        android:id="@+id/end"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/input"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/start"
+            android:layout_alignBottom="@+id/start"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="28dp"
+            android:background="#54ABCB"
+            android:minWidth="300dip"
+            android:onClick="showDatePickerDialog"
+            android:text="End Date" />
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:background="#54ABCB"
+            android:minWidth="300dip"
+            android:onClick="showDatePickerDialog"
+            android:text="Start Date" />
+
+        <TextView
+            android:id="@+id/endDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/end"
+            android:layout_alignRight="@+id/end"
+            android:layout_below="@+id/end"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="date"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/start"
+            android:layout_alignRight="@+id/start"
+            android:layout_below="@+id/start"
+            android:ems="10"
+            android:gravity="center"
+            android:inputType="date"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <TableRow
+        android:id="@+id/headers"
+        android:layout_below="@id/input"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/start"
-        android:layout_alignBottom="@+id/start"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="28dp"
-        android:background="#54ABCB"
-        android:minWidth="300dip"
-        android:onClick="showDatePickerDialog"
-        android:text="End Date" />
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        android:showDividers="middle" >
 
-    <Button
-        android:id="@+id/start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp"
-        android:background="#54ABCB"
-        android:minWidth="300dip"
-        android:onClick="showDatePickerDialog"
-        android:text="Start Date" />
+        <TextView
+            android:id="@+id/headerRName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Medication"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/endDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/end"
-        android:layout_alignRight="@+id/end"
-        android:layout_below="@+id/end"
-        android:ems="10"
-        android:inputType="date"
-        android:gravity="center"
-        android:textSize="20sp" />
+        <TextView
+            android:id="@+id/headerName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="To Treat"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/startDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/start"
-        android:layout_alignRight="@+id/start"
-        android:layout_below="@+id/start"
-        android:ems="10"
-        android:inputType="date"
-        android:gravity="center"
-        android:textSize= "20sp" />
-
-</RelativeLayout>
+        <TextView
+            android:id="@+id/headerTaken"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Amount Needed"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </TableRow>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-		android:layout_below ="@id/input">
-        
-    
-    
-     <TableLayout
-        android:id="@+id/futurelistview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingTop="30dp"
-        android:stretchColumns="1" />
-    
-    
-</ScrollView>
-    
-    
+        android:layout_below="@id/headers" >
+
+        <TableLayout
+            android:id="@+id/futurelistview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="30dp"
+            android:layout_centerHorizontal="true"
+            android:stretchColumns="0,1,2" />
+    </ScrollView>
+
 </RelativeLayout>

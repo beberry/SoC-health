@@ -143,11 +143,13 @@ public class ListItemAdapter extends BaseAdapter {
 
 		//populate the first column with the name of the medication
 		TextView t1 = (TextView) row.findViewById(R.id.realName);
-		t1.setText(data.get(position).getDisplayName());
-
-		//display the amount of medicaiton
+		t1.setText(data.get(position).getName());
+		
+		
+		//display the Nickname
 		TextView t2 = (TextView) row.findViewById(R.id.name);
-		t2.setText(data.get(position).getName());
+		t2.setText(data.get(position).getDisplayName());
+		
 
 		TextView t3 = (TextView) row.findViewById(R.id.ammountLeft);
 		t3.setText(String.valueOf(data.get(position).getRemaining()));

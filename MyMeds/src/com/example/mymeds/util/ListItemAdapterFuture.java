@@ -43,18 +43,17 @@ public class ListItemAdapterFuture extends BaseAdapter {
 
 		//Populate each column in the new row
 		
-		//first row set to the display/nickname of the medication
-		TextView t1 = (TextView) row.findViewById(R.id.name);
-		t1.setText(data.get(position).getDisplayName());
-
 		//second row to the real name of the medication
-		TextView t2 = (TextView) row.findViewById(R.id.realName);
-		t2.setText(data.get(position).getMedName());
+		TextView t1 = (TextView) row.findViewById(R.id.realName);
+		t1.setText(data.get(position).getMedName());
+		
+		//first row set to the display/nickname of the medication
+		TextView t2 = (TextView) row.findViewById(R.id.name);
+		t2.setText(data.get(position).getDisplayName());
 
 		//third row set to the amount needed of the medicastion
 		TextView t3 = (TextView) row.findViewById(R.id.amount);
 		t3.setText(Integer.toString(data.get(position).getAmountNeeded()));
-
 		
 		//set the size of the text depending on user settings
 		SharedPreferences prefs = mContext.getSharedPreferences(

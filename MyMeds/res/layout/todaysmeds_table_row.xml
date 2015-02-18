@@ -2,8 +2,8 @@
 <TableRow xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/cell_shape"
- >
+    android:background="@drawable/cell_shape" >
+
     <!-- Remove cell_shape drawable background to remove white background from the table -->
 
     <TextView
@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-            android:gravity="center"
+        android:gravity="center"
         android:textSize="15sp"
         android:textStyle="bold" />
 
@@ -20,8 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-            android:gravity="center"
-
+        android:gravity="center"
         android:textSize="15sp"
         android:textStyle="normal" />
 
@@ -30,8 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        	android:gravity="center"
-
-        android:text = "Pill Taken" />
+        android:gravity="center"
+        android:text="Pill Taken" />
 
 </TableRow>
