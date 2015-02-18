@@ -88,8 +88,8 @@ public class Alarms {
 	 * Method is used when we add a Medication.
 	 * @param id
 	 */
-	public void addAlarm(int id) {
-		Medication med = getMedicationById(id);
+	public void addAlarm(Medication med) {
+		//Medication med = getMedicationById(id);
 		ArrayList<Frequency> frequencyList = med.getFrequency();
 		Frequency freqObject;
 		String dosage = null, freqTime = null;
@@ -107,13 +107,13 @@ public class Alarms {
 		AlarmUtils.printFormattedDate(time, med.getName(), "Added Alarm");
 
 		Intent myIntent = new Intent(context, AlarmReceiver.class);
-		myIntent.putExtra("id", id);
+		myIntent.putExtra("id", med.getIndex());
 		myIntent.putExtra("time", freqTime);
 		myIntent.putExtra("dosage", dosage);
 		myIntent.putExtra("units", String.valueOf(units));
 		myIntent.putExtra("name", med.getName());
 
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, AlarmUtils.calculateAlarmId(id, freqTime), myIntent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(context, AlarmUtils.calculateAlarmId(med.getIndex(), freqTime), myIntent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC, time, pendingIntent);
 	}

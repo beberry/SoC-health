@@ -367,14 +367,13 @@ public class MedicationInputActivity extends Activity{
 			Toast.makeText(getApplicationContext(), "The input is not valid!", Toast.LENGTH_LONG).show();
 		}
 
+		//Attach alarm to new medication.
+		Alarms alarm = new Alarms(getApplicationContext());
+		alarm.addAlarm(med);
 		
 		Intent intent = new Intent("Med-Added");
 		intent.putParcelableArrayListExtra("allMeds", meds);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-		
-		//Attach alarm to new medication.
-		//Alarms alarm = new Alarms(getApplicationContext());
-		//alarm.addAlarm(size);
 	}
 
 	/**
