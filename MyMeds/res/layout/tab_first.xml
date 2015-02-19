@@ -9,6 +9,7 @@
     android:paddingTop="30dp" >
 
     <TableRow
+        android:id="@+id/header"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -48,15 +49,19 @@
             android:textStyle="bold" />
     </TableRow>
 
-
+        <ScrollView
+        android:layout_below="@+id/header"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
 
         <TableLayout
             android:id="@+id/listview"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingTop="70dp"
+            android:paddingTop="10dp" 
             android:layout_centerHorizontal="true"
             android:stretchColumns="0,1,2" />
 
+        </ScrollView>
 </RelativeLayout>
