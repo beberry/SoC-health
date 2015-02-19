@@ -3,335 +3,326 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:background="#c7f1f3" >
-    
-	<RelativeLayout
+
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
-        android:orientation="horizontal" 
-        android:background="#c7f1f3" >
+        android:background="#c7f1f3"
+        android:orientation="horizontal" >
 
-<!-- Medication Name -->
-    <TextView 
-        android:id="@+id/textMedicineName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Medication Name"
-        android:textSize="25sp"
-        	android:layout_marginTop="20sp"
-        	android:layout_marginBottom="15sp"
-        	android:layout_marginLeft="20sp"
-        	android:layout_marginRight="50sp"      	      	
-        />
-	
-	<EditText 
-	    android:id="@+id/editMedicineName"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:singleLine="true"
-        android:minWidth="200dp"
-        android:hint="Insert medicine name"
-        	android:layout_alignBaseline="@+id/textMedicineName"
-        	android:layout_toRightOf="@+id/textMedicineName"
-        	android:layout_marginLeft="50dp"
-	    />	    
+        <!-- Medication Name -->
 
-<!-- Display Name -->
-    <TextView 
-        android:id="@+id/textDisplayName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Nickname for Medicine"
-        android:textSize="25sp"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-        	android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textMedicineName"
-        />
-	
-	<EditText 
-	    android:id="@+id/editDisplayName"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:singleLine="false"
-        android:minWidth="200dp"
-        android:hint="Painkillers"
-        	android:layout_alignBaseline="@+id/textDisplayName"        	
-        	android:layout_below="@id/textMedicineName"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />	
+        <TextView
+            android:id="@+id/textMedicineName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="50sp"
+            android:layout_marginTop="20sp"
+            android:text="Medication Name"
+            android:textSize="25sp" />
 
-<!-- Description -->
-	<TextView 
-        android:id="@+id/textDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textSize="25sp"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textDisplayName"
-        />
-	
-	<EditText 
-	    android:id="@+id/editDescription"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:singleLine="true"
-        android:minWidth="200dp"
-        android:hint="To control blood pressure"
-        	android:layout_alignBaseline="@+id/textDescription"        	
-        	android:layout_below="@id/textDisplayName"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />
-	
-	
-<!-- Type -->	
-	<TextView
-	    android:id="@+id/textType"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:text="Medication Type"
-		android:textSize="25sp"
-			android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textDescription"
-		/>
-	
-	<Spinner 
-	    android:id="@+id/spinnerMedicationType"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:drawSelectorOnTop="true"
-	    android:entries="@array/MedicationTypeArray" 
-	    	android:layout_alignBaseline="@+id/textType"        	
-        	android:layout_below="@id/textDescription"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />	
+        <EditText
+            android:id="@+id/editMedicineName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textMedicineName"
+            android:layout_marginLeft="50dp"
+            android:layout_toRightOf="@+id/textMedicineName"
+            android:hint="Insert medicine name"
+            android:inputType="text"
+            android:minWidth="200dp"
+            android:singleLine="true" />
 
-<!-- Start Date -->
-	<TextView 
-        android:id="@+id/textStartDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start Date"
-        android:textSize="25sp"       
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textType"
-        />
-	
-	<EditText
-		android:id="@+id/editStartDate"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textUri"
-        android:singleLine="true"
-        android:hint="DD/MM/YYYY"
-        android:minWidth="200dp"
-        android:focusable="false"
-        	android:layout_alignBaseline="@+id/textStartDate"        	
-        	android:layout_below="@id/textType"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />	
+        <!-- Display Name -->
 
-<!-- End Date -->
-	<TextView 
-        android:id="@+id/textEndDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="End Date"
-        android:textSize="25sp"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textStartDate"
-        />
-	
-	<EditText
-		android:id="@+id/editEndDate"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textUri"
-        android:singleLine="true"
-        android:hint="DD/MM/YYYY"
-        android:minWidth="200dp"
-        android:focusable="false"
-        	android:layout_alignBaseline="@+id/textEndDate"        	
-        	android:layout_below="@id/textStartDate"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />
+        <TextView
+            android:id="@+id/textDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textMedicineName"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="Nickname for Medicine"
+            android:textSize="25sp" />
 
-<!-- Remaining -->   
-    <TextView 
-        android:id="@+id/textRemaining"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Remaining Medication"
-        android:textSize="25sp"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textEndDate"
-        />
-    
-    <EditText 
-	    android:id="@+id/editRemaining"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:singleLine="true"
-        android:hint="# Pills on box"
-        android:minWidth="200dp"
-        	android:layout_alignBaseline="@+id/textRemaining"        	
-        	android:layout_below="@id/textEndDate"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />	
+        <EditText
+            android:id="@+id/editDisplayName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textDisplayName"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textMedicineName"
+            android:hint="Painkillers"
+            android:inputType="text"
+            android:minWidth="200dp"
+            android:singleLine="false" />
 
-<!-- Repeat Period --> <!-- (2 = Once every 2 days) -->    
-	<TextView 
-        android:id="@+id/textRepeatPeriod"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Repeat Period"
-        android:textSize="25sp"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textRemaining"
-        />
-	
-	<TextView 
-        android:id="@+id/textRepeatPeriodText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Every"
-        android:textSize="20sp"
-        android:layout_alignBaseline="@+id/textRepeatPeriod"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_alignLeft="@+id/editMedicineName"      	
-        	android:layout_below="@id/textRemaining"
-        />
-	
-	<EditText 
-	    android:id="@+id/editRepeatPeriod"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:singleLine="true"
-        android:hint="2"
-        android:minWidth="75dp"
-        android:gravity="center"
-        	android:layout_alignBaseline="@+id/textRepeatPeriodText1"        	
-        	android:layout_below="@id/textRemaining"
-        	android:layout_toRightOf="@+id/textRepeatPeriodText1"
-	    />
-	
-	<TextView 
-        android:id="@+id/textRepeatPeriodText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Day(s)"
-        android:textSize="20sp"
-        android:layout_alignBaseline="@+id/textRepeatPeriod"
-        	android:layout_marginTop="15sp"
-        	android:layout_marginBottom="15sp"     	
-        	android:layout_below="@id/textRemaining"
-        	android:layout_toRightOf="@+id/editRepeatPeriod"
-        />
+        <!-- Description -->
 
-<!-- Frequency -->
-	<TextView 
-        android:id="@+id/textFrequency"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Frequency: "
-        android:textSize="25sp"
-        	android:layout_marginTop="20sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textRepeatPeriod"
-        />
-	
-	<!-- Add Row -->
-	<Button
-	    android:id="@+id/buttonAddFrequency"
-	    android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="15dp" 
-        android:minHeight="15dp"
-       	android:text="+"
-        android:textSize="25sp"
-        android:onClick="addFrequency" 
-        	android:layout_marginTop="20sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"
-        	android:layout_alignBaseline="@+id/textFrequency"        	
-        	android:layout_below="@id/textRepeatPeriod"
-        	android:layout_alignLeft="@+id/editMedicineName"
-	    />
+        <TextView
+            android:id="@+id/textDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textDisplayName"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="Description"
+            android:textSize="25sp" />
 
-<!-- Frequency Table -->
-	<TableLayout
-	    android:id="@+id/frequencyTable"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    	android:layout_marginTop="20sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"      	
-        	android:layout_below="@id/textFrequency"
-	    ></TableLayout>	
-	
-<!-- Add Button -->    
-    <Button
-       	android:id="@+id/buttonSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="75dp" 
-       	android:text="Save"
-        android:textSize="25sp"
-        android:onClick="addInput" 
-        android:background="#54abcb"
-        	android:layout_marginTop="20sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"
-        	android:layout_below="@+id/frequencyTable"
-        />
-    
-<!-- Cancel Button -->
-    <Button
-        android:id="@+id/buttonCancel"
-        android:layout_width="wrap_content"
-      	android:layout_height="wrap_content"
-       	android:minWidth="90dp"
-        android:text="Cancel"
-        android:textSize="25sp"
-        android:onClick="cancelInput"
-        	android:layout_marginTop="20sp"
-        	android:layout_marginBottom="15sp"
-			android:layout_marginLeft="20sp"
-        	android:layout_marginRight="20sp"
-        	android:layout_below="@+id/frequencyTable"
-        	android:layout_alignLeft="@+id/editMedicineName"
-         />    			    					
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textDescription"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textDisplayName"
+            android:hint="To control blood pressure"
+            android:inputType="text"
+            android:minWidth="200dp"
+            android:singleLine="true" />
+
+        <!-- Type -->
+
+        <TextView
+            android:id="@+id/textType"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textDescription"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="Medication Type"
+            android:textSize="25sp" />
+
+        <Spinner
+            android:id="@+id/spinnerMedicationType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textType"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textDescription"
+            android:drawSelectorOnTop="true"
+            android:entries="@array/MedicationTypeArray" />
+
+        <!-- Start Date -->
+
+        <TextView
+            android:id="@+id/textStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textType"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="Start Date"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/editStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textStartDate"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textType"
+            android:focusable="false"
+            android:hint="DD/MM/YYYY"
+            android:inputType="textUri"
+            android:minWidth="200dp"
+            android:singleLine="true" />
+
+        <!-- End Date -->
+
+        <TextView
+            android:id="@+id/textEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textStartDate"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="End Date"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/editEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textEndDate"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textStartDate"
+            android:focusable="false"
+            android:hint="DD/MM/YYYY"
+            android:inputType="textUri"
+            android:minWidth="200dp"
+            android:singleLine="true" />
+
+        <!-- Remaining -->
+
+        <TextView
+            android:id="@+id/textRemaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textEndDate"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="Remaining Medication"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/editRemaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textRemaining"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textEndDate"
+            android:hint="# Pills on box"
+            android:inputType="number"
+            android:minWidth="200dp"
+            android:singleLine="true" />
+
+        <!-- Repeat Period -->
+        <!-- (2 = Once every 2 days) -->
+
+        <TextView
+            android:id="@+id/textRepeatPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textRemaining"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="15sp"
+            android:text="Repeat Period"
+            android:textSize="25sp" />
+
+        <TextView
+            android:id="@+id/textRepeatPeriodText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textRepeatPeriod"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textRemaining"
+            android:layout_marginBottom="15sp"
+            android:layout_marginTop="15sp"
+            android:text="Every"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/editRepeatPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textRepeatPeriodText1"
+            android:layout_below="@id/textRemaining"
+            android:layout_toRightOf="@+id/textRepeatPeriodText1"
+            android:gravity="center"
+            android:hint="2"
+            android:inputType="number"
+            android:minWidth="75dp"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/textRepeatPeriodText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textRepeatPeriod"
+            android:layout_below="@id/textRemaining"
+            android:layout_marginBottom="15sp"
+            android:layout_marginTop="15sp"
+            android:layout_toRightOf="@+id/editRepeatPeriod"
+            android:text="Day(s)"
+            android:textSize="20sp" />
+
+        <!-- Frequency -->
+
+        <TextView
+            android:id="@+id/textFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textRepeatPeriod"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp"
+            android:text="Frequency: "
+            android:textSize="25sp" />
+
+        <!-- Add Row -->
+
+        <Button
+            android:id="@+id/buttonAddFrequency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/textFrequency"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@id/textRepeatPeriod"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp"
+            android:minHeight="15dp"
+            android:minWidth="15dp"
+            android:onClick="addFrequency"
+            android:text="+"
+            android:textSize="25sp" />
+
+        <!-- Frequency Table -->
+
+        <TableLayout
+            android:id="@+id/frequencyTable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textFrequency"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp" >
+        </TableLayout>
+
+        <!-- Add Button -->
+
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/frequencyTable"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp"
+            android:background="#54abcb"
+            android:minWidth="75dp"
+            android:onClick="addInput"
+            android:text="Save"
+            android:textSize="25sp" />
+
+        <!-- Cancel Button -->
+
+        <Button
+            android:id="@+id/buttonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/editMedicineName"
+            android:layout_below="@+id/frequencyTable"
+            android:layout_marginBottom="15sp"
+            android:layout_marginLeft="20sp"
+            android:layout_marginRight="20sp"
+            android:layout_marginTop="20sp"
+            android:minWidth="90dp"
+            android:onClick="cancelInput"
+            android:text="Cancel"
+            android:textSize="25sp" />
     </RelativeLayout>
 
 </ScrollView>
