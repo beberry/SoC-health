@@ -9,10 +9,12 @@ import java.io.InputStreamReader;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -178,7 +180,8 @@ public class SettingsActivity extends Activity{
 			e.printStackTrace();
 			Toast.makeText(getApplicationContext(), "Error Saving Settings", Toast.LENGTH_LONG).show();
 		}
-		
+		Intent intent = new Intent("Settings-Changed");
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 		finish();
 	}
 

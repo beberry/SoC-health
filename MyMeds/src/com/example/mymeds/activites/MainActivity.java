@@ -97,6 +97,8 @@ public class MainActivity extends TabActivity {
 				new IntentFilter("Med-Edited"));
 		LocalBroadcastManager.getInstance(this).registerReceiver(mEditedMessageReceiver,
 				new IntentFilter("Med-Added"));
+		LocalBroadcastManager.getInstance(this).registerReceiver(mSettingsMessageReceiver, 
+				new IntentFilter("Settings-Changed"));
 	}
 
 	// Our handler for received Intents. This will be called whenever a pill taken button is pressed
@@ -145,6 +147,14 @@ public class MainActivity extends TabActivity {
 				updateActivities(1);
 			}
 		};
+		
+		// Our handler for received Intents. This will be called whenever a pill taken button is pressed
+				private BroadcastReceiver mSettingsMessageReceiver = new BroadcastReceiver() {
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						updateActivities(0);
+					}
+				};
 
 	//update the data stored on the JSON files
 	private void updateData()
