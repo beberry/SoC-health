@@ -1,6 +1,7 @@
 package com.example.mymeds.tabs;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +11,8 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.mymeds.R;
+import com.example.mymeds.stores.TodayMedStore;
+import com.example.mymeds.util.Frequency;
 import com.example.mymeds.util.ListItemAdapter;
 import com.example.mymeds.util.Medication;
 
@@ -51,9 +54,36 @@ public class TodaysMeds extends Activity {
 			t3.setTextAppearance(mContext, R.style.textNormal);
 		}
 
+		ArrayList<TodayMedStore> tmsList = new ArrayList<TodayMedStore>();
+
+
 		for(int i=0;i<meds.size();i++){						
-			adapter.setFirstView(i, this.findViewById(R.layout.tab_first), listViewItems);
+
+			String name = meds.get(i).getName();
+			String nickName = meds.get(i).getDisplayName();
+
+			ArrayList<Frequency> freqs = meds.get(i).getFrequency(); 
+
+			for(int j = 0; j< freqs.size(); j++){
+				TodayMedStore tms = new TodayMedStore();
+
+				tms.setMedIndex(i);
+				tms.setFreqIndex(j);
+				tms.setMedName(name);
+				tms.setNickName(nickName);
+				tms.setTime(freqs.get(j).getTime());
+				tms.setTakenTime(freqs.get(j).getTaken());
+				
+				tmsList.add(tms);
+			}
 		}
+
+		Collections.sort(tmsList);
+		
+		for(int i=0;i<tmsList.size();i++){						
+			adapter.setFirstView(tmsList.get(i), this.findViewById(R.layout.tab_first), listViewItems);
+		}
+
 		listViewItems.requestLayout();
 	}
 }

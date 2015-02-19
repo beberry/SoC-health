@@ -56,7 +56,7 @@ public class MainActivity extends TabActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		File file = new File(this.getFilesDir()+"//"+"meddata.json");
 		if(!file.exists()){
-		JSONUtils.writeStringToFile(readAssets(), this.getApplicationContext(), true); // Forces overwrite of existing JSON.
+			JSONUtils.writeStringToFile(readAssets(), this.getApplicationContext(), true); // Forces overwrite of existing JSON.
 		}
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
@@ -67,10 +67,10 @@ public class MainActivity extends TabActivity {
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
 		long today = MedFetcher.milliDate(year, month, day);
-		
+
 		disableHardwareMenuKey();
 		gestureDetector = new GestureDetector(new SwipeGestureDetector());
-		
+
 
 		allMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), true), this.getApplicationContext());
 
@@ -78,13 +78,13 @@ public class MainActivity extends TabActivity {
 		mMedFetcher.loadAssets(this, allMeds);
 		File file2 = new File(this.getFilesDir()+"//"+"todaydata.json");
 		if(!file2.exists()){
-		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false); // Forces overwrite of existing JSON.
+			JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false); // Forces overwrite of existing JSON.
 		}
 		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 
 		tabHost = getTabHost();
 		populateTabs(0);
-		
+
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
 		//alarm.addAlarm(0);
@@ -109,16 +109,18 @@ public class MainActivity extends TabActivity {
 			//Update the locally held todays meds, knock out the first frequency
 			int position = intent.getIntExtra("position", 0);
 			int timesTaken = intent.getIntExtra("timesTaken", 0);
-			
+			boolean actualyTaken = intent.getBooleanExtra("actualyTaken", false); 
+
 			//set the frequenceys object last time taken to the current time in milliseconds
 			todaysMeds.get(position).getFrequency().get(timesTaken).setTaken(System.currentTimeMillis());		
-			
-			//Modify and update the numbers of pills remaining for this pill
-			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits(), System.currentTimeMillis(), timesTaken);			
 
+
+			//Modify and update the numbers of pills remaining for this pill
+			mMedFetcher.modifyQuantity(todaysMeds.get(position).getIndex(), todaysMeds.get(position).getFrequency().get(0).getUnits(), System.currentTimeMillis(), timesTaken, actualyTaken);			
+			
 			//update the JSON files with changes
 			updateData();
-			
+
 			//remove the taken medication from the current list of todays medication
 			//if it was the last time today, remove the medication from the list
 			if(todaysMeds.get(position).getFrequency().size()==1){
@@ -128,78 +130,78 @@ public class MainActivity extends TabActivity {
 			else{
 				todaysMeds.get(position).getFrequency().remove(timesTaken);
 			}
-			
+
 			//update the activities with the changes
 			updateActivities(0);
 		}
 	};
-	
+
 	// Our handler for received Intents. This will be called whenever a pill taken button is pressed
-		private BroadcastReceiver mEditedMessageReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				// Get extra data included in the Intent
-				//Update the locally held allMeds
-				allMeds = intent.getParcelableArrayListExtra("allMeds");
-				//update the JSON with the edit
-				updateData();
-				//update the informatin on the activites
-				updateActivities(1);
-			}
-		};
-		
-		// Our handler for received Intents. This will be called whenever a pill taken button is pressed
-				private BroadcastReceiver mSettingsMessageReceiver = new BroadcastReceiver() {
-					@Override
-					public void onReceive(Context context, Intent intent) {
-						updateActivities(0);
-					}
-				};
+	private BroadcastReceiver mEditedMessageReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// Get extra data included in the Intent
+			//Update the locally held allMeds
+			allMeds = intent.getParcelableArrayListExtra("allMeds");
+			//update the JSON with the edit
+			updateData();
+			//update the informatin on the activites
+			updateActivities(1);
+		}
+	};
+
+	// Our handler for received Intents. This will be called whenever a pill taken button is pressed
+	private BroadcastReceiver mSettingsMessageReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			updateActivities(0);
+		}
+	};
 
 	//update the data stored on the JSON files
 	private void updateData()
 	{
 		//write an changes for the all medication JSON
 		JSONUtils.writeToFile(allMeds, mContext, true);
-		
+
 		//update the ArrayList in medFetcher
 		mMedFetcher.resetMeds(allMeds);
-		
+
 		//Get todays date
 		final Calendar c = Calendar.getInstance();
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
 		long today = MedFetcher.milliDate(year, month, day);
-		
+
 		//recalculate and write all of todays medication again (incase new ones have been added for the day)
 		JSONUtils.writeToFile(mMedFetcher.daysMedication(today), this, false);
 		//reload the medicatio for the day
 		todaysMeds = JSONUtils.loadValues(JSONUtils.readFile(this.getApplicationContext(), false), this.getApplicationContext());
 	}
-	
+
 	//update the activites with the new information
 	private void updateActivities(int tabToShow){
 
 		//Destroy all the old activies 
 		LocalActivityManager manager = getLocalActivityManager();
-        manager.destroyActivity("Today's Medication", true);
-        manager.destroyActivity("All Medication", true);
-        manager.destroyActivity("My Record", true);
-        tabHost.setOnTabChangedListener(new OnTabChangeListener(){
+		manager.destroyActivity("Today's Medication", true);
+		manager.destroyActivity("All Medication", true);
+		manager.destroyActivity("My Record", true);
+		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
 			@Override
 			public void onTabChanged(String tabId){
 			}});
-        tabHost.clearAllTabs();
-        
-        //create the new activites
+		tabHost.clearAllTabs();
+
+		//create the new activites
 		populateTabs(tabToShow);
 	}
 
 	public void onResume(Bundle savedInstanceState){
 		super.onResume();
 	}
-	
+
 	//Create the tab activites
 	private void populateTabs(int tabToGoTo){
 		Intent intentToday = new Intent().setClass(this, TodaysMeds.class);
@@ -231,38 +233,38 @@ public class MainActivity extends TabActivity {
 		tabHost.addTab(tabSpecAll);
 		tabHost.addTab(tabSpecProfile);
 		tabHost.setCurrentTab(tabToGoTo);
-		
+
 		//set the tab background colours, highlighting the currently selected one
 		tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
 		tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
 		tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));
-		
+
 		tabHost.getTabWidget().getChildAt(tabToGoTo).setBackgroundColor(Color.parseColor("#71B238"));
-		
+
 		//when new tab is selcted change its colour to high light it is selected
 		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
 			@Override
 			public void onTabChanged(String tabId) {
-			    if(tabId.equals("Today's Medication")) {					
+				if(tabId.equals("Today's Medication")) {					
 					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#71B238"));	
 					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
 					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
-			    }
-			    if(tabId.equals("All Medication")) {					
+				}
+				if(tabId.equals("All Medication")) {					
 					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
 					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#71B238"));	
 					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#A6CB45"));	
-			    }
-			    if(tabId.equals("My Record")) {					
+				}
+				if(tabId.equals("My Record")) {					
 					tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#A6CB45"));	
 					tabHost.getTabWidget().getChildAt(1).setBackgroundColor(Color.parseColor("#A6CB45"));	
 					tabHost.getTabWidget().getChildAt(2).setBackgroundColor(Color.parseColor("#71B238"));	
-			    }
-			 
+				}
+
 			}});
-		
-		
-		
+
+
+
 	}
 
 	/**
@@ -357,8 +359,8 @@ public class MainActivity extends TabActivity {
 		return super.onTouchEvent(event);
 	}
 
-	
-	
+
+
 	private void onLeftSwipe() {
 		if(tabHost.getCurrentTab()<3){
 			tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundColor(Color.parseColor("#A6CB45"));		
