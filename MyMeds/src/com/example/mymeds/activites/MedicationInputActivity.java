@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -89,6 +91,10 @@ public class MedicationInputActivity extends Activity{
 		editRemaining = (EditText) findViewById(R.id.editRemaining);
 		editRepeatPeriod = (EditText) findViewById(R.id.editRepeatPeriod);
 
+		//Force activity to show soft keyboard on startup.
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.showSoftInput(editMedicineName, InputMethodManager.SHOW_IMPLICIT);
+		
 		//Add onclicklistener for datePicker
 		editStartDate.setOnClickListener(new View.OnClickListener() {
 			@Override
