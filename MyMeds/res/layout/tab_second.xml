@@ -10,12 +10,13 @@
 
     <Button
         android:id="@+id/add_medication"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="Add medication"
         android:textStyle="bold"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:layout_gravity="center_horizontal" />
 
    	<TableRow
    	    android:paddingTop ="20dp"
