@@ -22,7 +22,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.mymeds.R;
-import com.example.mymeds.activites.MedicationEditActivity;
+import com.example.mymeds.activities.MedicationEditActivity;
 import com.example.mymeds.stores.TodayMedStore;
 
 @SuppressLint("InflateParams")

@@ -27,7 +27,7 @@
         <receiver android:name="com.example.mymeds.util.SnoozeReceiver"/>
 
         <activity
-            android:name=".activites.MainActivity"
+            android:name="com.example.mymeds.activities.MainActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -39,7 +39,7 @@
 
         <!-- SettingsActivity -->
         <activity
-            android:name="com.example.mymeds.activites.SettingsActivity"
+            android:name="com.example.mymeds.activities.SettingsActivity"
             android:configChanges="orientation|screenSize"
             android:label="@string/activity_settings" 
             android:screenOrientation="portrait" >
@@ -47,14 +47,14 @@
 
         <!-- MedicationInput Activity -->
         <activity
-            android:name="com.example.mymeds.activites.MedicationInputActivity"
+            android:name="com.example.mymeds.activities.MedicationInputActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/activity_medication_input" 
             android:screenOrientation="portrait">
         </activity>
         <!-- MedicationEdit Activity -->
         <activity
-            android:name="com.example.mymeds.activites.MedicationEditActivity"
+            android:name="com.example.mymeds.activities.MedicationEditActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:label="@string/activity_medication_edit"
             android:screenOrientation="portrait" >

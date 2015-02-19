@@ -14,7 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.example.mymeds.R;
-import com.example.mymeds.activites.MedicationInputActivity;
+import com.example.mymeds.activities.MedicationInputActivity;
 import com.example.mymeds.util.ListItemAdapter;
 import com.example.mymeds.util.Medication;
 
