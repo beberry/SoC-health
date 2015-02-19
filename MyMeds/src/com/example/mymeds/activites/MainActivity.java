@@ -87,9 +87,13 @@ public class MainActivity extends TabActivity {
 
 		Alarms alarm = new Alarms(getApplicationContext());
 		//alarm.setAllAlarms();
-		//alarm.addAlarm(0);
-		//alarm.addAlarm(1);
-		//alarm.addAlarm(2);
+		
+		
+		for(int a = 0; a < todaysMeds.size(); a++)
+		{
+		alarm.addAlarm(todaysMeds.get(a));
+		}
+		
 		//alarm.setNextAlarm(0, 02300, "2300");
 		LocalBroadcastManager.getInstance(this).registerReceiver(mTakenMessageReceiver,
 				new IntentFilter("Med-Taken"));
