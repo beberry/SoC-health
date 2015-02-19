@@ -277,13 +277,13 @@ public class MainActivity extends TabActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//getMenuInflater().inflate(R.menu.main, menu);
 
-		MenuItem itemBlog = menu.add(Menu.NONE, // Group ID
+		MenuItem itemSettings = menu.add(Menu.NONE, // Group ID
 				R.id.action_settings, // Item ID
 				101, // Order
-				"Blog"); // Title
+				"Settings"); // Title
 		// To showAsAction attribute, use MenuItemCompat (set to always)
-		MenuItemCompat.setShowAsAction(itemBlog, MenuItem.SHOW_AS_ACTION_ALWAYS);
-		itemBlog.setIcon(R.drawable.ic_settings);
+		MenuItemCompat.setShowAsAction(itemSettings, MenuItem.SHOW_AS_ACTION_ALWAYS);
+		itemSettings.setIcon(R.drawable.ic_settings);
 		super.onCreateOptionsMenu(menu);
 		return true;
 	} 
