@@ -1,8 +1,6 @@
 package com.example.mymeds.util;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
@@ -22,7 +20,6 @@ import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MedicationEditActivity;
@@ -141,9 +138,6 @@ public class ListItemAdapter extends BaseAdapter {
 
 		//create row to e populated
 		TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.allmeds_table_row, null);
-
-		//get the details of the medicaiton to be added
-		final Medication toAdd = data.get(position);
 
 		//populate the first column with the name of the medication
 		TextView t1 = (TextView) row.findViewById(R.id.realName);

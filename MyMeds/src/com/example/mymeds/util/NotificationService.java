@@ -2,8 +2,6 @@ package com.example.mymeds.util;
 
 import java.util.Calendar;
 
-import com.example.mymeds.R;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,7 +10,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+
+import com.example.mymeds.R;
 
 public class NotificationService extends Service {
 	private NotificationManager notificationManager;

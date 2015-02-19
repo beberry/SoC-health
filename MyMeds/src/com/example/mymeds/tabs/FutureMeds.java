@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.PopupWindow;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -45,6 +44,7 @@ public class FutureMeds extends FragmentActivity {
 	
 	TextView startDateText, endDateText;
 
+	@SuppressWarnings("unused")
 	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

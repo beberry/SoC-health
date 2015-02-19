@@ -3,9 +3,7 @@ package com.example.mymeds.util;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;

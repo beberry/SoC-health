@@ -36,12 +36,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.mymeds.R;
-import com.example.mymeds.util.Alarms;
 import com.example.mymeds.util.Frequency;
-import com.example.mymeds.util.JSONUtils;
 import com.example.mymeds.util.Medication;
 
-@SuppressLint("SimpleDateFormat")
+@SuppressLint({ "SimpleDateFormat", "InflateParams" })
 public class MedicationEditActivity extends Activity{
 
 	public TableLayout frequencyTable;

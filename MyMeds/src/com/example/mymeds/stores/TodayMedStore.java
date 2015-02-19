@@ -1,5 +1,6 @@
 package com.example.mymeds.stores;
 
+@SuppressWarnings("rawtypes")
 public class TodayMedStore implements Comparable {
 
 	private String medName;

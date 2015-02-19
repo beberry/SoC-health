@@ -22,6 +22,7 @@ public class TodaysMeds extends Activity {
 	public ArrayList<Medication> meds = new ArrayList<Medication>();
 	public TodaysMeds today;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
