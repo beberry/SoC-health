@@ -67,12 +67,15 @@ public class ListItemAdapter extends BaseAdapter {
 				final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.todaysmeds_table_row, null);
 
 				//populate the first textView with medicaiton name
-				final TextView t1 = (TextView) row.findViewById(R.id.name);
+				final TextView t1 = (TextView) row.findViewById(R.id.Rname);
 				t1.setText(tms.getMedName());
 
+				//populate the first textView with medicaiton name
+				final TextView t2 = (TextView) row.findViewById(R.id.name);
+				t2.setText(tms.getNickName());
 
 				//populate the second textView with the time the medication need to be taken	
-				final TextView t2 = (TextView) row.findViewById(R.id.time);
+				final TextView t3 = (TextView) row.findViewById(R.id.time);
 	
 
 				//populate the third tab with a button to say the medication has been taken
@@ -82,7 +85,7 @@ public class ListItemAdapter extends BaseAdapter {
 				String h = takeTime.substring( 0,2);
 				String m = takeTime.substring( 2,takeTime.length());
 
-				t2.setText( h+ ":" + m);		
+				t3.setText( h+ ":" + m);		
 				
 				//set text size dependent on user settings
 				SharedPreferences prefs = mContext.getSharedPreferences(
@@ -91,11 +94,13 @@ public class ListItemAdapter extends BaseAdapter {
 				{
 					t1.setTextAppearance(mContext, R.style.textLarge);
 					t2.setTextAppearance(mContext, R.style.textLarge);
+					t3.setTextAppearance(mContext, R.style.textLarge);
 				}
 				else
 				{
 					t1.setTextAppearance(mContext, R.style.textNormal);
 					t2.setTextAppearance(mContext, R.style.textNormal);
+					t3.setTextAppearance(mContext, R.style.textNormal);
 				}
 
 				

@@ -16,16 +16,28 @@
         android:showDividers="middle" >
 
         <TextView
+            android:id="@+id/headerRName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Medication"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
             android:id="@+id/headerName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Medicine"
+            android:text="To Treat"
             android:textSize="20sp"
             android:textStyle="bold" />
-
+        
+        
         <TextView
             android:id="@+id/headerTime"
             android:layout_width="fill_parent"
@@ -44,7 +56,6 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Pill Taken"
             android:textSize="20sp"
             android:textStyle="bold" />
     </TableRow>
@@ -61,7 +72,7 @@
             android:gravity="center"
             android:paddingTop="10dp" 
             android:layout_centerHorizontal="true"
-            android:stretchColumns="0,1,2" />
+            android:stretchColumns="0,1,2,3" />
 
         </ScrollView>
 </RelativeLayout>

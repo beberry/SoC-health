@@ -22,7 +22,7 @@
         {
             "index": 1,
             "name": "Ramipril",
-            "displayName": "Heart Problems",
+            "displayName": "Heart",
             "description": "easy",
             "type": "pill",
             "startTime": 1423483966000,
@@ -47,8 +47,8 @@
         },
         {
             "index": 2,
-            "name": "Paracetamol",
-            "displayName": "Painkillers",
+            "name": "Chlortalidone",
+            "displayName": "Kidneys",
             "description": "easy",
             "type": "pill",
             "startTime":  1391947966000,

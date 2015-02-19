@@ -38,20 +38,23 @@ public class TodaysMeds extends Activity {
 
 		SharedPreferences prefs = mContext.getSharedPreferences(
 				"com.example.mymeds", Context.MODE_PRIVATE);
-		TextView t1 = (TextView)findViewById(R.id.headerName);
-		TextView t2 = (TextView)findViewById(R.id.headerTaken);
-		TextView t3 = (TextView)findViewById(R.id.headerTime);
+		TextView t1 = (TextView)findViewById(R.id.headerRName);
+		TextView t2 = (TextView)findViewById(R.id.headerName);
+		TextView t3 = (TextView)findViewById(R.id.headerTaken);
+		TextView t4 = (TextView)findViewById(R.id.headerTime);
 		if(prefs.getInt("textSize", -1) == 1)
 		{
 			t1.setTextAppearance(mContext, R.style.textLarge);
 			t2.setTextAppearance(mContext, R.style.textLarge);
 			t3.setTextAppearance(mContext, R.style.textLarge);
+			t4.setTextAppearance(mContext, R.style.textLarge);
 		}
 		else
 		{
 			t1.setTextAppearance(mContext, R.style.textNormal);
 			t2.setTextAppearance(mContext, R.style.textNormal);
 			t3.setTextAppearance(mContext, R.style.textNormal);
+			t4.setTextAppearance(mContext, R.style.textNormal);
 		}
 
 		ArrayList<TodayMedStore> tmsList = new ArrayList<TodayMedStore>();
