@@ -180,7 +180,7 @@ public class MedFetcher {
 	 * @param timeTaken the time the lates dosage was taken
 	 * @param freqNum the frequency object index
 	 */
-	public void modifyQuantity(int medId, int quantConsumed, long timeTaken, int freqNum)
+	public void modifyQuantity(int medId, int quantConsumed, long timeTaken, int freqNum, boolean actualyTaken)
 	{
 		//for all medication
 		for(int i=0; i<allmeds.size(); i++){
@@ -192,11 +192,16 @@ public class MedFetcher {
 			{
 				//update the amount left by subtrackting the amount taken and store in medication object
 				Medication modMed = currentMed;			
+				
+				//update the frequency taken time
+				modMed.getFrequency().get(freqNum).setTaken(timeTaken);		
+						
+				if(actualyTaken)
+				{
 				int remaining = currentMed.getRemaining()-quantConsumed;
 				modMed.setRemaining(remaining>0 ? remaining : 0);
-
-				//update the frequency taken time
-				modMed.getFrequency().get(freqNum).setTaken(timeTaken);				
+				}
+						
 				//update all meds ArrayList
 				allmeds.set(i, modMed);
 

@@ -2,8 +2,8 @@ package com.example.mymeds.util;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
 import java.util.Calendar;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar.LayoutParams;
 import android.app.AlertDialog;
@@ -23,8 +23,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.mymeds.R;
 import com.example.mymeds.activites.MedicationEditActivity;
+import com.example.mymeds.stores.TodayMedStore;
 
 @SuppressLint("InflateParams")
 public class ListItemAdapter extends BaseAdapter {
@@ -54,25 +56,19 @@ public class ListItemAdapter extends BaseAdapter {
 
 
 	//used to display information on the first tab (todays medicaiton)
-	public View setFirstView(final int position, View root, TableLayout table){
+	public View setFirstView(TodayMedStore tms, View root, TableLayout table){
 
 		tempTable = table;
-
-		//for every time the medication needs to be taken
-		for( int t = 0;t < data.get(position).getFrequency().size(); t++)
-		{	
+	
 			//if the medicaiton has already been taken at that time for the day
-			if(MedFetcher.toBeTakenToday(data.get(position).getFrequency().get(t).getTaken()))
+			if(MedFetcher.toBeTakenToday(tms.getTakenTime()))
 			{
 				//create new row for table
 				final TableRow row = (TableRow) LayoutInflater.from(mContext).inflate(R.layout.todaysmeds_table_row, null);
 
-				//get the medication needing added
-				final Medication toAdd = data.get(position);
-
 				//populate the first textView with medicaiton name
 				final TextView t1 = (TextView) row.findViewById(R.id.name);
-				t1.setText(data.get(position).getDisplayName());
+				t1.setText(tms.getMedName());
 
 
 				//populate the second textView with the time the medication need to be taken	
@@ -80,7 +76,7 @@ public class ListItemAdapter extends BaseAdapter {
 	
 
 				//populate the third tab with a button to say the medication has been taken
-				String takeTime = String.valueOf(data.get(position).getFrequency().get(t).getTime());
+				String takeTime = String.valueOf(tms.getTime());
 
 				//split the time string and add colon 
 				String h = takeTime.substring( 0,2);
@@ -102,9 +98,11 @@ public class ListItemAdapter extends BaseAdapter {
 					t2.setTextAppearance(mContext, R.style.textNormal);
 				}
 
+				
+		final int posIndex = tms.getMedIndex();
 		
 		//stores the indes of the frequency object
-		final int index = t;	
+		final int frqIndex = tms.getFreqIndex();	
 				
 		//populate the third column with a button to indicate if pill has been taken
 		final Button taken = (Button) row.findViewById(R.id.pillTaken);	
@@ -116,7 +114,7 @@ public class ListItemAdapter extends BaseAdapter {
 			public void onClick(View v) {
 			
 				//Get user confirmation
-				showDialog(position, index);
+				showDialog(posIndex, frqIndex);
 			
 			}
 		});
@@ -128,7 +126,7 @@ public class ListItemAdapter extends BaseAdapter {
 		
 				
 			}
-		}
+		
 		return root;
 	}
 
@@ -287,16 +285,20 @@ public class ListItemAdapter extends BaseAdapter {
 		        switch (which){
 		        case DialogInterface.BUTTON_POSITIVE:
 		            //Yes button clicked broadcast medication has been taken
-					Intent intent = new Intent("Med-Taken");
+					Intent intentP = new Intent("Med-Taken");
 					//pass medication and frequency indexs
-					intent.putExtra("position", p);
-					intent.putExtra("timesTaken", ind);
-					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);		
+					intentP.putExtra("position", p);
+					intentP.putExtra("timesTaken", ind);
+					intentP.putExtra("actualyTaken", true);
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intentP);		
 		            break;
 
-		        case DialogInterface.BUTTON_NEGATIVE:
-		            //No button clicked
-		        	isPillTaken = false;
+		        case DialogInterface.BUTTON_NEUTRAL:
+		        	Intent intentN = new Intent("Med-Taken");
+					intentN.putExtra("position", p);
+					intentN.putExtra("timesTaken", ind);
+					intentN.putExtra("actualyTaken", false);
+					LocalBroadcastManager.getInstance(mContext).sendBroadcast(intentN);	
 		            break;
 		        }
 		    }
@@ -304,7 +306,10 @@ public class ListItemAdapter extends BaseAdapter {
 
 		//options for dialogue box
 		AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-		builder.setMessage("Are you sure medication has been taken?").setPositiveButton("Yes", dialogClickListener)
-		    .setNegativeButton("No", dialogClickListener).show();
+		builder.setMessage("What action are you taking?")
+	    	.setPositiveButton("Medication Taken", dialogClickListener)
+	        .setNeutralButton("Meditcation Not taken", dialogClickListener)
+		    .setNegativeButton("Cancel", dialogClickListener)
+		    .show();
 	}	
 }
